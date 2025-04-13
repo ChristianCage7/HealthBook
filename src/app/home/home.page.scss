@@ -25,3 +25,28 @@
 #container a {
   text-decoration: none;
 }
+
+ion-content{
+}
+
+ion-header{
+  position:absolute;
+}
+
+ion-toolbar{
+  --ion-background-color: transparent;
+  --opacity:0;
+}
+
+.card{
+  text-align: center;
+}
+
+.signin-btns{
+  margin-top: 25px;
+  text-align: center;
+}
+
+.loginbtn{
+
+}

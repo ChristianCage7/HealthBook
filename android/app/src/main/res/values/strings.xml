@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">HealthBook</string>
+    <string name="title_activity_main">HealthBook</string>
+    <string name="package_name">com.healthbook</string>
+    <string name="custom_url_scheme">com.healthbook</string>
+</resources>
