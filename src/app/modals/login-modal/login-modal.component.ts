@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { IonicModule, ModalController } from '@ionic/angular';
-import { CommonModule } from '@angular/common';
 import { FormBuilder, Validators } from '@angular/forms';
 import { sharedStandaloneImports } from 'src/app/shared_standalone';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-modal',
@@ -20,7 +20,8 @@ export class LoginModalComponent{
 
   constructor(
     private modalCtrl: ModalController,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private router: Router
   ) {}
 
   dismiss(){
@@ -36,6 +37,10 @@ export class LoginModalComponent{
     const { email, password } = this.form.value;
     console.log('Login data: ', email, password);
     this.modalCtrl.dismiss();
+  }
+
+  viewMain(){
+    this.router.navigateByUrl('/tabs/main');
   }
 
 }

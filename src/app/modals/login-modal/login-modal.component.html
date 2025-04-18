@@ -27,6 +27,6 @@
       <p *ngIf="form.get('password')?.errors?.['minlength']">Mínimo 6 caracteres.</p>
     </ion-text>
 
-    <ion-button expand="block" type="submit" class="ion-margin-top">Iniciar sesión</ion-button>
+    <ion-button expand="block" type="submit" class="ion-margin-top" (click)="viewMain()">Iniciar sesión</ion-button>
   </form>
 </ion-content>
