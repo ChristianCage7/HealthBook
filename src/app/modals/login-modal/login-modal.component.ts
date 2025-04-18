@@ -24,22 +24,36 @@ export class LoginModalComponent{
     private router: Router
   ) {}
 
+  
   dismiss(){
     this.modalCtrl.dismiss();
   }
 
-  login(){
-    if(this.form.invalid){
+  login() {
+    if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
     }
 
     const { email, password } = this.form.value;
-    console.log('Login data: ', email, password);
-    this.modalCtrl.dismiss();
+
+    const TEST_USER = {
+      email: 'test@test.com',
+      password: '12345678',
+    }; //Usuario de testeo para verificar que funciona el login y redirige hacia las páginas principales
+
+    if (email === TEST_USER.email && password === TEST_USER.password) {
+      console.log('Inicio de sesión exitoso');
+      localStorage.setItem('isLoggedIn', 'true');
+      this.modalCtrl.dismiss();
+      this.router.navigateByUrl('/tabs/main');
+    } else {
+      console.log('Credenciales inválidas');
+      alert('Correo o contraseña incorrectos');
+    }
   }
 
-  viewMain(){
+  viewMain(){ //Lleva al main
     this.router.navigateByUrl('/tabs/main');
   }
 
