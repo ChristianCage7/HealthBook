@@ -1,0 +1,33 @@
+:host {
+    display: block;
+  }
+  
+  ion-item {
+    --background: white;
+    --highlight-color-focused: #6b47dc; // color del borde inferior al enfocar
+    --color: #4b268e; // color del icono y texto
+    --placeholder-color: #a38ec7; // color del texto flotante
+    border-radius: 14px;
+    margin-bottom: 8px;
+    padding-inline: 6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+  
+  ion-label {
+    color: #6b47dc !important;
+    font-weight: 500;
+  }
+  
+  ion-input {
+    color: #4b268e;
+    caret-color: #6b47dc;
+  
+    &::placeholder {
+      color: #a38ec7;
+    }
+  }
+  
+  ion-icon {
+    color: #6b47dc;
+  }
+  

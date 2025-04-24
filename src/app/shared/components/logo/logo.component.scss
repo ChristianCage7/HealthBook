@@ -1,0 +1,21 @@
+:host {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 24px;
+  }
+  
+  .healthbook-icon {
+    font-size: 80px;
+    margin-top: 40px;
+    color: #6b47dc; // violeta institucional
+  }
+  
+  .healthbook-title {
+    margin-top: 12px;
+    font-size: 22px;
+    color: #4b268e; // violeta oscuro
+    font-weight: 600;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  

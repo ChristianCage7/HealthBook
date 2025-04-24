@@ -1,0 +1,21 @@
+Para crear un nuevo componente:
+
+
+Aquí deberian ir todos los componentes, modals, navbars, logos, todo lo que pueda llegar a ser reutilizable dentro del mismo codigo en más de una pagina
+En este caso aqui tengo
+    -Formularios
+    -logos
+    -Inputs
+    -Header
+Esto hata el 21-04
+Si quieren crear otro componente usar el siguiente comando:
+
+    ionic g c shared/components/NOMBREDELCOMPONENTE
+
+Una vez creado el componente debemos ir a "shared.module.ts" debemos agregar nuestro nuevo componente tanto en "Imports" como "Declarations"
+
+Debemos importar nuestro shared module en cada pagina que queramos usarlo.
+
+Si queremos usar un componente en cualquier pagina debemos ir a su component.ts, copiar el selector que tiene pegarlo en la primera linea y darle a "CTRL + ESPACIO" para activar
+
+Si alguna pagina da problemas, debajo del selector trata de poner "Standalone: false"
