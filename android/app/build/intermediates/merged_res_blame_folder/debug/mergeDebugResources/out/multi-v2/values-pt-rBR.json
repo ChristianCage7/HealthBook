@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.healthbook.app-mergeDebugResources-25:/values-pt-rBR/values-pt-rBR.xml",
+            "outputFile": "io.ionic.starter.app-mergeDebugResources-25:/values-pt-rBR/values-pt-rBR.xml",
             "map": [
                 {
                     "source": "C:\\Users\\CHRISTIAN ANDRADE\\.gradle\\caches\\8.11.1\\transforms\\5f51ed623ec66baebfa6a053fe8a8b2a\\transformed\\core-1.15.0\\res\\values-pt-rBR\\values-pt-rBR.xml",

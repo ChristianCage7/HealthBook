@@ -1,3 +1,0 @@
-com.healthbook.test
-style WhiteBackgroundDialogTheme
-style WhiteBackgroundTheme

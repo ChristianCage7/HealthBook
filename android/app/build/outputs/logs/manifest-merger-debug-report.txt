@@ -18,7 +18,6 @@ INJECTED from D:\Projects\HealthBook\android\app\src\main\AndroidManifest.xml:2:
 MERGED from [:capacitor-app] D:\Projects\HealthBook\node_modules\@capacitor\app\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-7:12
 MERGED from [:capacitor-haptics] D:\Projects\HealthBook\node_modules\@capacitor\haptics\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-9:12
 MERGED from [:capacitor-keyboard] D:\Projects\HealthBook\node_modules\@capacitor\keyboard\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-7:12
-MERGED from [:capacitor-splash-screen] D:\Projects\HealthBook\node_modules\@capacitor\splash-screen\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-7:12
 MERGED from [:capacitor-status-bar] D:\Projects\HealthBook\node_modules\@capacitor\status-bar\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-7:12
 MERGED from [:capacitor-android] D:\Projects\HealthBook\node_modules\@capacitor\android\capacitor\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-7:12
 MERGED from [:capacitor-cordova-android-plugins] D:\Projects\HealthBook\android\capacitor-cordova-android-plugins\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:2:1-11:12
@@ -96,7 +95,7 @@ MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\CH
 		ADDED from D:\Projects\HealthBook\android\app\src\main\AndroidManifest.xml:5:9-35
 	android:theme
 		ADDED from D:\Projects\HealthBook\android\app\src\main\AndroidManifest.xml:10:9-40
-activity#com.healthbook.MainActivity
+activity#io.ionic.starter.MainActivity
 ADDED from D:\Projects\HealthBook\android\app\src\main\AndroidManifest.xml:12:9-25:20
 	android:label
 		ADDED from D:\Projects\HealthBook\android\app\src\main\AndroidManifest.xml:15:13-56
@@ -140,8 +139,6 @@ MERGED from [:capacitor-haptics] D:\Projects\HealthBook\node_modules\@capacitor\
 MERGED from [:capacitor-haptics] D:\Projects\HealthBook\node_modules\@capacitor\haptics\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
 MERGED from [:capacitor-keyboard] D:\Projects\HealthBook\node_modules\@capacitor\keyboard\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
 MERGED from [:capacitor-keyboard] D:\Projects\HealthBook\node_modules\@capacitor\keyboard\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
-MERGED from [:capacitor-splash-screen] D:\Projects\HealthBook\node_modules\@capacitor\splash-screen\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
-MERGED from [:capacitor-splash-screen] D:\Projects\HealthBook\node_modules\@capacitor\splash-screen\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
 MERGED from [:capacitor-status-bar] D:\Projects\HealthBook\node_modules\@capacitor\status-bar\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
 MERGED from [:capacitor-status-bar] D:\Projects\HealthBook\node_modules\@capacitor\status-bar\android\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
 MERGED from [:capacitor-android] D:\Projects\HealthBook\node_modules\@capacitor\android\capacitor\build\intermediates\merged_manifest\debug\processDebugManifest\AndroidManifest.xml:5:5-44
@@ -256,7 +253,7 @@ ADDED from [androidx.core:core:1.15.0] C:\Users\CHRISTIAN ANDRADE\.gradle\caches
 		ADDED from [androidx.core:core:1.15.0] C:\Users\CHRISTIAN ANDRADE\.gradle\caches\8.11.1\transforms\5f51ed623ec66baebfa6a053fe8a8b2a\transformed\core-1.15.0\AndroidManifest.xml:24:9-44
 	android:name
 		ADDED from [androidx.core:core:1.15.0] C:\Users\CHRISTIAN ANDRADE\.gradle\caches\8.11.1\transforms\5f51ed623ec66baebfa6a053fe8a8b2a\transformed\core-1.15.0\AndroidManifest.xml:23:9-81
-permission#com.healthbook.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+permission#io.ionic.starter.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
 ADDED from [androidx.core:core:1.15.0] C:\Users\CHRISTIAN ANDRADE\.gradle\caches\8.11.1\transforms\5f51ed623ec66baebfa6a053fe8a8b2a\transformed\core-1.15.0\AndroidManifest.xml:22:5-24:47
 	android:protectionLevel
 		ADDED from [androidx.core:core:1.15.0] C:\Users\CHRISTIAN ANDRADE\.gradle\caches\8.11.1\transforms\5f51ed623ec66baebfa6a053fe8a8b2a\transformed\core-1.15.0\AndroidManifest.xml:24:9-44
@@ -266,7 +263,7 @@ uses-permission#${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
 ADDED from [androidx.core:core:1.15.0] C:\Users\CHRISTIAN ANDRADE\.gradle\caches\8.11.1\transforms\5f51ed623ec66baebfa6a053fe8a8b2a\transformed\core-1.15.0\AndroidManifest.xml:26:5-97
 	android:name
 		ADDED from [androidx.core:core:1.15.0] C:\Users\CHRISTIAN ANDRADE\.gradle\caches\8.11.1\transforms\5f51ed623ec66baebfa6a053fe8a8b2a\transformed\core-1.15.0\AndroidManifest.xml:26:22-94
-uses-permission#com.healthbook.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+uses-permission#io.ionic.starter.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
 ADDED from [androidx.core:core:1.15.0] C:\Users\CHRISTIAN ANDRADE\.gradle\caches\8.11.1\transforms\5f51ed623ec66baebfa6a053fe8a8b2a\transformed\core-1.15.0\AndroidManifest.xml:26:5-97
 	android:name
 		ADDED from [androidx.core:core:1.15.0] C:\Users\CHRISTIAN ANDRADE\.gradle\caches\8.11.1\transforms\5f51ed623ec66baebfa6a053fe8a8b2a\transformed\core-1.15.0\AndroidManifest.xml:26:22-94

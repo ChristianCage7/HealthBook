@@ -12,7 +12,7 @@ Si quieren crear otro componente usar el siguiente comando:
 
     ionic g c shared/components/NOMBREDELCOMPONENTE
 
-Una vez creado el componente debemos ir a "shared.module.ts" debemos agregar nuestro nuevo componente tanto en "Imports" como "Declarations"
+Una vez creado el componente debemos ir a "shared.module.ts" debemos agregar nuestro nuevo componente tanto en "Imports" (25-04: Me funcionó en "Exports", no "Imports") como "Declarations"
 
 Debemos importar nuestro shared module en cada pagina que queramos usarlo.
 

@@ -1,0 +1,9 @@
+<ion-item class="custom-input" lines="none">
+  <ion-icon *ngIf="icon" slot="start" [name]="icon"></ion-icon>
+  <ion-label position="floating">{{ label }}</ion-label>
+  <ion-select [formControl]="control" interface="action-sheet">
+    <ion-select-option *ngFor="let opt of options" [value]="opt.value">
+      {{ opt.label }}
+    </ion-select-option>
+  </ion-select>
+</ion-item>
