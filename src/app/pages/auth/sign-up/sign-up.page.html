@@ -2,100 +2,113 @@
 <ion-content>
 
   <div class="d-flex-center">
-
     <form [formGroup]="form" class="auth-form" (ngSubmit)="submit()" (keypress.enter)="submit()">
       <app-logo></app-logo>
 
       <!-- Nombres -->
-      <app-custom-input autocomplete="given-name" icon="person-outline" [control]="form.controls.firstName" type="text"
-        label="Nombres">
+      <app-custom-input
+        [control]="getFormControl('firstName')"
+        icon="person-outline"
+        label="Nombres"
+        type="text"
+        autocomplete="given-name">
       </app-custom-input>
-      <div class="validators" *ngIf="form.controls.firstName.errors && form.controls.firstName.touched">
-        <div *ngIf="form.controls.firstName.errors?.['required']">Este campo es requerido</div>
+      <div class="validators" *ngIf="getFormControl('firstName').errors && getFormControl('firstName').touched">
+        <div *ngIf="getFormControl('firstName').errors?.['required']">Este campo es requerido</div>
       </div>
 
       <!-- Apellidos -->
-      <app-custom-input autocomplete="family-name" icon="person-outline" [control]="form.controls.lastName" type="text"
-        label="Apellidos">
+      <app-custom-input
+        [control]="getFormControl('lastName')"
+        icon="person-outline"
+        label="Apellidos"
+        type="text"
+        autocomplete="family-name">
       </app-custom-input>
-      <div class="validators" *ngIf="form.controls.lastName.errors && form.controls.lastName.touched">
-        <div *ngIf="form.controls.lastName.errors?.['required']">Este campo es requerido</div>
+      <div class="validators" *ngIf="getFormControl('lastName').errors && getFormControl('lastName').touched">
+        <div *ngIf="getFormControl('lastName').errors?.['required']">Este campo es requerido</div>
       </div>
 
       <!-- Identidad Nacional -->
-      <app-custom-input autocomplete="off" icon="id-card-outline" [control]="form.controls.nationalId" type="text"
-        label="Identidad nacional">
+      <app-custom-input
+        [control]="getFormControl('nationalId')"
+        icon="id-card-outline"
+        label="Identidad Nacional"
+        type="text"
+        autocomplete="off">
       </app-custom-input>
-      <div class="validators" *ngIf="form.controls.nationalId.errors && form.controls.nationalId.touched">
-        <div *ngIf="form.controls.nationalId.errors?.['required']">Este campo es requerido</div>
-        <div *ngIf="form.controls.nationalId.errors?.['minlength']">Debe tener al menos 6 caracteres</div>
+      <div class="validators" *ngIf="getFormControl('nationalId').errors && getFormControl('nationalId').touched">
+        <div *ngIf="getFormControl('nationalId').errors?.['required']">Este campo es requerido</div>
+        <div *ngIf="getFormControl('nationalId').errors?.['minlength']">Debe tener al menos 6 caracteres</div>
       </div>
 
       <!-- Fecha de nacimiento -->
-      <app-custom-input icon="calendar-outline" [control]="form.controls.birthDate" type="date"
-        label="Fecha de nacimiento">
+      <app-custom-input
+        [control]="getFormControl('birthDate')"
+        icon="calendar-outline"
+        label="Fecha de nacimiento"
+        type="date">
       </app-custom-input>
-      <div class="validators" *ngIf="form.controls.birthDate.errors && form.controls.birthDate.touched">
-        <div *ngIf="form.controls.birthDate.errors?.['required']">Este campo es requerido</div>
+      <div class="validators" *ngIf="getFormControl('birthDate').errors && getFormControl('birthDate').touched">
+        <div *ngIf="getFormControl('birthDate').errors?.['required']">Este campo es requerido</div>
       </div>
 
       <!-- Género -->
       <app-custom-select
-      [control]="form.controls.gender"
-      icon="transgender-outline"
-      label="Género"
-      [options]="[
-        { label: 'Masculino', value: 'masculino' },
-        { label: 'Femenino', value: 'femenino' },
-        { label: 'Prefiero no decirlo', value: 'no-decirlo' }
-      ]">
-    </app-custom-select>
-    
-    <div class="validators" *ngIf="form.controls.gender.errors && form.controls.gender.touched">
-      <div *ngIf="form.controls.gender.errors?.['required']">Este campo es requerido</div>
-    </div>
-    
-
-
-      <!-- Email -->
-      <app-custom-input autocomplete="email" icon="mail-outline" [control]="form.controls.email" type="email"
-        label="Correo">
-      </app-custom-input>
-      <div class="validators" *ngIf="form.controls.email.errors && form.controls.email.touched">
-        <div *ngIf="form.controls.email.errors?.['required']">El correo es requerido</div>
-        <div *ngIf="form.controls.email.errors?.['email']">Ingrese un correo válido</div>
+        [control]="getFormControl('gender')"
+        icon="transgender-outline"
+        label="Género"
+        [options]="[
+          { label: 'Masculino', value: 'masculino' },
+          { label: 'Femenino', value: 'femenino' },
+          { label: 'Prefiero no decirlo', value: 'no-decirlo' }
+        ]">
+      </app-custom-select>
+      <div class="validators" *ngIf="getFormControl('gender').errors && getFormControl('gender').touched">
+        <div *ngIf="getFormControl('gender').errors?.['required']">Este campo es requerido</div>
       </div>
 
-      <app-custom-input [control]="form.controls.password" icon="lock-closed-outline" type="password"
-        label="Contraseña">
+      <!-- Email -->
+      <app-custom-input
+        [control]="getFormControl('email')"
+        icon="mail-outline"
+        label="Correo"
+        type="email"
+        autocomplete="email">
       </app-custom-input>
-      <div class="validators" *ngIf="form.controls.password.errors && form.controls.password.touched">
-        <div *ngIf="form.controls.password.errors?.['required']">La contraseña es requerida</div>
+      <div class="validators" *ngIf="getFormControl('email').errors && getFormControl('email').touched">
+        <div *ngIf="getFormControl('email').errors?.['required']">El correo es requerido</div>
+        <div *ngIf="getFormControl('email').errors?.['email']">Ingrese un correo válido</div>
+      </div>
+
+      <!-- Contraseña -->
+      <app-custom-input
+        [control]="getFormControl('password')"
+        icon="lock-closed-outline"
+        label="Contraseña"
+        type="password">
+      </app-custom-input>
+      <div class="validators" *ngIf="getFormControl('password').errors && getFormControl('password').touched">
+        <div *ngIf="getFormControl('password').errors?.['required']">La contraseña es requerida</div>
       </div>
 
       <!-- Confirmar Contraseña -->
-      <app-custom-input [control]="form.controls.confirmPassword" icon="lock-closed-outline" type="password"
-        label="Confirmar contraseña">
+      <app-custom-input
+        [control]="getFormControl('confirmPassword')"
+        icon="lock-closed-outline"
+        label="Confirmar contraseña"
+        type="password">
       </app-custom-input>
-      <div class="validators" *ngIf="form.errors?.['passwordsMismatch'] && form.controls.confirmPassword.touched">
+      <div class="validators" *ngIf="form.errors?.['passwordsMismatch'] && getFormControl('confirmPassword').touched">
         <div>Las contraseñas no coinciden</div>
       </div>
 
-
-
-      <!-- Botones -->
-      <ion-button expand="block" mode="ios" class="submit" type="submit" [disabled]="form.invalid">
+      <!-- Botón -->
+      <ion-button expand="block" type="submit" [disabled]="form.invalid">
         Registrarse
-        <ion-icon slot="end" name="log-in-outline"></ion-icon>
-      </ion-button>
-
-      <ion-button class="ion-margin-top" routerLink="/auth" expand="block" mode="ios" fill="outline">
-        ¿Ya tienes cuenta? Inicia sesión
-        <ion-icon slot="end" name="person-outline"></ion-icon>
       </ion-button>
 
     </form>
-
   </div>
 
 </ion-content>
