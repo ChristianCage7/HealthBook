@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { SupabaseService } from 'src/app/shared/services/supabase.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-sign-up',
@@ -36,6 +37,28 @@ export class SignUpPage implements OnInit {
 
   async submit(){
     if (this.form.invalid) return;
+
+    const formData = this.form.value;
+
+    const payload = {
+      email: formData.email,
+      password: formData.password,
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      dni: formData.nationalId,
+      birthDate: formData.birthDate,
+      idProfile: 1,
+      idGender: formData.gender
+    };
+
+    try{
+      const response = await this.http.post(`${environment.apiUrl}/register`,payload).toPromise();
+      console.log('Registro exitoso', response);
+
+      this.form.reset();
+    } catch(error){
+      console.error("Error al registrar usuario", error);
+    }
   }
 
   getFormControl(controlName:string): FormControl {
