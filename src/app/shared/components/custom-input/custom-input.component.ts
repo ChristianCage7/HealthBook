@@ -10,7 +10,7 @@ import { FormControl } from '@angular/forms';
 export class CustomInputComponent  implements OnInit {
 
   @Input() control!: FormControl;
-  @Input() type!: string;
+  @Input() type: string = 'text';
   @Input() label!: string;
   @Input() autocomplete!: string;
   @Input() icon!: string;
@@ -24,10 +24,18 @@ export class CustomInputComponent  implements OnInit {
     if (this.type == 'password') this.isPassword = true;
   }
 
+  onDateChange(event: any){
+    this.control.setValue(event.detail.value);
+  }
+
   showOrHidePassword(){
     this.hide = !this.hide;
     if (this.hide) this.type = 'password';
     else this.type = 'text';
   }
 
+  
+  get isDate(): boolean {
+    return this.type === 'date';
+  }
 }

@@ -17,9 +17,9 @@ export class SignUpPage implements OnInit {
 
   constructor(
     private supabaseService: SupabaseService,
-    private http : HttpClient,
+    private http: HttpClient,
     private fb: FormBuilder
-  ) { 
+  ) {
     this.form = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required]),
@@ -29,16 +29,17 @@ export class SignUpPage implements OnInit {
       nationalId: new FormControl('', [Validators.required]),
       birthDate: new FormControl('', [Validators.required]),
       gender: new FormControl('', [Validators.required])
-    }, {validators: this.passwordMatchValidator});
+    }, { validators: this.passwordMatchValidator });
   }
 
   ngOnInit() {
   }
 
-  async submit(){
-    if (this.form.invalid) return;
-
+  async submit() {
+    if (this.form.invalid) return;    
     const formData = this.form.value;
+
+    console.log('birthDate capturado:', formData.birthDate);
 
     const payload = {
       email: formData.email,
@@ -46,22 +47,23 @@ export class SignUpPage implements OnInit {
       firstName: formData.firstName,
       lastName: formData.lastName,
       dni: formData.nationalId,
-      birthDate: formData.birthDate,
       idProfile: 1,
-      idGender: formData.gender
+      idGender: parseInt(formData.gender),
+      birthDate: formData.birthDate
     };
 
-    try{
-      const response = await this.http.post(`${environment.apiUrl}/register`,payload).toPromise();
-      console.log('Registro exitoso', response);
-
+    try {
+      console.log("📦 Payload que se enviará:", payload);
+      const response = await this.http.post(`${environment.apiUrl}/register`, payload, { responseType: 'text' }).toPromise();
+      console.log('Registro exitoso', response)
       this.form.reset();
-    } catch(error){
+
+    } catch (error) {
       console.error("Error al registrar usuario", error);
     }
   }
 
-  getFormControl(controlName:string): FormControl {
+  getFormControl(controlName: string): FormControl {
     return this.form.get(controlName) as FormControl;
   }
 

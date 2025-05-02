@@ -43,13 +43,22 @@
       </div>
 
       <!-- Fecha de nacimiento -->
-      <app-custom-input
-        [control]="getFormControl('birthDate')"
-        icon="calendar-outline"
-        label="Fecha de nacimiento"
-        type="date">
-      </app-custom-input>
-      <div class="validators" *ngIf="getFormControl('birthDate').errors && getFormControl('birthDate').touched">
+      <ion-item lines="none" class="custom-input">
+        <ion-icon slot="start" name="calendar-outline"></ion-icon>
+        <ion-datetime
+          formControlName="birthDate"
+          placeholder="Selecciona tu fecha de nacimiento"
+          presentation="date"
+          display-format="DD/MM/YYYY"
+          value-format="YYYY-MM-DDTHH:mm:ssZ"
+          locale="es-ES"
+          color="primary"
+          cancel-text="Cancelar"
+          done-text="Aceptar"
+        ></ion-datetime>
+      </ion-item>
+      
+      <div class="validators" *ngIf="getFormControl('birthDate').invalid && getFormControl('birthDate').touched">
         <div *ngIf="getFormControl('birthDate').errors?.['required']">Este campo es requerido</div>
       </div>
 
@@ -59,9 +68,9 @@
         icon="transgender-outline"
         label="Género"
         [options]="[
-          { label: 'Masculino', value: 'masculino' },
-          { label: 'Femenino', value: 'femenino' },
-          { label: 'Prefiero no decirlo', value: 'no-decirlo' }
+          { label: 'Masculino', value: '1' },
+          { label: 'Femenino', value: '2' },
+          { label: 'Prefiero no decirlo', value: '3'} 
         ]">
       </app-custom-select>
       <div class="validators" *ngIf="getFormControl('gender').errors && getFormControl('gender').touched">

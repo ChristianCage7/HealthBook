@@ -1,7 +1,7 @@
 <ion-item class="custom-input" lines="none">
   <ion-icon *ngIf="icon" slot="start" [name]="icon"></ion-icon>
 
-<ion-input 
+<ion-input *ngIf = "!isDate"
 [type]="type"
 [autocomplete]="autocomplete"
 [label]="label"
@@ -9,7 +9,25 @@
 label-placement="floating">
 </ion-input>
 
+<ng-container *ngIf="isDate">
+  <ion-label>{{ label }}</ion-label>
+  <ion-datetime-button datetime="datePicker"></ion-datetime-button>
+  <ion-modal [keepContentsMounted]="true">
+    <ng-template>
+      <ion-datetime
+        id="datePicker"
+        presentation="date"
+        [value]="control.value"
+        (ionChange)="onDateChange($event)">
+      </ion-datetime>
+    </ng-template>
+  </ion-modal>
+</ng-container>
+
 <ion-button *ngIf="isPassword" (click)="showOrHidePassword()" slot="end" fill="clear" shape="round">
   <ion-icon slot="icon-only" [name]="hide ? 'eye-outline' : 'eye-off-outline'"></ion-icon>
 </ion-button>
+
+
+
 </ion-item>
