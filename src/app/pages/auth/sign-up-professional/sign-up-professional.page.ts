@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-sign-up-professional',
+  standalone: false,
   templateUrl: './sign-up-professional.page.html',
   styleUrls: ['./sign-up-professional.page.scss'],
 })

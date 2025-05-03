@@ -1,16 +1,18 @@
 <app-header title="Registro"></app-header>
 <ion-content>
 
+
   <div class="d-flex-center">
+    <!-- Botón -->
+    <ion-button class=btn-primary expand="block" type="submit" routerLink="/auth/sign-up-professional">
+      ¿Es un profesional y desea trabajar con nosotros?
+      Registrese aquí
+       </ion-button>
     <form [formGroup]="form" class="auth-form" (ngSubmit)="submit()" (keypress.enter)="submit()">
       <app-logo></app-logo>
 
       <!-- Nombres -->
-      <app-custom-input
-        [control]="getFormControl('firstName')"
-        icon="person-outline"
-        label="Nombres"
-        type="text"
+      <app-custom-input [control]="getFormControl('firstName')" icon="person-outline" label="Nombres" type="text"
         autocomplete="given-name">
       </app-custom-input>
       <div class="validators" *ngIf="getFormControl('firstName').errors && getFormControl('firstName').touched">
@@ -18,11 +20,7 @@
       </div>
 
       <!-- Apellidos -->
-      <app-custom-input
-        [control]="getFormControl('lastName')"
-        icon="person-outline"
-        label="Apellidos"
-        type="text"
+      <app-custom-input [control]="getFormControl('lastName')" icon="person-outline" label="Apellidos" type="text"
         autocomplete="family-name">
       </app-custom-input>
       <div class="validators" *ngIf="getFormControl('lastName').errors && getFormControl('lastName').touched">
@@ -30,12 +28,8 @@
       </div>
 
       <!-- Identidad Nacional -->
-      <app-custom-input
-        [control]="getFormControl('nationalId')"
-        icon="id-card-outline"
-        label="Identidad Nacional"
-        type="text"
-        autocomplete="off">
+      <app-custom-input [control]="getFormControl('nationalId')" icon="id-card-outline" label="Identidad Nacional"
+        type="text" autocomplete="off">
       </app-custom-input>
       <div class="validators" *ngIf="getFormControl('nationalId').errors && getFormControl('nationalId').touched">
         <div *ngIf="getFormControl('nationalId').errors?.['required']">Este campo es requerido</div>
@@ -45,29 +39,17 @@
       <!-- Fecha de nacimiento -->
       <ion-item lines="none" class="custom-input">
         <ion-icon slot="start" name="calendar-outline"></ion-icon>
-        <ion-datetime
-          formControlName="birthDate"
-          placeholder="Selecciona tu fecha de nacimiento"
-          presentation="date"
-          display-format="DD/MM/YYYY"
-          value-format="YYYY-MM-DDTHH:mm:ssZ"
-          locale="es-ES"
-          color="primary"
-          cancel-text="Cancelar"
-          done-text="Aceptar"
-        ></ion-datetime>
+        <ion-datetime formControlName="birthDate" placeholder="Selecciona tu fecha de nacimiento" presentation="date"
+          display-format="DD/MM/YYYY" value-format="YYYY-MM-DDTHH:mm:ssZ" locale="es-ES" color="primary"
+          cancel-text="Cancelar" done-text="Aceptar"></ion-datetime>
       </ion-item>
-      
+
       <div class="validators" *ngIf="getFormControl('birthDate').invalid && getFormControl('birthDate').touched">
         <div *ngIf="getFormControl('birthDate').errors?.['required']">Este campo es requerido</div>
       </div>
 
       <!-- Género -->
-      <app-custom-select
-        [control]="getFormControl('gender')"
-        icon="transgender-outline"
-        label="Género"
-        [options]="[
+      <app-custom-select [control]="getFormControl('gender')" icon="transgender-outline" label="Género" [options]="[
           { label: 'Masculino', value: '1' },
           { label: 'Femenino', value: '2' },
           { label: 'Prefiero no decirlo', value: '3'} 
@@ -78,11 +60,7 @@
       </div>
 
       <!-- Email -->
-      <app-custom-input
-        [control]="getFormControl('email')"
-        icon="mail-outline"
-        label="Correo"
-        type="email"
+      <app-custom-input [control]="getFormControl('email')" icon="mail-outline" label="Correo" type="email"
         autocomplete="email">
       </app-custom-input>
       <div class="validators" *ngIf="getFormControl('email').errors && getFormControl('email').touched">
@@ -91,10 +69,7 @@
       </div>
 
       <!-- Contraseña -->
-      <app-custom-input
-        [control]="getFormControl('password')"
-        icon="lock-closed-outline"
-        label="Contraseña"
+      <app-custom-input [control]="getFormControl('password')" icon="lock-closed-outline" label="Contraseña"
         type="password">
       </app-custom-input>
       <div class="validators" *ngIf="getFormControl('password').errors && getFormControl('password').touched">
@@ -102,18 +77,15 @@
       </div>
 
       <!-- Confirmar Contraseña -->
-      <app-custom-input
-        [control]="getFormControl('confirmPassword')"
-        icon="lock-closed-outline"
-        label="Confirmar contraseña"
-        type="password">
+      <app-custom-input [control]="getFormControl('confirmPassword')" icon="lock-closed-outline"
+        label="Confirmar contraseña" type="password">
       </app-custom-input>
       <div class="validators" *ngIf="form.errors?.['passwordsMismatch'] && getFormControl('confirmPassword').touched">
         <div>Las contraseñas no coinciden</div>
       </div>
 
       <!-- Botón -->
-      <ion-button expand="block" type="submit" [disabled]="form.invalid">
+      <ion-button class=btn-primary expand="block" type="submit" [disabled]="form.invalid">
         Registrarse
       </ion-button>
 

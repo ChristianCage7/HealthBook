@@ -47,7 +47,13 @@ ion-content {
     font-weight: 600;
     border-radius: 14px;
   }
-  
+
+  .btn-primary {
+    --background: #4b268e;
+    --color: white;
+    font-weight: 600;
+    border-radius: 14px;
+  }  
   .validators {
     font-size: 13px;
     color: #d32f2f;
