@@ -22,6 +22,10 @@ const routes: Routes = [
   {
     path: 'creditor',
     loadChildren: () => import('./creditor/creditor.module').then( m => m.CreditorPageModule)
+  },
+  {
+    path: 'reset-password',
+    loadChildren: () => import('./reset-password/reset-password.module').then( m => m.ResetPasswordPageModule)
   }
 
 
