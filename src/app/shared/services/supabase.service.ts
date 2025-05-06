@@ -22,4 +22,20 @@ export class SupabaseService {
     return await supabase.auth.signOut();
   }
 
+  async getGenderOptions() {
+    const { data, error } = await supabase
+      .from('Gender')
+      .select('id, gender');  
+    if (error) throw error;
+    return data;
+  }
+  
+  async getProfessionOptions() {
+    const { data, error } = await supabase
+      .from('Profession')
+      .select('idprofession, name')  
+      .eq('status', 1);
+    if (error) throw error;
+    return data;
+  }
 }
