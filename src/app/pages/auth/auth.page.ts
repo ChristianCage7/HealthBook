@@ -54,6 +54,6 @@ export class AuthPage implements OnInit {
     }
 
     console.log('[Login] Usuario autenticado con éxito:', data);
-    this.router.navigateByUrl('/profile');
+    this.router.navigateByUrl('/menu');
   }
 }
