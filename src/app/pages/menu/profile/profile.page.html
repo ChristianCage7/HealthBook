@@ -2,54 +2,37 @@
 <ion-content class="main-content">
 
   <div class="upper-part">
-  <!-- Sección de Avatar con botón de carga -->
-  <div class="avatar-section">
-    <ion-avatar class="avatar-image">
-      <img [src]="avatarUrl || 'assets/img/avatar-tree.png'" alt="Avatar" />
-    </ion-avatar>
-    <input type="file" accept="image/*" hidden #fileInput (change)="onImageSelected($event)" />
-    <ion-button class="change-avatar-button" size="small" fill="outline" (click)="fileInput.click()">
-      Cambiar foto
-    </ion-button>
-  </div>
+    <div class="avatar-section">
+      <ion-avatar class="avatar-image">
+        <img [src]="avatarUrl" alt="Avatar" />
+      </ion-avatar>
+      <input type="file" accept="image/*" hidden #fileInput (change)="onImageSelected($event)" />
+      <ion-button class="change-avatar-button" size="small" fill="outline" (click)="fileInput.click()">
+        Cambiar foto
+      </ion-button>
+    </div>
 
-  <div class="title">Nombre paciente</div>
-</div>
+    <!-- Título estático -->
+    <div class="title">Mi cuenta</div>
+  </div>
 
   <div class="d-flex-center">
     <form [formGroup]="form" class="auth-form" (ngSubmit)="submit()" (keypress.enter)="submit()">
 
-      <!-- Correo -->
-      <app-custom-input [control]="getFormControl('email')" icon="mail-outline" label="Correo" type="email"
-        autocomplete="email">
+      <app-custom-input [control]="getFormControl('email')" icon="mail-outline" label="Correo" type="email" autocomplete="email">
         correo"&#64;"correo.com
       </app-custom-input>
-      <div class="validators" *ngIf="getFormControl('email').errors && getFormControl('email').touched">
-        <div *ngIf="getFormControl('email').errors?.['required']">El correo es requerido</div>
-        <div *ngIf="getFormControl('email').errors?.['email']">Ingrese un correo válido</div>
-      </div>
 
-      <!-- Contraseña -->
-      <app-custom-input [control]="getFormControl('password')" icon="lock-closed-outline" label="Contraseña"
-        type="password">
+      <app-custom-input [control]="getFormControl('password')" icon="lock-closed-outline" label="Contraseña" type="password">
       </app-custom-input>
-      <div class="validators" *ngIf="getFormControl('password').errors && getFormControl('password').touched">
-        <div *ngIf="getFormControl('password').errors?.['required']">La contraseña es requerida</div>
-      </div>
 
-      <!-- Confirmar Contraseña -->
-      <app-custom-input [control]="getFormControl('confirmPassword')" icon="lock-closed-outline"
-        label="Confirmar contraseña" type="password">
+      <app-custom-input [control]="getFormControl('confirmPassword')" icon="lock-closed-outline" label="Confirmar contraseña" type="password">
       </app-custom-input>
-      <div class="validators" *ngIf="form.errors?.['passwordsMismatch'] && getFormControl('confirmPassword').touched">
-        <div>Las contraseñas no coinciden</div>
-      </div>
 
       <ion-item class="notification">
         <ion-label>Notificaciones</ion-label>
         <ion-toggle formControlName="notifications" class="custom-toggle"></ion-toggle>
       </ion-item>
-
 
       <div class="button-group">
         <ion-button class="btn-primary" expand="block" type="submit" [disabled]="form.invalid">
