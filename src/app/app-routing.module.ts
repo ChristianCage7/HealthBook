@@ -16,6 +16,15 @@ const routes: Routes = [
     path: 'auth',
     loadChildren: () => import('./pages/auth/auth.module').then( m => m.AuthPageModule)
   },
+  {
+    path: 'profile',
+    loadChildren: () => import('./pages/menu/profile/profile.module').then( m => m.ProfilePageModule)
+  },  {
+    path: 'menu',
+    loadChildren: () => import('./pages/menu/menu.module').then( m => m.MenuPageModule)
+  },
+
+
 
 ];
 
