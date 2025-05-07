@@ -1,5 +1,13 @@
 {
 	"appId": "io.ionic.starter",
 	"appName": "healthbook",
-	"webDir": "www"
+	"webDir": "www",
+	"server": {
+		"androidScheme": "https"
+	},
+	"plugins": {
+		"CustomURLScheme": {
+			"scheme": "myapp"
+		}
+	}
 }

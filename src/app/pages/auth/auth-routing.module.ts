@@ -18,6 +18,14 @@ const routes: Routes = [
   },  {
     path: 'sign-up-professional',
     loadChildren: () => import('./sign-up-professional/sign-up-professional.module').then( m => m.SignUpProfessionalPageModule)
+  },
+  {
+    path: 'creditor',
+    loadChildren: () => import('./creditor/creditor.module').then( m => m.CreditorPageModule)
+  },
+  {
+    path: 'reset-password',
+    loadChildren: () => import('./reset-password/reset-password.module').then( m => m.ResetPasswordPageModule)
   }
 
 

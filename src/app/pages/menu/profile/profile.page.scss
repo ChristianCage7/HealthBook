@@ -1,0 +1,115 @@
+.main-content {
+    --background: linear-gradient(to bottom,
+            #f6f3fc 0%,
+            #f4effc 50%,
+            #f2eafe 100%);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding-top: 40px;
+    box-sizing: border-box;
+}
+
+.title {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.upper-part {
+    margin-top: 30px;
+}
+
+.change-avatar-button {
+    --background: white;
+    --color: #6b47dc;
+    --border-color: #6b47dc;
+    margin-top: 15px;
+}
+
+.custom-toggle{
+    --handle-background: #4b268e;         /* Color del círculo */
+    --handle-border-radius: 50%;        /* Redondeo del círculo */
+    --track-background: #ccc;           /* Color del track cuando está apagado */
+    --track-background-checked: #6b47dc; /* Color del track cuando está prendido */
+    --handle-background-checked: #4b268e; /* Color del círculo cuando está prendido */
+}
+
+.notification {
+    --background: white;
+    --highlight-color-focused: #6b47dc; // color del borde inferior al enfocar
+    --color: #4b268e; // color del icono y texto
+    --placeholder-color: #a38ec7; // color del texto flotante
+    border-radius: 14px;
+    margin-bottom: 8px;
+    margin-top: 20px;
+    padding-inline: 6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); 
+}
+
+.btn-danger {
+    --background: #ff4d4d;
+    --color: white;
+    font-weight: bold;
+    border-radius: 14px;
+  }
+
+.container {
+    width: 100%;
+    max-width: 60vw;
+    margin: 0 auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+@media (max-width: 600px) {
+    .container {
+        max-width: 90vw;
+    }
+}
+
+.avatar-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.avatar-image {
+    width: 120px;
+    height: 120px;
+    border: 2px solid #4b268e;
+}
+
+.username {
+    font-size: 20px;
+    font-weight: 600;
+    text-align: center;
+    margin: 4px 0 12px 0;
+}
+
+.form-list ion-item {
+    --padding-start: 12px;
+    --inner-padding-end: 12px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    background: white;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.btn-primary {
+    --background: #4b268e;
+    --color: white;
+    font-weight: 600;
+    border-radius: 12px;
+}
