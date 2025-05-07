@@ -53,7 +53,7 @@ export class SignUpPage implements OnInit {
     };
 
     try {
-      console.log("📦 Payload que se enviará:", payload);
+      console.log("Payload que se enviará:", payload);
       const response = await this.http.post(`${environment.apiUrl}/register`, payload, { responseType: 'text' }).toPromise();
       console.log('Registro exitoso', response)
       this.form.reset();

@@ -1,2 +1,77 @@
-<app-header title="Registro"></app-header>
-<ion-content></ion-content>
+<app-header title="Registro Profesional"></app-header>
+
+<ion-content>
+    <div class="d-flex-center">
+        <form [formGroup]="form" class="auth-form" (ngSubmit)="submit()" (keypress.enter)="submit()">
+            <app-logo></app-logo>
+
+            <!-- Nombres -->
+            <app-custom-input [control]="getFormControl('firstName')" icon="person-outline" label="Nombres" type="text"
+                autocomplete="given-name">
+            </app-custom-input>
+
+            <!-- Apellidos -->
+            <app-custom-input [control]="getFormControl('lastName')" icon="person-outline" label="Apellidos" type="text"
+                autocomplete="family-name">
+            </app-custom-input>
+
+            <!-- Identidad Nacional -->
+            <app-custom-input [control]="getFormControl('nationalId')" icon="id-card-outline" label="Identidad Nacional"
+                type="text" autocomplete="off">
+            </app-custom-input>
+
+            <!-- Fecha de nacimiento -->
+            <ion-item lines="none" class="custom-input">
+                <ion-icon slot="start" name="calendar-outline"></ion-icon>
+                <ion-datetime formControlName="datebirth" placeholder="Fecha de nacimiento" presentation="date"
+                    display-format="DD/MM/YYYY" value-format="YYYY-MM-DD" locale="es-ES" cancel-text="Cancelar"
+                    done-text="Aceptar">
+                </ion-datetime>
+            </ion-item>
+
+
+
+            <!-- Género (hardcodeado) -->
+            <app-custom-select [control]="getFormControl('idgender')" icon="transgender-outline" label="Género"
+                [options]="[
+          { label: 'Masculino', value: '1' },
+          { label: 'Femenino', value: '2' },
+          { label: 'Otro', value: '3' }
+        ]">
+            </app-custom-select>
+
+            <!-- Profesión (hardcodeado) -->
+            <app-custom-select [control]="getFormControl('idprofession')" icon="briefcase-outline" label="Profesión"
+                [options]="[
+          { label: 'Psicólogo', value: '1' }
+        ]">
+            </app-custom-select>
+
+            <!-- Email -->
+            <app-custom-input [control]="getFormControl('email')" icon="mail-outline" label="Correo" type="email"
+                autocomplete="email">
+            </app-custom-input>
+
+            <!-- Contraseña -->
+            <app-custom-input [control]="getFormControl('password')" icon="lock-closed-outline" label="Contraseña"
+                type="password">
+            </app-custom-input>
+
+            <!-- Confirmar Contraseña -->
+            <app-custom-input [control]="getFormControl('confirmPassword')" icon="lock-closed-outline"
+                label="Confirmar contraseña" type="password">
+            </app-custom-input>
+
+            <!-- Documento PDF -->
+            <ion-item lines="none" class="custom-input">
+                <ion-icon slot="start" name="document-outline"></ion-icon>
+                <input type="file" accept="application/pdf" (change)="onDocumentSelected($event)" />
+            </ion-item>
+
+            <!-- Botón de registro -->
+            <ion-button class="btn-primary" expand="block" type="submit" [disabled]="form.invalid">
+                Registrarse como Profesional
+            </ion-button>
+        </form>
+    </div>
+</ion-content>

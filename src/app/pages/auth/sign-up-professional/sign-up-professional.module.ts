@@ -8,6 +8,7 @@ import { SignUpProfessionalPageRoutingModule } from './sign-up-professional-rout
 
 import { SignUpProfessionalPage } from './sign-up-professional.page';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
     FormsModule,
     IonicModule,
     SignUpProfessionalPageRoutingModule,
-    SharedModule
+    SharedModule,
+    HttpClientModule
   ],
   declarations: [SignUpProfessionalPage]
 })
