@@ -26,6 +26,10 @@ const routes: Routes = [
   {
     path: 'reset-password',
     loadChildren: () => import('./reset-password/reset-password.module').then( m => m.ResetPasswordPageModule)
+  },
+  {
+    path: 'success-confirmation',
+    loadChildren: () => import('./success-confirmation/success-confirmation.module').then( m => m.SuccessConfirmationPageModule)
   }
 
 
