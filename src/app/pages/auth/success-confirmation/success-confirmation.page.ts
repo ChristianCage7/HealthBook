@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-success-confirmation',
@@ -8,9 +9,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SuccessConfirmationPage implements OnInit {
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit() {
+    setTimeout(() => {
+      this.router.navigate(['/auth'], { replaceUrl: true });
+    }, 3000); // redirige al login en 3 segundos
   }
-
 }
