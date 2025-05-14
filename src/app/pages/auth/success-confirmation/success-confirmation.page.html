@@ -1,13 +1,14 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>success-confirmation</ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-header title="Registro"></app-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">success-confirmation</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="ion-padding">
+  <div class="confirmation-message">
+    <app-logo></app-logo>
+    <h2>¡Correo confirmado!</h2>
+    <p>Serás redirigido al inicio de sesión en unos segundos...</p>
+
+    <ion-button class=btn-primary expand="block" type="submit" routerLink="/auth">
+      Si no redirige, presione aquí
+    </ion-button>
+
+  </div>
 </ion-content>
