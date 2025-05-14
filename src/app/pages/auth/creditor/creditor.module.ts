@@ -8,6 +8,7 @@ import { CreditorPageRoutingModule } from './creditor-routing.module';
 
 import { CreditorPage } from './creditor.page';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { SharedModule } from 'src/app/shared/shared.module';
     FormsModule,
     IonicModule,
     CreditorPageRoutingModule,
-    SharedModule
+    SharedModule,
+    HttpClientModule
   ],
   declarations: [CreditorPage]
 })

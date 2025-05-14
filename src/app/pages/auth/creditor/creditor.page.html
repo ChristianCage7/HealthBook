@@ -1,2 +1,24 @@
-<app-header title="Menu acreditador"></app-header>
-<ion-content></ion-content>
+<app-header title="Solicitudes Profesionales"></app-header>
+
+<ion-content>
+  <div class="d-flex-center auth-form">
+    <ion-list *ngIf="professionals.length > 0">
+      <ion-item *ngFor="let prof of professionals">
+        <ion-avatar slot="start">
+          <img [src]="prof.imgprofile || 'assets/icon/profile-img.png'">
+        </ion-avatar>
+        <ion-label>
+          <h2>{{ prof.first_name }} {{ prof.last_name }}</h2>
+          <p>Email: {{ prof.email }}</p>
+          <p>Fecha nacimiento: {{ prof.datebirth | date: 'dd/MM/yyyy' }}</p>
+        </ion-label>
+        <ion-button color="success" (click)="approve(prof.idprofessional)">Aprobar</ion-button>
+        <ion-button color="medium" (click)="reject(prof.idprofessional)">Rechazar</ion-button>
+      </ion-item>
+    </ion-list>
+
+    <div *ngIf="professionals.length === 0" class="ion-text-center ion-padding">
+      No hay profesionales pendientes.
+    </div>
+  </div>
+</ion-content>

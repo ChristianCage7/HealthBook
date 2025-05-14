@@ -1,55 +1,42 @@
 <app-header title="Mi perfil"></app-header>
 
-<ion-content class="main-content">
+<ion-content>
+  <div class="profile-container">
 
-  <div class="upper-part">
-    <div class="avatar-section">
-      <ion-avatar class="avatar-image">
-        <img [src]="avatarUrl || 'assets/img/avatar-default.png'" alt="Avatar" />
-      </ion-avatar>
-      <input type="file" accept="image/*" hidden #fileInput (change)="onImageSelected($event)" />
-      <ion-button class="change-avatar-button" size="small" fill="outline" (click)="fileInput.click()">
-        Cambiar foto
-      </ion-button>
-    </div>
+    <ion-avatar class="avatar-circle">
+      <img [src]="user.imgprofile || 'assets/icon/profile-img.png'" alt="Avatar">
+    </ion-avatar>
 
-    <!-- Título dinámico con nombre completo -->
-    <div class="title">
-      {{ patientName || 'Mi cuenta' }}
-    </div>
-  </div>
+    <ion-button fill="outline" size="small" class="change-photo-btn" disabled>
+      Cambiar foto
+    </ion-button>
 
-  <div class="d-flex-center">
-    <form [formGroup]="form" class="auth-form" (ngSubmit)="submit()" (keypress.enter)="submit()">
+    <h3 class="section-title">Mi cuenta</h3>
 
-      <app-custom-input [control]="getFormControl('email')" icon="mail-outline" label="Correo" type="email"
-        autocomplete="email">
-        correo&#64;correo.com
-      </app-custom-input>
-
-      <app-custom-input [control]="getFormControl('password')" icon="lock-closed-outline" label="Contraseña"
-        type="password">
-      </app-custom-input>
-
-      <app-custom-input [control]="getFormControl('confirmPassword')" icon="lock-closed-outline"
-        label="Confirmar contraseña" type="password">
-      </app-custom-input>
-
-      <ion-item class="notification">
-        <ion-label>Notificaciones</ion-label>
-        <ion-toggle formControlName="notifications" class="custom-toggle"></ion-toggle>
+    <ion-list lines="none">
+      <ion-item>
+        <ion-icon name="mail-outline" slot="start"></ion-icon>
+        <ion-input [(ngModel)]="user.email" placeholder="Correo"></ion-input>
       </ion-item>
 
-      <div class="button-group">
-        <ion-button class="btn-primary" expand="block" type="submit" [disabled]="form.invalid">
-          Guardar cambios
-        </ion-button>
+      <ion-item>
+        <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
+        <ion-input type="password" placeholder="••••••••••••" disabled></ion-input>
+        <ion-button fill="clear" size="small" (click)="changePassword()">Cambiar contraseña</ion-button>
+      </ion-item>
 
-        <ion-button class="btn-danger" expand="block" type="submit">
-          Eliminar mi cuenta
-        </ion-button>
-      </div>
-    </form>
+      <ion-item>
+        <ion-label>Notificaciones</ion-label>
+        <ion-toggle [(ngModel)]="notifications"></ion-toggle>
+      </ion-item>
+    </ion-list>
+
+    <ion-button expand="block" (click)="submit()">
+      Guardar cambios
+    </ion-button>
+
+    <ion-button expand="block" color="danger" (click)="deleteAccount()" disabled>
+      Eliminar mi cuenta
+    </ion-button>
   </div>
-
 </ion-content>
