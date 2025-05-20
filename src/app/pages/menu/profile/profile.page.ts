@@ -12,6 +12,7 @@ export class ProfilePage implements OnInit {
 
   user:any = {};
   notifications = true;
+  editEmail = false;
 
   constructor(
     private userService: UserService,
@@ -28,6 +29,12 @@ export class ProfilePage implements OnInit {
     });
   }
 
+  toggleEditEmail(){
+    this.userService.getCurrentUser().subscribe(res => {
+      this.user = res[0];
+    });
+  }
+
   submit(){
     this.userService.updateUser(this.user).subscribe(async () => {
       const alert = await this.alertCtrl.create({
@@ -39,7 +46,28 @@ export class ProfilePage implements OnInit {
     });
   }
 
-  changePassword(){
+    async confirmChangePassword() {
+    const alert = await this.alertCtrl.create({
+      header: 'Cambiar contraseña',
+      message: 'Se enviará un correo a tu dirección actual para cambiar la contraseña. ¿Deseas continuar?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        },
+        {
+          text: 'Enviar correo',
+          handler: () => {
+            this.sendPasswordRecovery();
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  sendPasswordRecovery() {
     this.userService.sendPasswordRecovery(this.user.email).subscribe(async () => {
       const alert = await this.alertCtrl.create({
         header: 'Correo enviado',

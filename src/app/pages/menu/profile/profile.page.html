@@ -13,30 +13,45 @@
 
     <h3 class="section-title">Mi cuenta</h3>
 
-    <ion-list lines="none">
-      <ion-item>
-        <ion-icon name="mail-outline" slot="start"></ion-icon>
-        <ion-input [(ngModel)]="user.email" placeholder="Correo"></ion-input>
-      </ion-item>
+    <div class="auth-form">
+      <!-- Correo bloqueado inicialmente -->
+      <app-custom-input
+        [(ngModel)]="user.email"
+        name="email"
+        icon="mail-outline"
+        label="Correo"
+        [readonly]="!editEmail">
+      </app-custom-input>
 
-      <ion-item>
-        <ion-icon name="lock-closed-outline" slot="start"></ion-icon>
-        <ion-input type="password" placeholder="••••••••••••" disabled></ion-input>
-        <ion-button fill="clear" size="small" (click)="changePassword()">Cambiar contraseña</ion-button>
-      </ion-item>
+      <ion-button fill="clear" size="small" color="primary" (click)="toggleEditEmail()">
+        {{ editEmail ? 'Bloquear correo' : 'Editar correo' }}
+      </ion-button>
 
-      <ion-item>
+      <!-- Contraseña estilo input bloqueado -->
+      <app-custom-input
+        icon="lock-closed-outline"
+        label="Contraseña"
+        [readonly]="true"
+        [type]="'password'"
+        [placeholder]="'••••••••••••'">
+      </app-custom-input>
+
+      <ion-button fill="clear" size="small" color="primary" (click)="confirmChangePassword()">
+        Cambiar contraseña
+      </ion-button>
+
+      <ion-item lines="none">
         <ion-label>Notificaciones</ion-label>
         <ion-toggle [(ngModel)]="notifications"></ion-toggle>
       </ion-item>
-    </ion-list>
 
-    <ion-button expand="block" (click)="submit()">
-      Guardar cambios
-    </ion-button>
+      <ion-button expand="block" color="primary" (click)="submit()">
+        Guardar cambios
+      </ion-button>
 
-    <ion-button expand="block" color="danger" (click)="deleteAccount()" disabled>
-      Eliminar mi cuenta
-    </ion-button>
+      <ion-button expand="block" color="danger" disabled>
+        Eliminar mi cuenta
+      </ion-button>
+    </div>
   </div>
 </ion-content>
