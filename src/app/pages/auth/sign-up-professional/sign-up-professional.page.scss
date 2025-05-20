@@ -1,0 +1,86 @@
+ion-content {
+  --background: linear-gradient(
+    to bottom,
+    #f6f3fc 0%,
+    #f4effc 50%,
+    #f2eafe 100%
+  );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100%;
+  }
+  
+  .d-flex-center {
+    width: 100%;
+    max-width: 420px;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    width: 100%;
+  }
+
+  app-logo {
+    width: 260px;
+    margin: 0 auto 10px;
+  }
+  
+  ion-button.submit {
+    --background: #4b268e;
+    --color: #ffffff;
+    font-weight: 600;
+    border-radius: 14px;
+  }
+  
+  ion-button[fill="outline"] {
+    --color: #4b268e;
+    --border-color: #4b268e;
+    font-weight: 600;
+    border-radius: 14px;
+  }
+
+  .btn-primary {
+    --background: #4b268e;
+    --color: white;
+    font-weight: 600;
+    border-radius: 14px;
+  }  
+  .validators {
+    font-size: 13px;
+    color: #d32f2f;
+    text-align: left;
+    margin-top: -8px;
+  }
+  
+  .custom-input-box {
+    --background: #ffffff;
+    border-radius: 14px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    margin-bottom: 12px;
+    padding-left: 10px;
+    padding-right: 10px;
+  
+    ion-select {
+      color: #4b268e;
+      font-weight: 500;
+    }
+  
+    .custom-label {
+      color: #6b47dc;
+      font-weight: 500;
+    }
+
+    ion-datetime {
+      width: 100%;
+      padding-left: 8px;
+    }
+  }

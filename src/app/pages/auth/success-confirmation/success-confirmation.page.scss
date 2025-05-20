@@ -1,0 +1,48 @@
+.confirmation-message {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+
+    h2 {
+        color: #4b268e; // tu color oscuro
+        margin-bottom: 10px;
+    }
+
+    p {
+        color: #4b268e; // el color claro que me pasaste
+        font-size: 16px;
+    }
+}
+
+ion-content {
+  --background: linear-gradient(
+    to bottom,
+    #f6f3fc 0%,
+    #f4effc 50%,
+    #f2eafe 100%
+  );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    height: 100%;
+  }
+
+app-logo {
+    width: 260px;
+    margin: 0 auto 10px;
+}
+
+ion-button {
+    --background: #4b268e;
+    --color: #ffffff;
+    font-weight: 600;
+    border-radius: 14px;
+}
+
+::ng-deep ion-back-button {
+  display: none !important;
+}
