@@ -12,8 +12,7 @@
           <p>Email: {{ prof.email }}</p>
           <p>Fecha nacimiento: {{ prof.datebirth | date: 'dd/MM/yyyy' }}</p>
         </ion-label>
-        <ion-button color="success" (click)="approve(prof.idprofessional)">Aprobar</ion-button>
-        <ion-button color="medium" (click)="reject(prof.idprofessional)">Rechazar</ion-button>
+        <ion-button color="primary" (click)="openReviewModal(prof)">Evaluación</ion-button>
       </ion-item>
     </ion-list>
 

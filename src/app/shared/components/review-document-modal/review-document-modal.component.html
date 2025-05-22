@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Revisión de Documentos</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">Cerrar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <h2>{{ professional.first_name }} {{ professional.last_name }}</h2>
+
+  <ion-item *ngFor="let doc of documents">
+    <ion-label>{{ doc.Document?.name || 'Documento sin nombre' }}</ion-label>
+    <ion-button fill="outline" (click)="download(doc.iduserdocument)">Examinar</ion-button>
+  </ion-item>
+
+  <ion-item lines="none">
+    <ion-label position="stacked">Comentario</ion-label>
+    <ion-textarea [(ngModel)]="comment" placeholder="Opcional, agrega un comentario..."></ion-textarea>
+  </ion-item>
+
+  <ion-footer class="ion-padding">
+    <ion-button expand="block" color="success" (click)="close('approve')">Aprobar</ion-button>
+    <ion-button expand="block" color="danger" (click)="close('reject')">Rechazar</ion-button>
+  </ion-footer>
+</ion-content>

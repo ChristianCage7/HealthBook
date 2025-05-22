@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { SupabaseService } from 'src/app/shared/services/supabase.service';
 import { environment } from 'src/environments/environment';
@@ -22,7 +23,8 @@ export class SignUpPage implements OnInit {
     private supabaseService: SupabaseService,
     private http: HttpClient,
     private fb: FormBuilder,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private router: Router
   ) {
     this.form = new FormGroup({
       email: new FormControl('', [Validators.required, Validators.email]),
@@ -65,6 +67,8 @@ export class SignUpPage implements OnInit {
 
       this.showAlert('Registro completado correctamente.');
       this.form.reset();
+      this.router.navigateByUrl('/auth');
+
 
     } catch (error) {
       console.error('Error al registrar usuario:', error);

@@ -1,28 +1,46 @@
 import { Injectable } from '@angular/core';
-import { of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+export interface Professional {
+  idprofessional: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  imgprofile: string;
+  datebirth: string;
+  approve: number;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class CreditorService {
 
-  constructor() { }
+  private apiUrl = 'http://localhost:8080/api'; // Asegúrate que este sea el base URL correcto
 
-  getPendingProfessionals(){
-    return of([
-      {
-        idprofessional: 1,
-        first_name: 'Paulino',
-        last_name: 'Gonza',
-        email: 'paulina.vice@gmail.com',
-        imgprofile: 'https://healthbook-users.s3.amazonaws.com/Users-IMGProfile/abaf02ac-f66e-41d7-80ac-3fc43360ce8b/profile-img.png',
-        datebirth: '2025-05-04 23:07:00+00'
-      }
-    ])
+  constructor(private http: HttpClient) { }
+
+  /**
+   * Obtener los profesionales pendientes de aprobación
+   */
+  getPendingProfessionals(): Observable<Professional[]> {
+    return this.http.get<Professional[]>(`${this.apiUrl}/users/professional/pending`);
   }
 
-approveProfessional(idProfessional: number){
-    return of({ message: 'Aprobado' });
+  getDocumentsByProfessional(idProfessional: number): Observable<any[]> {
+  return this.http.get<any[]>(`${this.apiUrl}/users/professional/documents/${idProfessional}`);
+}
+
+  /**
+   * Aprobar profesional por ID
+   */
+  approveProfessional(idProfessional: number): Observable<any> {
+    return this.http.post(`${this.apiUrl}/users/professional/${idProfessional}/approve`, {});
+  }
+
+  rejectProfessional(idProfessional: number): Observable<any> {
+  return this.http.post(`${this.apiUrl}/users/professional/${idProfessional}/reject`, {});
 }
 
 }

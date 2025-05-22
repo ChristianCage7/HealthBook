@@ -6,6 +6,7 @@ import { LogoComponent } from './components/logo/logo.component';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CustomSelectComponent } from './components/custom-select/custom-select.component';
+import { ReviewDocumentModalComponent } from './components/review-document-modal/review-document-modal.component';
 
 
 @NgModule({
@@ -13,7 +14,9 @@ import { CustomSelectComponent } from './components/custom-select/custom-select.
     HeaderComponent,
     CustomInputComponent,
     LogoComponent,
-    CustomSelectComponent
+    CustomSelectComponent,
+    ReviewDocumentModalComponent
+    
   ],
   exports: [
     HeaderComponent,
@@ -26,7 +29,7 @@ import { CustomSelectComponent } from './components/custom-select/custom-select.
     CommonModule,
     IonicModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
   ]
 })
 export class SharedModule { }
