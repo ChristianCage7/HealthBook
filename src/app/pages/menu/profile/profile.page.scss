@@ -41,3 +41,17 @@
 ion-button {
   margin-top: 8px;
 }
+
+ion-content {
+  --background: linear-gradient(
+    to bottom,
+    #f6f3fc 0%,
+    #f4effc 50%,
+    #f2eafe 100%
+  );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    box-sizing: border-box;
+  }

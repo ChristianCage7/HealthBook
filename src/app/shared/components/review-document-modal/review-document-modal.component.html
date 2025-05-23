@@ -7,21 +7,44 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
+<ion-content class="ion-padding custom-review-content">
+
   <h2>{{ professional.first_name }} {{ professional.last_name }}</h2>
+  <div class="professional-card">
+    <ion-item lines="none" *ngFor="let doc of documents">
+      <ion-label>{{ doc.Document?.name || 'Documento sin nombre' }}</ion-label>
+      <ion-button class="exam-btn" (click)="download(doc.iduserdocument)">
+        <ion-icon name="document-text-outline" slot="start"></ion-icon>
+        Examinar
+      </ion-button>
+    </ion-item>
 
-  <ion-item *ngFor="let doc of documents">
-    <ion-label>{{ doc.Document?.name || 'Documento sin nombre' }}</ion-label>
-    <ion-button fill="outline" (click)="download(doc.iduserdocument)">Examinar</ion-button>
-  </ion-item>
+    <ion-item lines="none">
+      <ion-label position="stacked">Comentario</ion-label>
+      <ion-textarea [(ngModel)]="comment" placeholder="Opcional, agrega un comentario..."></ion-textarea>
+    </ion-item>
 
-  <ion-item lines="none">
-    <ion-label position="stacked">Comentario</ion-label>
-    <ion-textarea [(ngModel)]="comment" placeholder="Opcional, agrega un comentario..."></ion-textarea>
-  </ion-item>
+    <div class="action-buttons">
+      <ion-button expand="block" class="approve-btn" (click)="close('approve')">
+        <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
+        Aprobar
+      </ion-button>
+      <ion-button expand="block" color="danger" (click)="close('reject')">
+        <ion-icon name="close-circle-outline" slot="start"></ion-icon>
+        Rechazar
+      </ion-button>
+    </div>
+  </div>
 
-  <ion-footer class="ion-padding">
-    <ion-button expand="block" color="success" (click)="close('approve')">Aprobar</ion-button>
-    <ion-button expand="block" color="danger" (click)="close('reject')">Rechazar</ion-button>
+  <ion-footer class="ion-padding final-footer">
+    <ion-button expand="block" class="confirm-btn" [disabled]="!selectedAction" (click)="confirmAction()">
+      <ion-icon name="checkmark-done-outline" slot="start"></ion-icon>
+      Confirmar
+    </ion-button>
+    <ion-button expand="block" class="cancel-btn" (click)="cancel()">
+      <ion-icon name="close-outline" slot="start"></ion-icon>
+      Cancelar
+    </ion-button>
   </ion-footer>
+
 </ion-content>

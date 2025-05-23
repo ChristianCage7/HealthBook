@@ -1,0 +1,140 @@
+ion-header {
+    ion-toolbar {
+        --background: #4b268e; // más oscuro que el fondo general
+        --color: #ffffff;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        padding-top: 10px;
+        padding-bottom: 4px;
+    }
+
+    ion-title {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding-left: 16px;
+
+        strong {
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .admin {
+            font-size: 12px;
+            letter-spacing: 6px;
+            color: #e5d9fb;
+            margin-top: 2px;
+        }
+    }
+
+    ion-back-button {
+        color: #ffffff; // acorde a tu paleta
+        margin-left: 4px;
+    }
+}
+
+.professional-card{
+    border-color: #28a745;
+}
+
+.custom-review-content {
+  --background: linear-gradient(to bottom, #f6f3fc 0%, #f4effc 50%, #f2eafe 100%);
+
+  h2 {
+    margin-bottom: 16px;
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+    text-align: center; // ← Centramos el nombre
+  }
+
+  .action-buttons {
+    background: #ffffff;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    padding: 8px 12px;
+  }
+
+  ion-item {
+    background: #ffffff;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    padding: 8px 12px;
+
+    ion-label {
+      font-size: 16px;
+      color: #444;
+    }
+  }
+
+  .exam-btn {
+    --border-radius: 12px;
+    --background: #7a5af5;
+    --color: #fff;
+    --padding-start: 16px;
+    --padding-end: 16px;
+    font-weight: 500;
+    font-size: small;
+    margin-left: auto;
+  }
+
+  .approve-btn {
+    --background: #7a5af5;
+    --color: white;
+    font-weight: 600;
+  }
+
+  ion-button[color="danger"] {
+    --background: #cccccc;
+    --color: #222;
+    font-weight: 600;
+  }
+
+  ion-textarea {
+    background: white;
+    border-radius: 12px;
+    padding: 12px;
+    font-size: 15px;
+  }
+
+  ion-label[position="stacked"] {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 6px;
+    color: #444;
+  }
+
+.final-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+  padding-bottom: env(safe-area-inset-bottom, 16px);
+  z-index: 10;
+
+  ion-button {
+    margin-top: 8px;
+    box-shadow: none;
+    --box-shadow: none;
+    --border-radius: 12px;
+    --padding-top: 12px;
+    --padding-bottom: 12px;
+    font-weight: 600;
+  }
+
+  .confirm-btn {
+    --background: #7a5af5;
+    --color: white;
+  }
+
+  .cancel-btn {
+    --background: #cccccc;
+    --color: #222;
+  }
+}
+
+}

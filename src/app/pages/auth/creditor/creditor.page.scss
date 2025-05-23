@@ -1,0 +1,74 @@
+ion-content {
+    --background: linear-gradient(to bottom,
+            #f6f3fc 0%,
+            #f4effc 50%,
+            #f2eafe 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    box-sizing: border-box;
+    padding: 16px;
+
+    .professional-list {
+        width: 100%;
+        max-width: 700px;
+    }
+
+    .professional-card {
+        background: #fff;
+        border-radius: 18px;
+        padding: 16px;
+        margin-bottom: 20px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        column-gap: 16px;
+
+        .card-avatar {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid #7a5af5;
+
+            img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+            }
+        }
+
+        .professional-info {
+            text-align: left;
+
+            h2 {
+                margin: 0;
+                font-size: 1.1rem;
+                color: #3b2e7e;
+            }
+
+            p {
+                margin: 4px 0;
+                font-size: 0.9rem;
+                color: #555;
+
+                strong {
+                    color: #6a4ecc;
+                }
+            }
+        }
+
+        .eval-button {
+            height: 36px;
+            font-weight: 500;
+            border-radius: 12px;
+            padding: 0 16px;
+            white-space: nowrap;
+            color: #7a5af5;
+        }
+    }
+
+}

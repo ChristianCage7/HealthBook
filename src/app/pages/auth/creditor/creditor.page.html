@@ -2,22 +2,27 @@
 
 <ion-content>
   <div class="d-flex-center auth-form">
-    <ion-list *ngIf="professionals.length > 0">
-      <ion-item *ngFor="let prof of professionals">
-        <ion-avatar slot="start">
-          <img [src]="prof.imgprofile || 'assets/icon/profile-img.png'">
-        </ion-avatar>
-        <ion-label>
-          <h2>{{ prof.first_name }} {{ prof.last_name }}</h2>
-          <p>Email: {{ prof.email }}</p>
-          <p>Fecha nacimiento: {{ prof.datebirth | date: 'dd/MM/yyyy' }}</p>
-        </ion-label>
-        <ion-button color="primary" (click)="openReviewModal(prof)">Evaluación</ion-button>
-      </ion-item>
-    </ion-list>
+    <div class="professional-list" *ngIf="professionals.length > 0">
+      <div class="professional-card" *ngFor="let prof of professionals">
+        <div class="card-avatar">
+          <img [src]="prof.imgprofile || 'assets/icon/profile-img.png'" />
+        </div>
+
+        <div class="professional-info">
+          <h3>{{ prof.first_name }} {{ prof.last_name }}</h3>
+          <p><strong>Email:</strong> {{ prof.email }}</p>
+          <p><strong>Fecha nacimiento:</strong> {{ prof.datebirth | date: 'dd/MM/yyyy' }}</p>
+        </div>
+
+        <ion-button fill="solid" color="tertiary" class="eval-button" (click)="openReviewModal(prof)">
+          <ion-icon name="search-outline" slot="start"></ion-icon>
+          Evaluación
+        </ion-button>
+      </div>
+    </div>
 
     <div *ngIf="professionals.length === 0" class="ion-text-center ion-padding">
-      No hay profesionales pendientes.
+      <p class="no-results">No hay profesionales pendientes.</p>
     </div>
   </div>
 </ion-content>
