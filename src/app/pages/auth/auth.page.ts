@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { SupabaseService } from 'src/app/shared/services/supabase.service';
 import { Router } from '@angular/router';
+import { UserService } from 'src/app/shared/services/user.service';
 
 @Component({
   selector: 'app-auth',
@@ -20,8 +21,9 @@ export class AuthPage implements OnInit {
 
   constructor(
     private supabaseService: SupabaseService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private userService: UserService
+  ) { }
 
   ngOnInit() {
     console.log('[Login] Componente inicializado');
@@ -34,26 +36,27 @@ export class AuthPage implements OnInit {
     this.errorMessage = null;
 
     const { email, password } = this.form.value!;
-    console.log('[Login] Enviando credenciales:', email, password);
-
     const { data, error } = await this.supabaseService.signIn(email!, password!);
 
     this.loading = false;
 
     if (error) {
-      console.error('[Login] Error al iniciar sesión:', error.message);
       this.errorMessage = error.message;
-
-      if (error.message.includes('Email not confirmed')) {
-        this.errorMessage = 'Tu correo aún no ha sido confirmado. Revisa tu bandeja de entrada.';
-      } else if (error.message.includes('Invalid login credentials')) {
-        this.errorMessage = 'Correo o contraseña incorrectos.';
-      }
-
       return;
     }
 
-    console.log('[Login] Usuario autenticado con éxito:', data);
-    this.router.navigateByUrl('/menu');
+    // Esperar el resultado de isCreditor() como promesa
+    const isCreditor = await this.userService.isCreditor().toPromise();
+
+    if (isCreditor) {
+      console.log('Usuario es creditor, redirigiendo a /menu/creditor');
+      this.router.navigateByUrl('/menu/creditor', { replaceUrl: true });
+    } else {
+      console.log('Usuario no es creditor, redirigiendo a /menu');
+      this.router.navigateByUrl('/menu', { replaceUrl: true });
+    }
   }
+
+
+
 }

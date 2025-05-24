@@ -15,13 +15,10 @@ const routes: Routes = [
   {
     path: 'forgot-password',
     loadChildren: () => import('./forgot-password/forgot-password.module').then( m => m.ForgotPasswordPageModule)
-  },  {
-    path: 'sign-up-professional',
-    loadChildren: () => import('./sign-up-professional/sign-up-professional.module').then( m => m.SignUpProfessionalPageModule)
   },
   {
-    path: 'creditor',
-    loadChildren: () => import('./creditor/creditor.module').then( m => m.CreditorPageModule)
+    path: 'sign-up-professional',
+    loadChildren: () => import('./sign-up-professional/sign-up-professional.module').then( m => m.SignUpProfessionalPageModule)
   },
   {
     path: 'reset-password',

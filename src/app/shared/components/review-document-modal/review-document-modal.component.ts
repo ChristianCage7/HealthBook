@@ -1,6 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ModalController, AlertController, ToastController } from '@ionic/angular';
 import { CreditorService } from 'src/app/shared/services/creditor.service';
+import { UserService } from '../../services/user.service';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
+
 
 @Component({
   selector: 'app-review-document-modal',
@@ -13,15 +17,35 @@ export class ReviewDocumentModalComponent implements OnInit {
   documents: any[] = [];
   comment: string = '';
   selectedAction: 'approve' | 'reject' | null = null;
+  idCreditor: number | null = null;
+  private apiUrl = environment.apiUrl
+
 
   constructor(
     private modalCtrl: ModalController,
     private creditorService: CreditorService,
     private alertCtrl: AlertController,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private userService: UserService,
+    private http: HttpClient,
   ) { }
 
-  ngOnInit() {
+ngOnInit() {
+  this.userService.getUidFromAuth()
+    .then(uid => {
+      return this.http.get<any[]>(`${this.apiUrl}/users/creditor/${uid}`).toPromise();
+    })
+    .then(res => {
+      if (res && res.length > 0) {
+        this.idCreditor = res[0].idcreditor;
+        console.log('Acreditador cargado:', this.idCreditor);
+      } else {
+        console.warn('No se encontró acreditador para este UID');
+      }
+    })
+    .catch(err => {
+      console.error('Error al obtener acreditador:', err);
+    });
     this.loadDocuments();
   }
 
@@ -32,7 +56,7 @@ export class ReviewDocumentModalComponent implements OnInit {
   }
 
   download(docId: number) {
-    const url = `http://localhost:8080/api/documents/download/${docId}`;
+    const url = `${this.apiUrl}/documents/download/${docId}`;
     window.open(url, '_blank');
   }
 
@@ -43,6 +67,7 @@ export class ReviewDocumentModalComponent implements OnInit {
   cancel() {
     this.modalCtrl.dismiss();
   }
+  
 
   async confirmAction() {
     const alert = await this.alertCtrl.create({
