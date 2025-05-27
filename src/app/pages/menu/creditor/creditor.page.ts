@@ -21,6 +21,7 @@ export class CreditorPage implements OnInit {
 
   ngOnInit() {
     this.loadPendingProfessionals();
+
   }
 
   loadPendingProfessionals() {
@@ -40,27 +41,17 @@ export class CreditorPage implements OnInit {
     const { data } = await modal.onWillDismiss();
 
     if (data?.action) {
-      if (data.action === 'approve') {
-        this.creditorService.approveProfessional(professional.idprofessional).subscribe(async () => {
-          this.professionals = this.professionals.filter(p => p.idprofessional !== professional.idprofessional);
-          const alert = await this.alertController.create({
-            header: 'Éxito',
-            message: 'Profesional aprobado.',
-            buttons: ['OK']
-          });
-          await alert.present();
-        });
-      } else if (data.action === 'reject') {
-        // Aquí puedes agregar la llamada al backend para rechazar si existe
-        this.professionals = this.professionals.filter(p => p.idprofessional !== professional.idprofessional);
-        const alert = await this.alertController.create({
-          header: 'Rechazado',
-          message: 'Profesional rechazado.',
-          buttons: ['OK']
-        });
-        await alert.present();
-      }
+      this.professionals = this.professionals.filter(p => p.idprofessional !== professional.idprofessional);
+
+      const alert = await this.alertController.create({
+        header: data.action === 'approve' ? 'Éxito' : 'Rechazado',
+        message: data.action === 'approve' ? 'Profesional aprobado.' : 'Profesional rechazado.',
+        buttons: ['OK']
+      });
+
+      await alert.present();
     }
   }
+
 
 }

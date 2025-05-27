@@ -10,6 +10,7 @@
 <ion-content class="ion-padding custom-review-content">
 
   <h2>{{ professional.first_name }} {{ professional.last_name }}</h2>
+
   <div class="professional-card">
     <ion-item lines="none" *ngFor="let doc of documents">
       <ion-label>{{ doc.Document?.name || 'Documento sin nombre' }}</ion-label>
@@ -25,26 +26,44 @@
     </ion-item>
 
     <div class="action-buttons">
-      <ion-button expand="block" class="approve-btn" (click)="close('approve')">
+      <ion-button
+        expand="block"
+        class="approve-btn"
+        [fill]="selectedAction === 'approve' ? 'solid' : 'outline'"
+        (click)="close('approve')">
         <ion-icon name="checkmark-circle-outline" slot="start"></ion-icon>
         Aprobar
       </ion-button>
-      <ion-button expand="block" color="danger" (click)="close('reject')">
+
+      <ion-button
+        expand="block"
+        class="reject-btn"
+        [fill]="selectedAction === 'reject' ? 'solid' : 'outline'"
+        color="danger"
+        (click)="close('reject')">
         <ion-icon name="close-circle-outline" slot="start"></ion-icon>
         Rechazar
       </ion-button>
     </div>
   </div>
 
-  <ion-footer class="ion-padding final-footer">
-    <ion-button expand="block" class="confirm-btn" [disabled]="!selectedAction" (click)="confirmAction()">
-      <ion-icon name="checkmark-done-outline" slot="start"></ion-icon>
-      Confirmar
-    </ion-button>
-    <ion-button expand="block" class="cancel-btn" (click)="cancel()">
-      <ion-icon name="close-outline" slot="start"></ion-icon>
-      Cancelar
-    </ion-button>
-  </ion-footer>
-
 </ion-content>
+
+<ion-footer class="final-footer ion-padding">
+  <ion-button
+    expand="block"
+    class="confirm-btn"
+    [disabled]="!selectedAction"
+    (click)="confirmAction()">
+    <ion-icon name="checkmark-done-outline" slot="start"></ion-icon>
+    Confirmar
+  </ion-button>
+
+  <ion-button
+    expand="block"
+    class="cancel-btn"
+    (click)="cancel()">
+    <ion-icon name="close-outline" slot="start"></ion-icon>
+    Cancelar
+  </ion-button>
+</ion-footer>

@@ -1,40 +1,36 @@
 ion-header {
-    ion-toolbar {
-        --background: #4b268e; // más oscuro que el fondo general
-        --color: #ffffff;
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-        padding-top: 10px;
-        padding-bottom: 4px;
+  ion-toolbar {
+    --background: #4b268e;
+    --color: #ffffff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    padding-top: 10px;
+    padding-bottom: 4px;
+  }
+
+  ion-title {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-left: 16px;
+
+    strong {
+      font-size: 18px;
+      font-weight: 700;
+      color: white;
     }
 
-    ion-title {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        padding-left: 16px;
-
-        strong {
-            font-size: 18px;
-            font-weight: 700;
-            color: white;
-        }
-
-        .admin {
-            font-size: 12px;
-            letter-spacing: 6px;
-            color: #e5d9fb;
-            margin-top: 2px;
-        }
+    .admin {
+      font-size: 12px;
+      letter-spacing: 6px;
+      color: #e5d9fb;
+      margin-top: 2px;
     }
+  }
 
-    ion-back-button {
-        color: #ffffff; // acorde a tu paleta
-        margin-left: 4px;
-    }
-}
-
-.professional-card{
-    border-color: #28a745;
+  ion-back-button {
+    color: #ffffff;
+    margin-left: 4px;
+  }
 }
 
 .custom-review-content {
@@ -45,15 +41,11 @@ ion-header {
     font-size: 20px;
     font-weight: 600;
     color: #333;
-    text-align: center; // ← Centramos el nombre
+    text-align: center;
   }
 
-  .action-buttons {
-    background: #ffffff;
-    border-radius: 12px;
-    margin-bottom: 12px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-    padding: 8px 12px;
+  .professional-card {
+    margin-bottom: 80px; // espacio para que no tape el footer
   }
 
   ion-item {
@@ -80,18 +72,6 @@ ion-header {
     margin-left: auto;
   }
 
-  .approve-btn {
-    --background: #7a5af5;
-    --color: white;
-    font-weight: 600;
-  }
-
-  ion-button[color="danger"] {
-    --background: #cccccc;
-    --color: #222;
-    font-weight: 600;
-  }
-
   ion-textarea {
     background: white;
     border-radius: 12px;
@@ -105,6 +85,29 @@ ion-header {
     margin-bottom: 6px;
     color: #444;
   }
+
+  .action-buttons {
+    background: #ffffff;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    padding: 8px 12px;
+
+    ion-button {
+      margin-top: 8px;
+    }
+
+    .approve-btn {
+      --background: #7a5af5;
+      --color: white;
+    }
+
+    .reject-btn {
+      --background: #cccccc;
+      --color: #222;
+    }
+  }
+}
 
 .final-footer {
   position: fixed;
@@ -135,6 +138,4 @@ ion-header {
     --background: #cccccc;
     --color: #222;
   }
-}
-
 }
