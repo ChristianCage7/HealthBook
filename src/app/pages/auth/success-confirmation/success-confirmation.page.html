@@ -1,14 +1,17 @@
-<app-header title="Registro"></app-header>
+<ion-content class="ion-padding ion-text-center">
+  <ng-container *ngIf="loading">
+    <ion-spinner></ion-spinner>
+    <p>Confirmando tu cuenta...</p>
+  </ng-container>
 
-<ion-content class="ion-padding">
-  <div class="confirmation-message">
-    <app-logo></app-logo>
-    <h2>¡Correo confirmado!</h2>
-    <p>Serás redirigido al inicio de sesión en unos segundos...</p>
+  <ng-container *ngIf="!loading && confirmed">
+    <h2>✅ Correo confirmado</h2>
+    <p>Redirigiendo al login...</p>
+  </ng-container>
 
-    <ion-button class=btn-primary expand="block" type="submit" routerLink="/auth">
-      Si no redirige, presione aquí
-    </ion-button>
-
-  </div>
+  <ng-container *ngIf="!loading && !confirmed">
+    <h2>❌ Error al confirmar</h2>
+    <p>El link puede haber expirado o ya fue usado.</p>
+    <ion-button routerLink="/auth">Ir al login</ion-button>
+  </ng-container>
 </ion-content>

@@ -18,5 +18,5 @@ export class MenuPage {
     })
   }
 
-  logoutConfirm(){}
+  logoutConfirm(){ }
 }
