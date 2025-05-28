@@ -52,7 +52,4 @@ async ngOnInit() {
         }
       ]
     });
-
-    await alert.present();
-  }
 }

@@ -46,26 +46,38 @@ export class SignUpPage implements OnInit {
 
     const formData = this.form.value;
 
-    const defaultImageBlob = await fetch('assets/icon/profile-img.png').then(res => res.blob());
-    const defaultImageFile = new File([defaultImageBlob], 'profile-img.png', { type: 'image/png' });
-
-    const formPayload = new FormData();
-    formPayload.append('email', formData.email);
-    formPayload.append('password', formData.password);
-    formPayload.append('firstName', formData.firstName);
-    formPayload.append('lastName', formData.lastName);
-    formPayload.append('dni', formData.nationalId);
-    formPayload.append('idProfile', '1');
-    formPayload.append('idGender', formData.gender);
-    formPayload.append('datebirth', formData.birthDate);
-    formPayload.append('imgprofile', defaultImageFile); // imagen por defecto
-
     try {
-      const response = await this.http.post(`${environment.apiUrl}/register`, formPayload, {
+      // Crear usuario en Supabase Auth
+      const { data, error } = await this.supabaseService.signUp(formData.email, formData.password);
+
+
+      if (error) throw error;
+      if (!data.user) {
+        throw new Error('No se pudo crear el usuario. Revisa si el correo ya está registrado.');
+      }
+      const uid = data.user.id;
+
+      // Imagen de perfil por defecto
+      const defaultImageBlob = await fetch('assets/icon/profile-img.png').then(res => res.blob());
+      const defaultImageFile = new File([defaultImageBlob], 'profile-img.png', { type: 'image/png' });
+
+      // Enviar datos al backend
+      const formPayload = new FormData();
+      formPayload.append('uid', uid);
+      formPayload.append('email', formData.email);
+      formPayload.append('firstName', formData.firstName);
+      formPayload.append('lastName', formData.lastName);
+      formPayload.append('dni', formData.nationalId);
+      formPayload.append('idProfile', '1');
+      formPayload.append('idGender', formData.gender);
+      formPayload.append('datebirth', formData.birthDate);
+      formPayload.append('imgprofile', defaultImageFile);
+
+      await this.http.post(`${environment.apiUrl}/register`, formPayload, {
         responseType: 'text'
       }).toPromise();
 
-      this.showAlert('Registro completado correctamente.');
+      this.showAlert('Registro completado. Revisa tu correo para confirmar la cuenta.');
       this.form.reset();
       this.router.navigateByUrl('/auth');
 
