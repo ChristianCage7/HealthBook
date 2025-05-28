@@ -1,22 +1,36 @@
 <ion-tabs>
   <ion-tab-bar slot="bottom" class="custom-tab-bar">
 
-    <ion-tab-button *ngIf="!isCreditor" tab="profile" class="custom-tab-button">
+    <ion-tab-button *ngIf="!isCreditor" tab="home" href="/menu/home">
+      <ion-icon name="home-outline"></ion-icon>
+      <ion-label>Inicio</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button *ngIf="!isCreditor" tab="book-appointment" href="/menu/book-appointment">
+      <ion-icon name="calendar-outline"></ion-icon>
+      <ion-label>Agendar</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button *ngIf="!isCreditor" tab="my-sessions" href="/menu/my-sessions">
+      <ion-icon name="archive-outline"></ion-icon>
+      <ion-label>Mis citas</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button *ngIf="!isCreditor" tab="profile" href="/menu/profile">
       <ion-icon name="person-outline"></ion-icon>
       <ion-label>Perfil</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button *ngIf="isCreditor" tab="creditor" class="custom-tab-button">
+    <ion-tab-button *ngIf="isCreditor" tab="creditor" href="/menu/creditor">
       <ion-icon name="briefcase-outline"></ion-icon>
       <ion-label>Creditor</ion-label>
     </ion-tab-button>
 
-
-    <ion-tab-button (click)="logoutConfirm()" class="custom-tab-button no-tab">
+    <ion-tab-button (click)="logoutConfirm()" class="no-tab">
       <ion-icon name="log-out-outline"></ion-icon>
       <ion-label>Salir</ion-label>
     </ion-tab-button>
 
-
   </ion-tab-bar>
+
 </ion-tabs>
