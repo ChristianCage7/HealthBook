@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { authGuard } from './shared/guards/auth.guard';
 
 const routes: Routes = [
-
   {
     path: 'main',
-    loadChildren: () => import('./pages/main/main.module').then( m => m.MainPageModule)
+    loadChildren: () => import('./pages/main/main.module').then(m => m.MainPageModule)
   },
   {
     path: '',
@@ -14,24 +14,27 @@ const routes: Routes = [
   },
   {
     path: 'auth',
-    loadChildren: () => import('./pages/auth/auth.module').then( m => m.AuthPageModule)
+    loadChildren: () => import('./pages/auth/auth.module').then(m => m.AuthPageModule)
   },
   {
     path: 'profile',
-    loadChildren: () => import('./pages/menu/profile/profile.module').then( m => m.ProfilePageModule)
+    canActivate: [authGuard],
+    loadChildren: () => import('./pages/menu/profile/profile.module').then(m => m.ProfilePageModule)
   },
   {
     path: 'menu',
-    loadChildren: () => import('./pages/menu/menu.module').then( m => m.MenuPageModule)
+    canActivate: [authGuard],
+    loadChildren: () => import('./pages/menu/menu.module').then(m => m.MenuPageModule)
   },
   {
     path: 'success-confirmation',
-    loadChildren: () => import('./pages/auth/success-confirmation/success-confirmation.module').then( m => m.SuccessConfirmationPageModule)
-
+    loadChildren: () => import('./pages/auth/success-confirmation/success-confirmation.module').then(m => m.SuccessConfirmationPageModule)
+  },
+  {
+    path: 'creditor',
+    canActivate: [authGuard],
+    loadChildren: () => import('./pages/menu/creditor/creditor.module').then(m => m.CreditorPageModule)
   }
-
-
-
 ];
 
 @NgModule({

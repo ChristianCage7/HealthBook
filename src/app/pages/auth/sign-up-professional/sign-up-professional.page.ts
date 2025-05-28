@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
 import { SupabaseService } from 'src/app/shared/services/supabase.service';
 import { environment } from 'src/environments/environment';
@@ -25,7 +26,8 @@ export class SignUpProfessionalPage implements OnInit {
     private fb: FormBuilder,
     private supabase: SupabaseService,
     private alertCtrl: AlertController,
-    private http: HttpClient
+    private http: HttpClient,
+    private router: Router
   ) { 
 
     this.form = this.fb.group({
@@ -103,6 +105,7 @@ export class SignUpProfessionalPage implements OnInit {
       this.showAlert('Registro profesional completado correctamente.');
       this.form.reset();
       this.selectedDocument = null;
+      this.router.navigateByUrl('/auth');
 
     } catch (error) {
       console.error('Error al registrar profesional:', error);
