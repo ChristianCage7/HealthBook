@@ -35,6 +35,15 @@ ion-toolbar {
   background: transparent !important;
 }
 
+ion-content {
+  --background: linear-gradient(
+    to bottom,
+    #f6f3fc 0%,
+    #f4effc 50%,
+    #f2eafe 100%
+  );
+  }
+
 // safe padding for ios
 .safe-p-bottom{
     padding-bottom: constant(safe-area-inset-bottom); // for ios 13+

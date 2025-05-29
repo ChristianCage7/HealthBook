@@ -1,0 +1,70 @@
+ion-content {
+  --background: linear-gradient(to bottom, #f6f3fc 0%, #f4effc 50%, #f2eafe 100%);
+  display: block; // <- CORRECTO, NO usar flex aquí
+}
+
+.container {
+  width: 100%;
+  max-width: 400px;
+  padding: 24px;
+  margin: auto;
+  text-align: center;
+  flex-direction: column;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh; // Asegura centrado vertical
+  box-sizing: border-box;
+}
+
+app-logo {
+  width: 180px;
+  margin: 0 auto 10px;
+  padding-top: 15%;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #4b268e;
+}
+
+.description {
+  font-size: 16px;
+  color: #4b268e;
+  line-height: 1.4;
+}
+
+.btn-primary {
+  --background: #4b268e;
+  --color: white;
+  font-weight: 600;
+  border-radius: 14px;
+}
+
+/* Animación de aparición */
+.fade-in {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeInUp 0.8s ease forwards;
+}
+
+.delay-0 {
+  animation-delay: 0s;
+}
+.delay-1 {
+  animation-delay: 0.3s;
+}
+.delay-2 {
+  animation-delay: 0.6s;
+}
+.delay-3 {
+  animation-delay: 0.9s;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

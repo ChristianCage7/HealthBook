@@ -26,13 +26,13 @@ export class MenuPage {
     });
   }
 
-async ngOnInit() {
-  try {
-    this.isCreditor = await firstValueFrom(this.userService.isCreditor());
-  } catch (err) {
-    console.error('Error verificando creditor:', err);
+  async ngOnInit() {
+    try {
+      this.isCreditor = await firstValueFrom(this.userService.isCreditor());
+    } catch (err) {
+      console.error('Error verificando creditor:', err);
+    }
   }
-}
 
   async logoutConfirm() {
     const alert = await this.alertController.create({
@@ -52,4 +52,6 @@ async ngOnInit() {
         }
       ]
     });
-}
+    await alert.present();
+  }
+};
