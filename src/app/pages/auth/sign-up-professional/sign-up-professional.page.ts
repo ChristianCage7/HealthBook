@@ -73,7 +73,7 @@ export class SignUpProfessionalPage implements OnInit {
   }
 
 
-  async submit() {
+    async submit() {
     if (this.form.invalid || !this.selectedDocument) {
       this.showAlert('Debe completar todos los campos y subir el documento PDF.');
       return;
@@ -81,30 +81,42 @@ export class SignUpProfessionalPage implements OnInit {
 
     const formData = this.form.value;
 
-    const defaultImageBlob = await fetch('assets/icon/profile-img.png').then(res => res.blob());
-    const defaultImageFile = new File([defaultImageBlob], 'profile-img.png', { type: 'image/png' });
-
-    const formPayload = new FormData();
-    formPayload.append('email', formData.email);
-    formPayload.append('password', formData.password);
-    formPayload.append('firstName', formData.firstName);
-    formPayload.append('lastName', formData.lastName);
-    formPayload.append('dni', formData.nationalId);
-    formPayload.append('idProfile', '2');
-    formPayload.append('idGender', formData.idgender);
-    formPayload.append('idprofession', formData.idprofession);
-    formPayload.append('datebirth', formData.datebirth);
-    formPayload.append('document', this.selectedDocument as Blob);
-    formPayload.append('imgprofile', defaultImageFile);
-
     try {
-      const response = await this.http.post(`${environment.apiUrl}/register`, formPayload, {
+      // 1. Crear usuario en Supabase Auth
+      const { data, error } = await this.supabase.signUp(formData.email, formData.password);
+      if (error) throw error;
+
+      if (!data.user) {
+        throw new Error('No se pudo crear el usuario. Revisa si el correo ya está registrado.');
+      }
+      const uid = data.user.id;
+
+      // 2. Imagen por defecto
+      const defaultImageBlob = await fetch('assets/icon/profile-img.png').then(res => res.blob());
+      const defaultImageFile = new File([defaultImageBlob], 'profile-img.png', { type: 'image/png' });
+
+      // 3. Enviar datos al backend
+      const formPayload = new FormData();
+      formPayload.append('uid', uid);
+      formPayload.append('email', formData.email);
+      formPayload.append('firstName', formData.firstName);
+      formPayload.append('lastName', formData.lastName);
+      formPayload.append('dni', formData.nationalId);
+      formPayload.append('idProfile', '2');
+      formPayload.append('idGender', formData.idgender);
+      formPayload.append('idprofession', formData.idprofession);
+      formPayload.append('datebirth', formData.datebirth);
+      formPayload.append('document', this.selectedDocument as Blob);
+      formPayload.append('imgprofile', defaultImageFile);
+
+      await this.http.post(`${environment.apiUrl}/register`, formPayload, {
         responseType: 'text'
       }).toPromise();
 
-      this.showAlert('Registro profesional completado correctamente.');
+      this.showAlert('Registro profesional completado. Revisa tu correo para confirmar la cuenta.');
       this.form.reset();
       this.selectedDocument = null;
+      this.selectedDocumentName = '';
       this.router.navigateByUrl('/auth');
 
     } catch (error) {
