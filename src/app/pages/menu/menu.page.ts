@@ -15,6 +15,7 @@ export class MenuPage {
 
   currentUrl: string = '';
   isCreditor = false;
+  isProfessional = false;
 
   constructor(
     private router: Router,
@@ -26,11 +27,18 @@ export class MenuPage {
     });
   }
 
-  async ngOnInit() {
+ async ngOnInit() {
     try {
       this.isCreditor = await firstValueFrom(this.userService.isCreditor());
+      this.isProfessional = await firstValueFrom(this.userService.isProfessional());
+
+      // Redirigir si es profesional y está en /menu/home
+      if (this.isProfessional && this.router.url === '/menu/home') {
+        this.router.navigateByUrl('/menu/professional-dashboard', { replaceUrl: true });
+      }
+
     } catch (err) {
-      console.error('Error verificando creditor:', err);
+      console.error('Error verificando tipo de usuario:', err);
     }
   }
 

@@ -33,7 +33,19 @@ const routes: Routes = [
         pathMatch: 'full',
       }
     ]
+  },  {
+    path: 'professional-dashboard',
+    loadChildren: () => import('./professional-dashboard/professional-dashboard.module').then( m => m.ProfessionalDashboardPageModule)
+  },
+  {
+    path: 'professional-sessions',
+    loadChildren: () => import('./professional-sessions/professional-sessions.module').then( m => m.ProfessionalSessionsPageModule)
+  },
+  {
+    path: 'manage-availability',
+    loadChildren: () => import('./manage-availability/manage-availability.module').then( m => m.ManageAvailabilityPageModule)
   }
+
 ];
 
 

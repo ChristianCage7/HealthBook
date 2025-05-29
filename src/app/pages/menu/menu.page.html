@@ -1,36 +1,54 @@
 <ion-tabs>
   <ion-tab-bar slot="bottom" class="custom-tab-bar">
 
-    <ion-tab-button *ngIf="!isCreditor" tab="home" href="/menu/home">
-      <ion-icon name="home-outline"></ion-icon>
+    <!-- Menú para PROFESIONAL -->
+    <ion-tab-button *ngIf="isProfessional" tab="professional-dashboard" href="/menu/professional-dashboard">
+      <ion-icon name="briefcase-outline"></ion-icon>
       <ion-label>Inicio</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button *ngIf="!isCreditor" tab="book-appointment" href="/menu/book-appointment">
+    <ion-tab-button *ngIf="isProfessional" tab="professional-sessions" href="/menu/professional-sessions">
       <ion-icon name="calendar-outline"></ion-icon>
-      <ion-label>Agendar</ion-label>
+      <ion-label>Sesiones</ion-label>
     </ion-tab-button>
 
-    <ion-tab-button *ngIf="!isCreditor" tab="my-sessions" href="/menu/my-sessions">
-      <ion-icon name="archive-outline"></ion-icon>
-      <ion-label>Mis citas</ion-label>
-    </ion-tab-button>
-
-    <ion-tab-button *ngIf="!isCreditor" tab="profile" href="/menu/profile">
+    <ion-tab-button *ngIf="isProfessional" tab="profile" href="/menu/profile">
       <ion-icon name="person-outline"></ion-icon>
       <ion-label>Perfil</ion-label>
     </ion-tab-button>
 
+    <!-- Menú para PACIENTE -->
+    <ion-tab-button *ngIf="!isProfessional && !isCreditor" tab="home" href="/menu/home">
+      <ion-icon name="home-outline"></ion-icon>
+      <ion-label>Inicio</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button *ngIf="!isProfessional && !isCreditor" tab="book-appointment" href="/menu/book-appointment">
+      <ion-icon name="calendar-outline"></ion-icon>
+      <ion-label>Agendar</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button *ngIf="!isProfessional && !isCreditor" tab="my-sessions" href="/menu/my-sessions">
+      <ion-icon name="archive-outline"></ion-icon>
+      <ion-label>Mis citas</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button *ngIf="!isProfessional && !isCreditor" tab="profile" href="/menu/profile">
+      <ion-icon name="person-outline"></ion-icon>
+      <ion-label>Perfil</ion-label>
+    </ion-tab-button>
+
+    <!-- Menú para ACREDITADOR -->
     <ion-tab-button *ngIf="isCreditor" tab="creditor" href="/menu/creditor">
-      <ion-icon name="briefcase-outline"></ion-icon>
+      <ion-icon name="document-outline"></ion-icon>
       <ion-label>Creditor</ion-label>
     </ion-tab-button>
 
+    <!-- Opción común para todos: salir -->
     <ion-tab-button (click)="logoutConfirm()" class="no-tab">
       <ion-icon name="log-out-outline"></ion-icon>
       <ion-label>Salir</ion-label>
     </ion-tab-button>
 
   </ion-tab-bar>
-
 </ion-tabs>
