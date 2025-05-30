@@ -41,23 +41,30 @@ export class UserService {
     );
   }
 
-  getCurrentUser(): Observable<any> {
-    return from(this.getUidFromAuth()).pipe(
-      switchMap(uid => this.http.get<any>(`${this.apiUrl}/api/users/professional/${uid}`))
-    );
-  }
+getCurrentUser(): Observable<any> {
+  return from(this.getUidFromAuth()).pipe(
+    switchMap(uid => this.http.get<any>(`${this.apiUrl}/api/users/${uid}`))
+  );
+}
 
-  updateUser(user: any): Observable<any> {
-    return from(this.getUidFromAuth()).pipe(
-      switchMap(uid => this.http.put(`${this.apiUrl}/api/users/professional/update`, {
+updateUser(user: any): Observable<any> {
+  return from(this.getUidFromAuth()).pipe(
+    switchMap(uid => {
+      const body: any = {
         UID: uid,
         firstName: user.first_name,
         lastName: user.last_name,
-        email: user.email,
-        idprofession: user.idprofession
-      }))
-    );
-  }
+        email: user.email
+      };
+      if (user.idprofession) body.idprofession = user.idprofession;
+      if (user.idProfile === 2) {
+        return this.http.put(`${this.apiUrl}/api/users/professional/update`, body);
+      } else {
+        return this.http.put(`${this.apiUrl}/api/users/basic/update`, body);
+      }
+    })
+  );
+}
 
   sendPasswordRecovery(email: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/api/password/send-recovery-email?email=${email}`, {});

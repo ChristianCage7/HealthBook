@@ -23,11 +23,11 @@ export class ProfilePage implements OnInit {
     this.loadProfile();
   }
 
-  loadProfile(){
-    this.userService.getCurrentUser().subscribe(res => {
-      this.user = res[0];
-    });
-  }
+loadProfile() {
+  this.userService.getCurrentUser().subscribe(res => {
+    this.user = res;
+  });
+}
 
   toggleEditEmail(){
     this.userService.getCurrentUser().subscribe(res => {

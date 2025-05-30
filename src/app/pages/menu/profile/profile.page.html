@@ -1,57 +1,31 @@
-<app-header title="Mi perfil" [showBackButton]="false" ></app-header>
+<app-header title="Mi perfil" [showBackButton]="false"></app-header>
 
 <ion-content>
-  <div class="profile-container">
-
-    <ion-avatar class="avatar-circle">
+  <div class="profile-container" style="display: flex; flex-direction: column; align-items: center; padding: 1rem;">
+    
+    <ion-avatar class="avatar-circle" style="width: 120px; height: 120px; margin-bottom: 1rem;">
       <img [src]="user.imgprofile || 'assets/icon/profile-img.png'" alt="Avatar">
     </ion-avatar>
 
-    <ion-button fill="outline" size="small" class="change-photo-btn" disabled>
-      Cambiar foto
+    <ion-card style="width: 100%; max-width: 500px;">
+      <ion-card-header>
+        <ion-card-title>{{ user.first_name }} {{ user.last_name }}</ion-card-title>
+        <ion-card-subtitle>{{ user.email }}</ion-card-subtitle>
+      </ion-card-header>
+
+      <ion-card-content>
+        <p><strong>Fecha de nacimiento:</strong> {{ user.datebirth | date:'longDate' }}</p>
+        <p><strong>Género:</strong> {{ user.gender?.name || 'No especificado' }}</p>
+        <p *ngIf="user.profession"><strong>Profesión:</strong> {{ user.profession.name }}</p>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-button expand="block" color="primary" (click)="confirmChangePassword()">
+      Cambiar contraseña
     </ion-button>
 
-    <h3 class="section-title">Mi cuenta</h3>
-
-    <div class="auth-form">
-      <!-- Correo bloqueado inicialmente -->
-      <app-custom-input
-        [(ngModel)]="user.email"
-        name="email"
-        icon="mail-outline"
-        label="Correo"
-        [readonly]="!editEmail">
-      </app-custom-input>
-
-      <ion-button fill="clear" size="small" color="primary" (click)="toggleEditEmail()">
-        {{ editEmail ? 'Bloquear correo' : 'Editar correo' }}
-      </ion-button>
-
-      <!-- Contraseña estilo input bloqueado -->
-      <app-custom-input
-        icon="lock-closed-outline"
-        label="Contraseña"
-        [readonly]="true"
-        [type]="'password'"
-        [placeholder]="'••••••••••••'">
-      </app-custom-input>
-
-      <ion-button fill="clear" size="small" color="primary" (click)="confirmChangePassword()">
-        Cambiar contraseña
-      </ion-button>
-
-      <ion-item lines="none">
-        <ion-label>Notificaciones</ion-label>
-        <ion-toggle [(ngModel)]="notifications"></ion-toggle>
-      </ion-item>
-
-      <ion-button expand="block" color="primary" (click)="submit()">
-        Guardar cambios
-      </ion-button>
-
-      <ion-button expand="block" color="danger" disabled>
-        Eliminar mi cuenta
-      </ion-button>
-    </div>
+    <ion-button expand="block" color="danger" disabled>
+      Eliminar mi cuenta
+    </ion-button>
   </div>
 </ion-content>
