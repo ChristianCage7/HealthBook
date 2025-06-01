@@ -1,47 +1,3 @@
-.profile-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 16px;
-}
-
-.avatar-circle {
-  width: 120px;
-  height: 120px;
-  border: 2px solid #6c3df4;
-  margin-bottom: 8px;
-  overflow: hidden;
-}
-
-.change-photo-btn {
-  margin-bottom: 16px;
-}
-
-.section-title {
-  margin-top: 24px;
-  font-size: 18px;
-  font-weight: 600;
-  text-align: center;
-}
-
-.auth-form {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  padding: 16px;
-}
-
-.password-container {
-  display: flex;
-  align-items: center;
-  margin-bottom: 16px;
-  gap: 8px;
-}
-
-ion-button {
-  margin-top: 8px;
-}
-
 ion-content {
   --background: linear-gradient(
     to bottom,
@@ -49,9 +5,53 @@ ion-content {
     #f4effc 50%,
     #f2eafe 100%
   );
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    box-sizing: border-box;
-  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100%;
+}
+
+.d-flex-center {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.profile-img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid #ccc;
+}
+
+.profile-name {
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.profile-email {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 12px;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+}
+
+.btn-primary {
+  --background: #4b268e;
+  --color: white;
+  font-weight: 600;
+  border-radius: 14px;
+}

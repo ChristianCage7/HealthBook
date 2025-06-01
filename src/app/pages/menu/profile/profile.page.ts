@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AlertController } from '@ionic/angular';
 import { UserService } from 'src/app/shared/services/user.service';
 
@@ -10,60 +11,142 @@ import { UserService } from 'src/app/shared/services/user.service';
 })
 export class ProfilePage implements OnInit {
 
-  user:any = {};
-  notifications = true;
-  editEmail = false;
+  user: any = {};
+  editForm!: FormGroup;
+  professions: any[] = [];
 
+  editMode = false;
+
+  selectedImage: File | null = null;
+  selectedImagePreview: string | null = null;
+  
   constructor(
     private userService: UserService,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private fb: FormBuilder
+
   ) { }
 
   async ngOnInit() {
-    this.loadProfile();
+    await this.loadUser();
   }
 
-loadProfile() {
-  this.userService.getCurrentUser().subscribe(res => {
-    this.user = res;
-  });
-}
+  async loadUser() {
+    this.userService.getCurrentUser().subscribe({
+      next: (response: any) => {
+        const data = Array.isArray(response) ? response[0] : response;
+        this.user = data;
+        this.user.email = data.Register?.email || '';
+        this.user.UID = data.UID;
 
-  toggleEditEmail(){
-    this.userService.getCurrentUser().subscribe(res => {
-      this.user = res[0];
+        this.editForm = this.fb.group({
+          first_name: [data.first_name, Validators.required],
+          last_name: [data.last_name, Validators.required]
+        });
+      },
+      error: async () => {
+        const alert = await this.alertCtrl.create({
+          header: 'Error',
+          message: 'No se pudo cargar la información del perfil.',
+          buttons: ['OK']
+        });
+        await alert.present();
+      }
     });
   }
 
-  submit(){
-    this.userService.updateUser(this.user).subscribe(async () => {
-      const alert = await this.alertCtrl.create({
-        header: 'Éxito',
-        message: 'Perfil actualizado correctamente',
-        buttons: ['Ok']
-      });
-      await alert.present();
+  getEditControl(controlName: string): FormControl {
+    return this.editForm.get(controlName) as FormControl;
+  }
+
+  async saveEdit() {
+    if (this.editForm.invalid) return;
+
+    const updatedUser = {
+      UID: this.user.UID,
+      firstName: this.editForm.value.first_name,
+      lastName: this.editForm.value.last_name,
+      email: this.user.email
+    };
+
+    this.userService.updateUser(updatedUser).subscribe({
+      next: async () => {
+        const alert = await this.alertCtrl.create({
+          header: 'Éxito',
+          message: 'Perfil actualizado correctamente',
+          buttons: ['OK']
+        });
+        await alert.present();
+        this.editMode = false;
+        await this.loadUser();
+      },
+      error: async (err) => {
+        console.error('Error actualizando perfil:', err);
+        const alert = await this.alertCtrl.create({
+          header: 'Error',
+          message: 'No se pudo actualizar el perfil.',
+          buttons: ['OK']
+        });
+        await alert.present();
+      }
     });
   }
 
-    async confirmChangePassword() {
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    if (file) {
+      this.selectedImage = file;
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.selectedImagePreview = reader.result as string;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  async uploadProfileImage() {
+    if (!this.selectedImage || !this.user.UID) return;
+
+    const formData = new FormData();
+    formData.append('uid', this.user.UID);
+    formData.append('file', this.selectedImage);
+
+    this.userService.uploadProfileImage(formData).subscribe({
+      next: async () => {
+        const alert = await this.alertCtrl.create({
+          header: 'Éxito',
+          message: 'Imagen de perfil actualizada',
+          buttons: ['OK']
+        });
+        await alert.present();
+        this.selectedImage = null;
+        this.selectedImagePreview = null;
+        await this.loadUser();
+      },
+      error: async () => {
+        const alert = await this.alertCtrl.create({
+          header: 'Error',
+          message: 'No se pudo actualizar la imagen.',
+          buttons: ['OK']
+        });
+        await alert.present();
+      }
+    });
+  }
+
+  async confirmChangePassword() {
     const alert = await this.alertCtrl.create({
       header: 'Cambiar contraseña',
       message: 'Se enviará un correo a tu dirección actual para cambiar la contraseña. ¿Deseas continuar?',
       buttons: [
-        {
-          text: 'Cancelar',
-          role: 'cancel'
-        },
+        { text: 'Cancelar', role: 'cancel' },
         {
           text: 'Enviar correo',
-          handler: () => {
-            this.sendPasswordRecovery();
-          }
+          handler: () => this.sendPasswordRecovery()
         }
       ]
     });
-
     await alert.present();
   }
 
@@ -78,5 +161,21 @@ loadProfile() {
     });
   }
 
-  deleteAccount(){}
+  async confirmDeleteAccount() {
+    const alert = await this.alertCtrl.create({
+      header: 'Confirmar eliminación',
+      message: '¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.',
+      buttons: [
+        { text: 'Cancelar', role: 'cancel' },
+        {
+          text: 'Eliminar',
+          role: 'destructive',
+          handler: () => {
+            console.log('Eliminar cuenta - futura implementación');
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
 }

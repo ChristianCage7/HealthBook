@@ -1,31 +1,60 @@
-<app-header title="Mi perfil" [showBackButton]="false"></app-header>
+<app-header title="Mi Perfil"></app-header>
 
-<ion-content>
-  <div class="profile-container" style="display: flex; flex-direction: column; align-items: center; padding: 1rem;">
-    
-    <ion-avatar class="avatar-circle" style="width: 120px; height: 120px; margin-bottom: 1rem;">
-      <img [src]="user.imgprofile || 'assets/icon/profile-img.png'" alt="Avatar">
-    </ion-avatar>
+<ion-content class="ion-padding">
+  <div class="d-flex-center">
 
-    <ion-card style="width: 100%; max-width: 500px;">
-      <ion-card-header>
-        <ion-card-title>{{ user.first_name }} {{ user.last_name }}</ion-card-title>
-        <ion-card-subtitle>{{ user.email }}</ion-card-subtitle>
-      </ion-card-header>
+    <!-- Imagen de perfil -->
+    <img
+      [src]="selectedImagePreview || user.imgprofile || 'assets/icon/profile-img.png'"
+      class="profile-img"
+      alt="Foto de perfil" />
 
-      <ion-card-content>
-        <p><strong>Fecha de nacimiento:</strong> {{ user.datebirth | date:'longDate' }}</p>
-        <p><strong>Género:</strong> {{ user.gender?.name || 'No especificado' }}</p>
-        <p *ngIf="user.profession"><strong>Profesión:</strong> {{ user.profession.name }}</p>
-      </ion-card-content>
-    </ion-card>
+    <!-- Seleccionar nueva imagen -->
+    <input type="file" accept="image/*" #fileInput hidden (change)="onFileSelected($event)" />
+    <ion-button fill="outline" size="small" (click)="fileInput.click()">Cambiar foto</ion-button>
 
-    <ion-button expand="block" color="primary" (click)="confirmChangePassword()">
+    <!-- Subir imagen -->
+    <ion-button *ngIf="selectedImage" class="btn-primary" size="small" (click)="uploadProfileImage()">
+      Subir imagen
+    </ion-button>
+
+    <!-- Nombre y correo -->
+    <h2 class="profile-name">{{ user.first_name }} {{ user.last_name }}</h2>
+    <p class="profile-email">{{ user.email }}</p>
+
+    <!-- Modo edición -->
+    <ion-button class="btn-primary" expand="block" (click)="editMode = !editMode">
+      {{ editMode ? 'Cancelar edición' : 'Editar perfil' }}
+    </ion-button>
+
+    <!-- Formulario de edición -->
+    <form *ngIf="editMode" (ngSubmit)="saveEdit()" class="auth-form">
+      <app-custom-input
+        [control]="getEditControl('first_name')"
+        icon="person-outline"
+        label="Nombre"
+        type="text">
+      </app-custom-input>
+
+      <app-custom-input
+        [control]="getEditControl('last_name')"
+        icon="person-outline"
+        label="Apellido"
+        type="text">
+      </app-custom-input>
+
+      <ion-button class="btn-primary" expand="block" type="submit">
+        Guardar cambios
+      </ion-button>
+    </form>
+
+    <!-- Opciones adicionales -->
+    <ion-button class="btn-primary" expand="block" color="tertiary" (click)="confirmChangePassword()">
       Cambiar contraseña
     </ion-button>
 
-    <ion-button expand="block" color="danger" disabled>
-      Eliminar mi cuenta
+    <ion-button expand="block" fill="outline" color="danger" (click)="confirmDeleteAccount()">
+      Eliminar cuenta
     </ion-button>
   </div>
 </ion-content>

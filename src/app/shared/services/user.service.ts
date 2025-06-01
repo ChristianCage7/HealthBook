@@ -15,17 +15,18 @@ export class UserService {
 
   getUidFromAuth(): Promise<string> {
     return supabase.auth.getSession().then(({ data, error }) => {
-      if (error || !data.session) throw new Error('No hay sesión activa')
+      if (error || !data.session) throw new Error('No hay sesión activa');
+      console.log('UID actual:', data.session.user.id); // 👈 NUEVO
       return data.session.user.id;
     });
   }
 
   isProfessional(): Observable<boolean> {
-  return from(this.getUidFromAuth()).pipe(
-    switchMap(uid => this.http.get<any[]>(`${this.apiUrl}/api/users/professional/${uid}`)),
-    map(res => Array.isArray(res) && res.length > 0 && res[0].register?.idprofile === 2)
-  );
-}
+    return from(this.getUidFromAuth()).pipe(
+      switchMap(uid => this.http.get<any[]>(`${this.apiUrl}/api/users/professional/${uid}`)),
+      map(res => Array.isArray(res) && res.length > 0 && res[0].register?.idprofile === 2)
+    );
+  }
   isCreditor(): Observable<boolean> {
     return from(this.getUidFromAuth()).pipe(
       switchMap(uid => this.http.get<any[]>(`${this.apiUrl}/api/users/creditor/${uid}`)),
@@ -41,33 +42,61 @@ export class UserService {
     );
   }
 
-getCurrentUser(): Observable<any> {
-  return from(this.getUidFromAuth()).pipe(
-    switchMap(uid => this.http.get<any>(`${this.apiUrl}/api/users/${uid}`))
-  );
-}
-
-updateUser(user: any): Observable<any> {
-  return from(this.getUidFromAuth()).pipe(
-    switchMap(uid => {
-      const body: any = {
-        UID: uid,
-        firstName: user.first_name,
-        lastName: user.last_name,
-        email: user.email
-      };
-      if (user.idprofession) body.idprofession = user.idprofession;
-      if (user.idProfile === 2) {
-        return this.http.put(`${this.apiUrl}/api/users/professional/update`, body);
-      } else {
-        return this.http.put(`${this.apiUrl}/api/users/basic/update`, body);
-      }
-    })
-  );
-}
-
-  sendPasswordRecovery(email: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/api/password/send-recovery-email?email=${email}`, {});
+  getCurrentUser() {
+    return from(this.getUidFromAuth()).pipe(
+      switchMap(uid =>
+        this.http.get<any>(`${this.apiUrl}/api/users/basic/${uid}`).pipe(
+          map((res: any) => {
+            console.log('Respuesta backend UserBasic:', res);
+            if (!Array.isArray(res) || res.length === 0) {
+              throw new Error('Usuario no encontrado en UserBasic');
+            }
+            const user = res[0];
+            user.uid = uid;
+            return user;
+          }),
+          switchMap(user => {
+            const idProfile = user.register?.idprofile;
+            if (idProfile === 2) {
+              return this.http.get<any>(`${this.apiUrl}/api/users/professional/${user.uid}`).pipe(
+                map((res: any) => {
+                  console.log('Respuesta backend UserProfessional:', res);
+                  if (!Array.isArray(res) || res.length === 0) {
+                    throw new Error('Usuario no encontrado en UserProfessional');
+                  }
+                  const profUser = res[0];
+                  return profUser;
+                })
+              );
+            }
+            return from([user]);
+          })
+        )
+      )
+    );
   }
+
+  updateUser(user: any) {
+    return this.http.put(`${this.apiUrl}/api/users/basic/update`, user, { responseType: 'text' });
+  }
+
+  getProfessions() {
+    return this.http.get<any>(`${this.apiUrl}/api/users/profession`).pipe(
+      map((res: any) => Array.isArray(res) ? res : [])
+    );
+  }
+
+
+  sendPasswordRecovery(email: string) {
+    return from(supabase.auth.resetPasswordForEmail(email));
+  }
+
+  uploadProfileImage(formData: FormData) {
+  return this.http.post(`${this.apiUrl}/api/users/basic/upload-image`, formData, { responseType: 'text' });
+}
+
+updateProfessionalUser(user: any) {
+  return this.http.put(`${this.apiUrl}/api/users/professional/update`, user, { responseType: 'text' });
+}
 
 }
