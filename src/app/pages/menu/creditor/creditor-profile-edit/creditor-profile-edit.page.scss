@@ -102,4 +102,25 @@ ion-content {
             transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
         }
     }
+
+
+    .content-wrapper {
+        position: relative;
+        min-height: 100%;
+    }
+
+    .loading-wrapper {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(255, 255, 255, 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+    }
+
+
 }

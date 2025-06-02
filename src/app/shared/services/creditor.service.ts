@@ -10,6 +10,7 @@ export interface Professional {
   email: string;
   imgprofile: string;
   datebirth: string;
+  gender: number;
   approve: number;
 }
 
@@ -40,7 +41,7 @@ export class CreditorService {
   }
 
   getAllUsers(): Observable<Basic[]> {
-    return this.http.get<Basic[]>(`${this.apiUrl}/users/basic/pending`);
+    return this.http.get<Basic[]>(`${this.apiUrl}/users/basic`);
   }
 
   getUser(uid: string, isProfessional: boolean): Observable<any> {

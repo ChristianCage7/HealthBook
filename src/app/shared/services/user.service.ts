@@ -4,10 +4,17 @@ import { environment } from 'src/environments/environment';
 import { supabase } from './supabase.client';
 import { Observable, from, switchMap, map, tap } from 'rxjs';
 
+export interface Gender {
+  idgender: number;
+  gender: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
+
 export class UserService {
+  
 
   private apiUrl = environment.backendUrl;
 
@@ -23,7 +30,7 @@ export class UserService {
   isProfessional(): Observable<boolean> {
     return from(this.getUidFromAuth()).pipe(
       switchMap(uid => this.http.get<any[]>(`${this.apiUrl}/api/users/professional/${uid}`)),
-      map(res => Array.isArray(res) && res.length > 0 && res[0].register?.idprofile === 2)
+      map(res => Array.isArray(res) && res.length > 0 && res[0].Register?.idprofile === 2)
     );
   }
   isCreditor(): Observable<boolean> {
@@ -34,6 +41,9 @@ export class UserService {
     );
   }
 
+  getGenders(): Observable<Gender[]> {
+    return this.http.get<Gender[]>(`${this.apiUrl}/api/users/gender`);
+  }
 
   getCreditorInfo(): Observable<any> {
     return from(this.getUidFromAuth()).pipe(

@@ -2,46 +2,53 @@
 
 <ion-content>
   <div class="d-flex-center auth-form">
-    <div class="user-list" *ngIf="users.length > 0">
+    <div class="content-wrapper">
+      <div class="user-list" *ngIf="users.length > 0">
 
-      <ion-segment [(ngModel)]="viewType" (ionChange)="changeView(viewType)">
-        <ion-segment-button value="professionals">
-          Profesionales
-        </ion-segment-button>
-        <ion-segment-button value="basics">
-          Usuarios básicos
-        </ion-segment-button>
-      </ion-segment>
+        <ion-segment [(ngModel)]="viewType" (ionChange)="changeView(viewType)">
+          <ion-segment-button value="professionals">
+            Profesionales
+          </ion-segment-button>
+          <ion-segment-button value="basics">
+            Usuarios básicos
+          </ion-segment-button>
+        </ion-segment>
 
-      <div class="user-card" *ngFor="let user of users">
-        <div class="card-avatar">
-          <img [src]="user.imgprofile || 'assets/icon/profile-img.png'" />
-        </div>
+        <div class="user-card" *ngFor="let user of users">
+          <div class="card-avatar">
+            <img [src]="user.imgprofile || 'assets/icon/profile-img.png'" />
+          </div>
 
-        <div class="user-info">
-          <h3>{{ user.first_name }} {{ user.last_name }}</h3>
-          <p><strong>Email:</strong> {{ user.Register?.email }}</p>
-          <p *ngIf="user.datebirth"><strong>Fecha nacimiento:</strong> {{ user.datebirth | date: 'dd/MM/yyyy' }}</p>
-        </div>
+          <div class="user-info">
+            <h3>{{ user.first_name }} {{ user.last_name }}</h3>
+            <p><strong>Email:</strong> {{ user.Register?.email }}</p>
+            <p *ngIf="user.datebirth"><strong>Fecha nacimiento:</strong> {{ user.datebirth | date: 'dd/MM/yyyy' }}</p>
+            <p><strong>Género:</strong> {{ user.genderName }}</p>
+            <p *ngIf="viewType === 'professionals'"><strong>Aprobado:</strong> {{ user.approve === 1 ? 'Sí' : 'No' }}
+            </p>
+          </div>
 
-        <div class="user-actions">
-          <ion-button fill="solid" color="tertiary" class="eval-button">
-            <ion-icon name="search-outline" slot="start"></ion-icon>
-            Ver perfil
-          </ion-button>
+          <div class="user-actions">
+            <ion-button fill="solid" color="tertiary" class="eval-button">
+              <ion-icon name="search-outline" slot="start"></ion-icon>
+              Ver perfil
+            </ion-button>
 
-          <ion-button fill="solid" color="danger" class="eval-button">
-            <ion-icon name="close-circle-outline" slot="start"></ion-icon>
-            Desactivar perfil
-          </ion-button>
+            <ion-button fill="solid" color="danger" class="eval-button">
+              <ion-icon name="close-circle-outline" slot="start"></ion-icon>
+              Desactivar perfil
+            </ion-button>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div *ngIf="!loading && users.length === 0" class="no-data">
-      <p>No hay usuarios para mostrar.</p>
-    </div>
+      <div *ngIf="!loading && users.length === 0" class="no-data">
+        <p>No hay usuarios para mostrar.</p>
+      </div>
 
-    <ion-spinner *ngIf="loading" name="crescent" color="primary"></ion-spinner>
+      <div *ngIf="loading" class="loading-wrapper">
+        <ion-spinner name="crescent" color="primary"></ion-spinner>
+      </div>
+    </div>
   </div>
 </ion-content>
