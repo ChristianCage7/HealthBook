@@ -7,7 +7,12 @@ const routes: Routes = [
   {
     path: '',
     component: CreditorPage
+  },
+  {
+    path: 'creditor-profile-edit',
+    loadChildren: () => import('./creditor-profile-edit/creditor-profile-edit.module').then( m => m.CreditorProfileEditPageModule)
   }
+
 ];
 
 @NgModule({

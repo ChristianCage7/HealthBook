@@ -1,9 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { App } from '@capacitor/app';
 import { Router } from '@angular/router';
 import { supabase } from './shared/services/supabase.client';
 import { UserService } from './shared/services/user.service';
 import { firstValueFrom } from 'rxjs';
+import { ToastService } from './shared/services/toast.service';
+import { CustomToastComponent } from './shared/components/custom-toast/custom-toast.component'; // Asegúrate que la ruta sea correcta
 
 @Component({
   selector: 'app-root',
@@ -11,44 +13,48 @@ import { firstValueFrom } from 'rxjs';
   styleUrls: ['app.component.scss'],
   standalone: false
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterViewInit {
+  @ViewChild(CustomToastComponent) toastComponent!: CustomToastComponent;
+
   constructor(
     private router: Router,
-    private userService: UserService
+    private userService: UserService,
+    private toastService: ToastService
   ) {
     this.setupDeepLinking();
   }
 
   ngOnInit() {
-  console.log('AppComponent ngOnInit');
-  this.handleAppStart();
-}
+    console.log('AppComponent ngOnInit');
+    this.handleAppStart();
+  }
 
-async handleAppStart() {
-  console.log('handleAppStart iniciado');
-  try {
-    const { data: { session } } = await supabase.auth.getSession();
-    console.log('Session:', session);
-    if (session) {
-      const isCreditor = await firstValueFrom(this.userService.isCreditor());
-      console.log('Is creditor:', isCreditor);
-      if (isCreditor) {
-        console.log('Navegando a /creditor');
-        this.router.navigateByUrl('/menu/creditor', { replaceUrl: true });
+  ngAfterViewInit() {
+    this.toastService.register(this.toastComponent);
+  }
+
+  async handleAppStart() {
+    console.log('handleAppStart iniciado');
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      console.log('Session:', session);
+      if (session) {
+        const isCreditor = await firstValueFrom(this.userService.isCreditor());
+        console.log('Is creditor:', isCreditor);
+        if (isCreditor) {
+          this.router.navigateByUrl('/menu/creditor', { replaceUrl: true });
+        } else {
+          this.router.navigateByUrl('/menu', { replaceUrl: true });
+        }
       } else {
-        console.log('Navegando a /menu');
-        this.router.navigateByUrl('/menu', { replaceUrl: true });
+        this.router.navigateByUrl('/main', { replaceUrl: true });
       }
-    } else {
-      console.log('No session, navegando a /auth');
+    } catch (error) {
+      console.error('Error en handleAppStart:', error);
+      this.toastService.show('Error al iniciar la app', 'Error', 'error');
       this.router.navigateByUrl('/main', { replaceUrl: true });
     }
-  } catch (error) {
-    console.error('Error en handleAppStart:', error);
-    this.router.navigateByUrl('/main', { replaceUrl: true });
   }
-}
-
 
   setupDeepLinking() {
     App.addListener('appUrlOpen', (event) => {
@@ -60,6 +66,7 @@ async handleAppStart() {
           this.router.navigateByUrl('/auth/reset-password');
         } else {
           console.warn('[Deep Link] Ruta desconocida:', basePath);
+          this.toastService.show('Ruta desconocida en deep link', 'Aviso', 'warning');
         }
       }
     });

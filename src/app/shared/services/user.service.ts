@@ -21,11 +21,11 @@ export class UserService {
   }
 
   isProfessional(): Observable<boolean> {
-  return from(this.getUidFromAuth()).pipe(
-    switchMap(uid => this.http.get<any[]>(`${this.apiUrl}/api/users/professional/${uid}`)),
-    map(res => Array.isArray(res) && res.length > 0 && res[0].register?.idprofile === 2)
-  );
-}
+    return from(this.getUidFromAuth()).pipe(
+      switchMap(uid => this.http.get<any[]>(`${this.apiUrl}/api/users/professional/${uid}`)),
+      map(res => Array.isArray(res) && res.length > 0 && res[0].register?.idprofile === 2)
+    );
+  }
   isCreditor(): Observable<boolean> {
     return from(this.getUidFromAuth()).pipe(
       switchMap(uid => this.http.get<any[]>(`${this.apiUrl}/api/users/creditor/${uid}`)),

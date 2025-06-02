@@ -34,7 +34,9 @@ const routes: Routes = [
     path: 'creditor',
     canActivate: [authGuard],
     loadChildren: () => import('./pages/menu/creditor/creditor.module').then(m => m.CreditorPageModule)
-  }
+  },
+
+
 ];
 
 @NgModule({

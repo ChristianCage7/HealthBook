@@ -21,12 +21,12 @@ export class CreditorPage implements OnInit {
 
   ngOnInit() {
     this.loadPendingProfessionals();
-
   }
 
   loadPendingProfessionals() {
-    this.creditorService.getPendingProfessionals().subscribe((data: any[]) => {
-      this.professionals = data;
+    this.creditorService.getAllProfessionals().subscribe((data: any[]) => {
+      // Filtrar por profesionales con approve === 0 en frontend
+      this.professionals = data.filter(p => p.approve === 0);
     });
   }
 
@@ -52,6 +52,5 @@ export class CreditorPage implements OnInit {
       await alert.present();
     }
   }
-
 
 }

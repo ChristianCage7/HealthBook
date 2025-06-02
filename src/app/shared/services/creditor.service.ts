@@ -13,6 +13,16 @@ export interface Professional {
   approve: number;
 }
 
+export interface Basic {
+  iduser: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  imgprofile: string;
+  gender: number;
+  datebirth: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -25,8 +35,12 @@ export class CreditorService {
   /**
    * Obtener los profesionales pendientes de aprobación
    */
-  getPendingProfessionals(): Observable<Professional[]> {
+  getAllProfessionals(): Observable<Professional[]> {
     return this.http.get<Professional[]>(`${this.apiUrl}/users/professional/pending`);
+  }
+
+  getAllUsers(): Observable<Basic[]> {
+    return this.http.get<Basic[]>(`${this.apiUrl}/users/basic/pending`);
   }
 
   getUser(uid: string, isProfessional: boolean): Observable<any> {

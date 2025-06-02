@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CustomSelectComponent } from './components/custom-select/custom-select.component';
 import { ReviewDocumentModalComponent } from './components/review-document-modal/review-document-modal.component';
+import { CustomToastComponent } from './components/custom-toast/custom-toast.component';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { ReviewDocumentModalComponent } from './components/review-document-modal
     LogoComponent,
     CustomSelectComponent,
     ReviewDocumentModalComponent,
+    CustomToastComponent
 
   ],
   exports: [
@@ -25,7 +27,8 @@ import { ReviewDocumentModalComponent } from './components/review-document-modal
     ReviewDocumentModalComponent,
     FormsModule,
     ReactiveFormsModule,
-    IonicModule
+    IonicModule,
+    CustomToastComponent
   ],
   imports: [
     CommonModule,

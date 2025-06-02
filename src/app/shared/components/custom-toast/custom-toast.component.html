@@ -1,0 +1,19 @@
+<div class="toast-box" [ngClass]="[type, isActive ? 'active' : '']">
+  <div class="toast-box-icon">
+    <i class="bx" [ngClass]="{
+      'bx-check': type === 'success',
+      'bx-error': type === 'error',
+      'bx-info-circle': type === 'info',
+      'bx-error-circle': type === 'warning'
+    }"></i>
+  </div>
+
+  <div class="toast-box-text">
+    <p class="toast-heading">{{ heading }}</p>
+    <p class="toast-description">{{ description }}</p>
+  </div>
+
+  <div class="toast-close" (click)="closeToast()">
+    <i class="bx bx-x"></i>
+  </div>
+</div>
