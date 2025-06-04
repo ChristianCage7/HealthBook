@@ -8,6 +8,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CustomSelectComponent } from './components/custom-select/custom-select.component';
 import { ReviewDocumentModalComponent } from './components/review-document-modal/review-document-modal.component';
 import { CustomToastComponent } from './components/custom-toast/custom-toast.component';
+import { ProfessionalProfileModalComponent } from './components/professional-profile-modal/professional-profile-modal.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { CustomToastComponent } from './components/custom-toast/custom-toast.com
     LogoComponent,
     CustomSelectComponent,
     ReviewDocumentModalComponent,
-    CustomToastComponent
+    CustomToastComponent,
+    ProfessionalProfileModalComponent
 
   ],
   exports: [
@@ -28,7 +30,8 @@ import { CustomToastComponent } from './components/custom-toast/custom-toast.com
     FormsModule,
     ReactiveFormsModule,
     IonicModule,
-    CustomToastComponent
+    CustomToastComponent,
+    ProfessionalProfileModalComponent
   ],
   imports: [
     CommonModule,

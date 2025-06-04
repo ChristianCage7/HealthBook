@@ -23,6 +23,7 @@ export class CreditorPage implements OnInit {
     this.loadPendingProfessionals();
   }
 
+  /*Obtiene profesionales*/
   loadPendingProfessionals() {
     this.creditorService.getAllProfessionals().subscribe((data: any[]) => {
       // Filtrar por profesionales con approve === 0 en frontend
@@ -30,6 +31,7 @@ export class CreditorPage implements OnInit {
     });
   }
 
+  /*Abre modal para revisión*/
   async openReviewModal(professional: any) {
     const modal = await this.modalController.create({
       component: ReviewDocumentModalComponent,

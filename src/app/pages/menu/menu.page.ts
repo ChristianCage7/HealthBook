@@ -28,6 +28,7 @@ export class MenuPage {
   }
 
  async ngOnInit() {
+  /*Revisa que tipo de usuario inicia sesión*/
   try {
     this.isCreditor = await firstValueFrom(this.userService.isCreditor());
     this.isProfessional = await firstValueFrom(this.userService.isProfessional());
@@ -43,6 +44,7 @@ export class MenuPage {
   }
   }
 
+  /*Cerrar sesión*/
   async logoutConfirm() {
     const alert = await this.alertController.create({
       header: 'Cerrar sesión',

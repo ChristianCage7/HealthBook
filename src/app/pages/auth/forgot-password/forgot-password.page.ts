@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { SupabaseService } from 'src/app/shared/services/supabase.service';
 import { ToastController } from '@ionic/angular';
+import { ToastService } from 'src/app/shared/services/toast.service';
 
 @Component({
   selector: 'app-forgot-password',
@@ -17,37 +18,30 @@ export class ForgotPasswordPage implements OnInit {
 
   constructor(
     private supabaseService: SupabaseService,
-    private toastController: ToastController
-  ) {}
+    private toastService: ToastService,
 
-  ngOnInit() {}
+  ) { }
+
+  ngOnInit() { }
 
   async submit() {
     if (this.form.invalid) return;
 
     const email = this.form.value.email!;
-    
+
     try {
       const { data, error } = await this.supabaseService.resetPassword(email);
-      
+
       if (error) {
-        this.showToast('Error al enviar enlace. Intenta de nuevo.', 'danger');
+        this.toastService.show('Error al enviar enlace. Intenta de nuevo.', 'Error', 'error');
         console.error(error);
       } else {
-        this.showToast('Enlace enviado correctamente. Revisa tu correo.', 'success');
+        this.toastService.show('Enlace enviado correctamente. Revisa tu correo.', 'Éxito','success');
       }
     } catch (err) {
       console.error(err);
-      this.showToast('Algo salió mal. Intenta más tarde.', 'danger');
+      this.toastService.show('Algo salió mal. Intenta más tarde.','Error','error')
     }
   }
 
-  async showToast(message: string, color: 'success' | 'danger') {
-    const toast = await this.toastController.create({
-      message,
-      duration: 3000,
-      color
-    });
-    toast.present();
-  }
 }

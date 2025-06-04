@@ -1,0 +1,77 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Perfil profesional</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="cancel()">Cerrar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+  <div class="profile-container">
+    <div class="profile-inner">
+      <!-- Header del perfil -->
+      <div class="profile-header">
+        <img src="assets/icon/profile-img.png" class="profile-avatar" />
+
+        <div class="profile-info">
+          <h2 class="profile-name">{{ professional.first_name }} {{ professional.last_name }}</h2>
+          <p class="profile-specialty">Aerobics, Weight loss</p>
+          <div class="profile-rating">
+            <ion-icon name="star" class="star-icon"></ion-icon>
+            <ion-icon name="star" class="star-icon"></ion-icon>
+            <ion-icon name="star" class="star-icon"></ion-icon>
+            <ion-icon name="star" class="star-icon"></ion-icon>
+            <ion-icon name="star-outline" class="star-icon"></ion-icon>
+          </div>
+        </div>
+      </div>
+
+      <!-- Botón de agendar -->
+      <div class="appointment-button-wrapper">
+        <ion-button expand="block" class="appointment-button" (click)="goToNewAppointment()">
+          Agendar una cita
+        </ion-button>
+      </div>
+
+      <!-- Métricas del perfil -->
+      <div class="profile-metrics">
+        <div class="metric">
+          <p class="metric-number">2772</p>
+          <p class="metric-label">Likes</p>
+        </div>
+        <div class="metric">
+          <p class="metric-number">1376</p>
+          <p class="metric-label">Comments</p>
+        </div>
+        <div class="metric">
+          <p class="metric-number">754</p>
+          <p class="metric-label">Suggested</p>
+        </div>
+      </div>
+
+      <!-- Sección de descripción -->
+      <div class="profile-about">
+        <h4 class="section-title">Acerca de</h4>
+        <p class="about-text">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit.
+          Consectetur veniam incidunt eius fuga, architecto recusandae
+          ipsum asperiores tempore.
+        </p>
+
+        <div class="profile-contact">
+          <ion-icon name="location-outline" class="contact-icon"></ion-icon>
+          <span class="contact-text">
+            Eva Surbhi complex, Aksharwadi road Bhavnagar - 364001
+          </span>
+        </div>
+
+        <div class="profile-phone">
+          <ion-icon name="call-outline" class="contact-icon"></ion-icon>
+          <span class="contact-text">9876543212</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

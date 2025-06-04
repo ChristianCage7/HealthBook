@@ -25,31 +25,33 @@ export class CreditorProfileEditPage implements OnInit {
     this.loadProfessionals();
   }
 
-loadProfessionals() {
-  this.loading = true;
+  /*Obtener profesionales*/
+  loadProfessionals() {
+    this.loading = true;
 
-  forkJoin({
-    users: this.creditorService.getAllProfessionals(),
-    genders: this.userService.getGenders()
-  }).subscribe({
-    next: ({ users, genders }) => {
-      this.users = users.map(user => ({
-        ...user,
-        genderName: genders.find(g => g.idgender === user.gender)?.gender || 'Desconocido'
-      }));
+    forkJoin({
+      users: this.creditorService.getAllProfessionals(),
+      genders: this.userService.getGenders()
+    }).subscribe({
+      next: ({ users, genders }) => {
+        this.users = users.map(user => ({
+          ...user,
+          genderName: genders.find(g => g.idgender === user.gender)?.gender || 'Desconocido'
+        }));
 
-      this.loading = false;
-      this.toastService.show('Profesionales cargados correctamente', 'Éxito', 'success');
-    },
-    error: (err) => {
-      this.loading = false;
-      this.toastService.show('Error cargando profesionales', 'Error', 'error');
-      console.error(err);
-    }
-  });
-}
+        this.loading = false;
+        this.toastService.show('Profesionales cargados correctamente', 'Éxito', 'success');
+      },
+      error: (err) => {
+        this.loading = false;
+        this.toastService.show('Error cargando profesionales', 'Error', 'error');
+        console.error(err);
+      }
+    });
+  }
 
 
+  /*Obtener usuarios básicos */
   loadUserBasics() {
     this.loading = true;
 
@@ -58,7 +60,6 @@ loadProfessionals() {
       genders: this.userService.getGenders()
     }).subscribe({
       next: ({ users, genders }) => {
-        // Mapear usuarios para incluir el nombre del género
         this.users = users.map(user => ({
           ...user,
           genderName: genders.find(g => g.idgender === user.gender)?.gender || 'Desconocido'
@@ -74,6 +75,8 @@ loadProfessionals() {
       }
     });
   }
+
+  /*Cambiar vista entre profesionales y básicos*/
   changeView(type: 'professionals' | 'basics') {
     this.viewType = type;
     if (type === 'professionals') {
