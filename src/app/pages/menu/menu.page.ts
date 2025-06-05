@@ -28,20 +28,23 @@ export class MenuPage {
   }
 
  async ngOnInit() {
-    try {
-      this.isCreditor = await firstValueFrom(this.userService.isCreditor());
-      this.isProfessional = await firstValueFrom(this.userService.isProfessional());
+  /*Revisa que tipo de usuario inicia sesión*/
+  try {
+    this.isCreditor = await firstValueFrom(this.userService.isCreditor());
+    this.isProfessional = await firstValueFrom(this.userService.isProfessional());
 
-      // Redirigir si es profesional y está en /menu/home
-      if (this.isProfessional && this.router.url === '/menu/home') {
-        this.router.navigateByUrl('/menu/professional-dashboard', { replaceUrl: true });
-      }
+    console.log('isCreditor:', this.isCreditor);
+    console.log('isProfessional:', this.isProfessional);
 
-    } catch (err) {
-      console.error('Error verificando tipo de usuario:', err);
+    if (this.isProfessional && this.router.url.includes('/menu/home')) {
+      this.router.navigateByUrl('/menu/professional-dashboard', { replaceUrl: true });
     }
+  } catch (err) {
+    console.error('Error verificando tipo de usuario:', err);
+  }
   }
 
+  /*Cerrar sesión*/
   async logoutConfirm() {
     const alert = await this.alertController.create({
       header: 'Cerrar sesión',

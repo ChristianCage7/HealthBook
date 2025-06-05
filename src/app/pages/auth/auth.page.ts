@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { SupabaseService } from 'src/app/shared/services/supabase.service';
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/shared/services/user.service';
+import { ToastService } from 'src/app/shared/services/toast.service';
 
 @Component({
   selector: 'app-auth',
@@ -22,7 +23,8 @@ export class AuthPage implements OnInit {
   constructor(
     private supabaseService: SupabaseService,
     private router: Router,
-    private userService: UserService
+    private userService: UserService,
+    private toastService: ToastService
   ) { }
 
   ngOnInit() {
@@ -42,6 +44,7 @@ export class AuthPage implements OnInit {
 
     if (error) {
       this.errorMessage = error.message;
+      this.toastService.show(this.errorMessage, 'Error', 'error')
       return;
     }
 
@@ -55,6 +58,8 @@ export class AuthPage implements OnInit {
       console.log('Usuario no es creditor, redirigiendo a /menu');
       this.router.navigateByUrl('/menu', { replaceUrl: true });
     }
+
+    this.toastService.show('Inicio de sesión exitoso.', 'Éxito', 'success')
   }
 
 

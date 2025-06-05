@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { ManageAvailabilityPageRoutingModule } from './manage-availability-routing.module';
 
 import { ManageAvailabilityPage } from './manage-availability.page';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ManageAvailabilityPageRoutingModule
+    ManageAvailabilityPageRoutingModule,
+    SharedModule
   ],
   declarations: [ManageAvailabilityPage]
 })

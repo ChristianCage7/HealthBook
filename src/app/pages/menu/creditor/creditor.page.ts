@@ -21,15 +21,17 @@ export class CreditorPage implements OnInit {
 
   ngOnInit() {
     this.loadPendingProfessionals();
-
   }
 
+  /*Obtiene profesionales*/
   loadPendingProfessionals() {
-    this.creditorService.getPendingProfessionals().subscribe((data: any[]) => {
-      this.professionals = data;
+    this.creditorService.getAllProfessionals().subscribe((data: any[]) => {
+      // Filtrar por profesionales con approve === 0 en frontend
+      this.professionals = data.filter(p => p.approve === 0);
     });
   }
 
+  /*Abre modal para revisión*/
   async openReviewModal(professional: any) {
     const modal = await this.modalController.create({
       component: ReviewDocumentModalComponent,
@@ -52,6 +54,5 @@ export class CreditorPage implements OnInit {
       await alert.present();
     }
   }
-
 
 }

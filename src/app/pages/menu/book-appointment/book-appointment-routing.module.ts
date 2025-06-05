@@ -7,8 +7,9 @@ const routes: Routes = [
   {
     path: '',
     component: BookAppointmentPage
-  },  {
-    path: 'new-appointment',
+  },
+  {
+    path: 'new-appointment/:id',
     loadChildren: () => import('./new-appointment/new-appointment.module').then( m => m.NewAppointmentPageModule)
   }
 

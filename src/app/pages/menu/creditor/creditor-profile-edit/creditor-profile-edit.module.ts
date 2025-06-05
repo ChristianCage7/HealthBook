@@ -4,9 +4,9 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { ProfessionalSessionsPageRoutingModule } from './professional-sessions-routing.module';
+import { CreditorProfileEditPageRoutingModule } from './creditor-profile-edit-routing.module';
 
-import { ProfessionalSessionsPage } from './professional-sessions.page';
+import { CreditorProfileEditPage } from './creditor-profile-edit.page';
 import { SharedModule } from 'src/app/shared/shared.module';
 
 @NgModule({
@@ -14,9 +14,9 @@ import { SharedModule } from 'src/app/shared/shared.module';
     CommonModule,
     FormsModule,
     IonicModule,
-    ProfessionalSessionsPageRoutingModule,
+    CreditorProfileEditPageRoutingModule,
     SharedModule
   ],
-  declarations: [ProfessionalSessionsPage]
+  declarations: [CreditorProfileEditPage]
 })
-export class ProfessionalSessionsPageModule {}
+export class CreditorProfileEditPageModule {}

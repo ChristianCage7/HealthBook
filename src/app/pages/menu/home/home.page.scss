@@ -1,7 +1,4 @@
-ion-content {
-  --background: linear-gradient(to bottom, #f6f3fc 0%, #f4effc 50%, #f2eafe 100%);
-  display: block; // <- CORRECTO, NO usar flex aquí
-}
+
 
 .container {
   width: 100%;
@@ -13,7 +10,6 @@ ion-content {
   gap: 20px;
   justify-content: center;
   align-items: center;
-  min-height: 100vh; // Asegura centrado vertical
   box-sizing: border-box;
 }
 

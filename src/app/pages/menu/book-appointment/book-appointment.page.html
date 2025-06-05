@@ -1,2 +1,56 @@
 <app-header [showBackButton]="false" title="Agendar cita"></app-header>
-<ion-content></ion-content>
+
+<ion-content class="page-content">
+
+  <div>
+    <ion-searchbar placeholder="Buscar profesional..."></ion-searchbar>
+
+    <ion-button fill="clear" id="filter-trigger">
+      Filtrar por
+      <ion-icon name="filter-outline" slot="end"></ion-icon>
+    </ion-button>
+
+    <!-- Popover de filtros -->
+    <ion-popover trigger="filter-trigger" triggerAction="click" showBackdrop="true">
+      <ng-template>
+        <ion-list>
+          <ion-item button>
+            <ion-label>Mayor calificación</ion-label>
+          </ion-item>
+          <ion-item button>
+            <ion-label>Menor calificación</ion-label>
+          </ion-item>
+          <ion-item button>
+            <ion-label>Quitar filtro</ion-label>
+          </ion-item>
+        </ion-list>
+      </ng-template>
+    </ion-popover>
+  </div>
+
+
+  <div class="card-wrapper" *ngFor="let prof of professionals" (click)="openProfessionalProfileModal(prof)">
+    <div class="card-inner">
+      <ion-card class="professional-card">
+        <div class="info-area">
+          <div class="top-row">
+            <div class="professional-info">
+              <h3 class="name">{{ prof.first_name }} {{ prof.last_name }}</h3>
+              <p class="specialty">Psicólogo</p>
+            </div>
+            <div class="rating">
+              <ion-icon name="star" class="star"></ion-icon>
+              <span>4.5</span>
+            </div>
+          </div>
+
+          <div class="bottom-row">
+            <ion-button size="medium" fill="solid" class="book-button" (click)="goToNewAppointment($event, prof)">Ver
+              disponibilidad</ion-button>
+          </div>
+        </div>
+      </ion-card>
+      <img src="assets/icon/profile-img.png" class="floating-avatar" />
+    </div>
+  </div>
+</ion-content>
