@@ -4,6 +4,7 @@ import { SupabaseService } from 'src/app/shared/services/supabase.service';
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/shared/services/user.service';
 import { supabase } from 'src/app/shared/services/supabase.client';
+import { ToastService } from 'src/app/shared/services/toast.service';
 
 @Component({
   selector: 'app-auth',
