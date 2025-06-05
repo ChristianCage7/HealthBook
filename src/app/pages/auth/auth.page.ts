@@ -24,7 +24,8 @@ export class AuthPage implements OnInit {
   constructor(
     private supabaseService: SupabaseService,
     private router: Router,
-    private userService: UserService
+    private userService: UserService,
+    private toastService: ToastService
   ) {}
 
   ngOnInit() {
@@ -50,6 +51,7 @@ export class AuthPage implements OnInit {
 
       // Validar el estado del usuario (status != 0)
       await this.userService.validateUserStatus();
+      this.toastService.show('Inicio de sesión exitoso', 'Éxito', 'success');
 
       const isCreditor = await this.userService.isCreditor().toPromise();
       if (isCreditor) {
