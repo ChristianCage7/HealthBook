@@ -1,8 +1,10 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
+import { forkJoin } from 'rxjs';
 import { ProfessionalProfileModalComponent } from 'src/app/shared/components/professional-profile-modal/professional-profile-modal.component';
 import { CreditorService } from 'src/app/shared/services/creditor.service';
+import { UserService } from 'src/app/shared/services/user.service';
 
 @Component({
   selector: 'app-book-appointment',
@@ -18,11 +20,12 @@ export class BookAppointmentPage implements OnInit {
     private creditorService: CreditorService,
     private modalController: ModalController,
     private router: Router,
+    private userService: UserService
 
   ) { }
 
   ngOnInit() {
-    this.loadPendingProfessionals();
+    this.loadProfessionals();
   }
 
   /*Obtiene profesionales*/
@@ -30,6 +33,27 @@ export class BookAppointmentPage implements OnInit {
     this.creditorService.getAllProfessionals().subscribe((data: any[]) => {
       // Filtrar por profesionales abrobados en frontend
       this.professionals = data.filter(p => p.approve === 1);
+    });
+  }
+
+  /*Obtener profesionales*/
+  loadProfessionals() {
+    forkJoin({
+      professionals: this.creditorService.getAllProfessionals(),
+      genders: this.userService.getGenders()
+    }).subscribe({
+      next: ({ professionals, genders }) => {
+        // Mapea con los nombres de género 
+        this.professionals = professionals
+          .map(pro => ({
+            ...pro,
+            genderName: genders.find(g => g.idgender === pro.gender)?.gender || 'Desconocido'
+          }))
+          .filter(pro => pro.approve === 1); // y luego se filtran solo profesionales aprobados
+      },
+      error: (err) => {
+        console.error('Error cargando profesionales:', err);
+      }
     });
   }
 
