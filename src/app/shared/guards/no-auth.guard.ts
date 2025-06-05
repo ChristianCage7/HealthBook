@@ -2,8 +2,9 @@ import { CanActivateFn, Router } from '@angular/router';
 import { inject } from '@angular/core';
 import { from, map, tap } from 'rxjs';
 import { supabase } from '../services/supabase.client';
+import { Observable } from 'rxjs';
 
-export const noAuthGuard: CanActivateFn = (route, state) => {
+export const noAuthGuard: CanActivateFn = (route, state): Observable<boolean> => {
   const router = inject(Router);
 
   return from(supabase.auth.getSession()).pipe(

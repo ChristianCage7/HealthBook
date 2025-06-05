@@ -1,6 +1,8 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { AlertController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
+import { supabase } from 'src/app/shared/services/supabase.client';
 import { UserService } from 'src/app/shared/services/user.service';
 
 @Component({
@@ -23,9 +25,10 @@ export class ProfilePage implements OnInit {
   constructor(
     private userService: UserService,
     private alertCtrl: AlertController,
-    private fb: FormBuilder
-
-  ) { }
+    private fb: FormBuilder,
+    private navCtrl: NavController,
+    private http: HttpClient
+  ) {}
 
   async ngOnInit() {
     await this.loadUser();
@@ -64,6 +67,7 @@ export class ProfilePage implements OnInit {
 
     const updatedUser = {
       UID: this.user.UID,
+      idprofessional: this.user.idprofessional,
       firstName: this.editForm.value.first_name,
       lastName: this.editForm.value.last_name,
       email: this.user.email
@@ -80,8 +84,7 @@ export class ProfilePage implements OnInit {
         this.editMode = false;
         await this.loadUser();
       },
-      error: async (err) => {
-        console.error('Error actualizando perfil:', err);
+      error: async () => {
         const alert = await this.alertCtrl.create({
           header: 'Error',
           message: 'No se pudo actualizar el perfil.',
@@ -170,12 +173,28 @@ export class ProfilePage implements OnInit {
         {
           text: 'Eliminar',
           role: 'destructive',
-          handler: () => {
-            console.log('Eliminar cuenta - futura implementación');
-          }
+          handler: () => this.deleteAndLogout()
         }
       ]
     });
     await alert.present();
+  }
+
+  private async deleteAndLogout() {
+    try {
+      const uid = await this.userService.getUidFromAuth();
+      const apiUrl = this.userService['apiUrl'];
+      await this.http.delete(`${apiUrl}/api/register/delete/${uid}`, { responseType: 'text' }).toPromise();
+
+      await supabase.auth.signOut();
+      this.navCtrl.navigateRoot('/auth'); // Redirige correctamente a tu login
+    } catch (e) {
+      const errAlert = await this.alertCtrl.create({
+        header: 'Error',
+        message: 'No se pudo eliminar la cuenta.',
+        buttons: ['OK']
+      });
+      await errAlert.present();
+    }
   }
 }

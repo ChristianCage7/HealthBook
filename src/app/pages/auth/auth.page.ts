@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { SupabaseService } from 'src/app/shared/services/supabase.service';
 import { Router } from '@angular/router';
 import { UserService } from 'src/app/shared/services/user.service';
+import { supabase } from 'src/app/shared/services/supabase.client';
 
 @Component({
   selector: 'app-auth',
@@ -23,7 +24,7 @@ export class AuthPage implements OnInit {
     private supabaseService: SupabaseService,
     private router: Router,
     private userService: UserService
-  ) { }
+  ) {}
 
   ngOnInit() {
     console.log('[Login] Componente inicializado');
@@ -36,27 +37,37 @@ export class AuthPage implements OnInit {
     this.errorMessage = null;
 
     const { email, password } = this.form.value!;
-    const { data, error } = await this.supabaseService.signIn(email!, password!);
 
-    this.loading = false;
+    try {
+      const { data, error } = await this.supabaseService.signIn(email!, password!);
+      this.loading = false;
 
-    if (error) {
-      this.errorMessage = error.message;
-      return;
-    }
+      if (error) {
+        this.errorMessage = error.message;
+        return;
+      }
 
-    // Esperar el resultado de isCreditor() como promesa
-    const isCreditor = await this.userService.isCreditor().toPromise();
+      // Validar el estado del usuario (status != 0)
+      await this.userService.validateUserStatus();
 
-    if (isCreditor) {
-      console.log('Usuario es creditor, redirigiendo a /menu/creditor');
-      this.router.navigateByUrl('/menu/creditor', { replaceUrl: true });
-    } else {
-      console.log('Usuario no es creditor, redirigiendo a /menu');
-      this.router.navigateByUrl('/menu', { replaceUrl: true });
+      const isCreditor = await this.userService.isCreditor().toPromise();
+      if (isCreditor) {
+        console.log('Usuario es creditor, redirigiendo a /menu/creditor');
+        this.router.navigateByUrl('/menu/creditor', { replaceUrl: true });
+      } else {
+        console.log('Usuario no es creditor, redirigiendo a /menu');
+        this.router.navigateByUrl('/menu', { replaceUrl: true });
+      }
+
+    } catch (e: any) {
+      this.loading = false;
+      console.error('Error en login o validación:', e);
+
+      // Cierre de sesión en caso de cuenta desactivada
+      await supabase.auth.signOut();
+
+      // Mostrar mensaje amigable
+      this.errorMessage = 'Tu cuenta ha sido desactivada y no puedes iniciar sesión.';
     }
   }
-
-
-
 }

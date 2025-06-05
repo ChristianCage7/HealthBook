@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { supabase } from './supabase.client';
-import { Observable, from, switchMap, map, tap } from 'rxjs';
+import { Observable, from, switchMap, map, tap, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -42,43 +42,42 @@ export class UserService {
     );
   }
 
-  getCurrentUser() {
-    return from(this.getUidFromAuth()).pipe(
-      switchMap(uid =>
-        this.http.get<any>(`${this.apiUrl}/api/users/basic/${uid}`).pipe(
-          map((res: any) => {
-            console.log('Respuesta backend UserBasic:', res);
-            if (!Array.isArray(res) || res.length === 0) {
-              throw new Error('Usuario no encontrado en UserBasic');
-            }
-            const user = res[0];
+getCurrentUser(): Observable<any> {
+  return from(this.getUidFromAuth()).pipe(
+    switchMap(uid =>
+      this.http.get<any[]>(`${this.apiUrl}/api/users/basic/${uid}`).pipe(
+        switchMap(basicRes => {
+          if (Array.isArray(basicRes) && basicRes.length > 0) {
+            const user = basicRes[0];
             user.uid = uid;
-            return user;
-          }),
-          switchMap(user => {
-            const idProfile = user.register?.idprofile;
-            if (idProfile === 2) {
-              return this.http.get<any>(`${this.apiUrl}/api/users/professional/${user.uid}`).pipe(
-                map((res: any) => {
-                  console.log('Respuesta backend UserProfessional:', res);
-                  if (!Array.isArray(res) || res.length === 0) {
-                    throw new Error('Usuario no encontrado en UserProfessional');
-                  }
-                  const profUser = res[0];
-                  return profUser;
-                })
-              );
-            }
-            return from([user]);
-          })
-        )
-      )
-    );
-  }
+            return of(user);
+          }
 
-  updateUser(user: any) {
-    return this.http.put(`${this.apiUrl}/api/users/basic/update`, user, { responseType: 'text' });
-  }
+          // Si no hay datos en UserBasic, buscar como UserProfessional
+          return this.http.get<any[]>(`${this.apiUrl}/api/users/professional/${uid}`).pipe(
+            map(profRes => {
+              if (!Array.isArray(profRes) || profRes.length === 0) {
+                throw new Error('Usuario no encontrado');
+              }
+              const user = profRes[0];
+              user.uid = uid;
+              return user;
+            })
+          );
+        })
+      )
+    )
+  );
+}
+
+updateUser(user: any) {
+  const isProfessional = !!user.idprofessional;
+  const endpoint = isProfessional
+    ? `${this.apiUrl}/api/users/professional/update`
+    : `${this.apiUrl}/api/users/basic/update`;
+
+  return this.http.put(endpoint, user, { responseType: 'text' });
+}
 
   getProfessions() {
     return this.http.get<any>(`${this.apiUrl}/api/users/profession`).pipe(
@@ -97,6 +96,43 @@ export class UserService {
 
 updateProfessionalUser(user: any) {
   return this.http.put(`${this.apiUrl}/api/users/professional/update`, user, { responseType: 'text' });
+}
+
+validateUserStatus(): Promise<void> {
+  return this.getUidFromAuth().then(uid => {
+    console.log('[Validación] Iniciando validación de estado para UID:', uid);
+
+    return this.http.get<any[]>(`${this.apiUrl}/api/users/basic/${uid}`).toPromise()
+      .then(res => {
+        console.log('[Validación] Respuesta UserBasic:', res);
+
+        if (!res || res.length === 0) throw new Error('Usuario no encontrado');
+        const user = res[0];
+        console.log('[Validación] STATUS en UserBasic:', user?.register?.status);
+
+        if (user?.register?.status === 0) {
+          console.warn('[Validación] Usuario desactivado (UserBasic)');
+          throw new Error('Cuenta desactivada');
+        }
+      })
+      .catch(() => {
+        console.log('[Validación] No encontrado en UserBasic, revisando en UserProfessional');
+
+        return this.http.get<any[]>(`${this.apiUrl}/api/users/professional/${uid}`).toPromise()
+          .then(res => {
+            console.log('[Validación] Respuesta UserProfessional:', res);
+
+            if (!res || res.length === 0) throw new Error('Usuario no encontrado');
+            const user = res[0];
+            console.log('[Validación] STATUS en UserProfessional:', user?.register?.status);
+
+            if (user?.register?.status === 0) {
+              console.warn('[Validación] Usuario desactivado (UserProfessional)');
+              throw new Error('Cuenta desactivada');
+            }
+          });
+      });
+  });
 }
 
 }

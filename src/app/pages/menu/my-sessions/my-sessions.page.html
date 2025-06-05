@@ -1,3 +1,11 @@
 <app-header [showBackButton]="false" title="Mis citas"></app-header>
-<ion-content></ion-content>
 
+<ion-content class="ion-padding">
+  <ion-button expand="block" color="tertiary" (click)="iniciarLlamadaProfesional()">
+    Iniciar videollamada (Profesional)
+  </ion-button>
+
+  <ion-button expand="block" color="primary" (click)="ingresarComoPaciente()">
+    Ingresar como paciente a la misma llamada
+  </ion-button>
+</ion-content>

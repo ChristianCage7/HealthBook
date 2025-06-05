@@ -1,10 +1,11 @@
 import { CanActivateFn, Router } from '@angular/router';
 import { inject } from '@angular/core';
 import { UserService } from '../services/user.service';
-import { from, map, switchMap, tap } from 'rxjs';
+import { from, map, of, switchMap, tap, catchError } from 'rxjs';
 import { supabase } from '../services/supabase.client';
+import { Observable } from 'rxjs';
 
-export const authGuard: CanActivateFn = (route, state) => {
+export const authGuard: CanActivateFn = (route, state): Observable<boolean> => {
   const userService = inject(UserService);
   const router = inject(Router);
 
@@ -13,22 +14,28 @@ export const authGuard: CanActivateFn = (route, state) => {
       const session = sessionData?.data?.session;
       if (!session) {
         router.navigateByUrl('/auth');
-        return [false];
+        return of(false);
       }
 
-      // Validar si es creditor
-      return userService.isCreditor().pipe(
-        tap(isCreditor => {
-          if (state.url === '/menu' && isCreditor) {
-            // Si intenta entrar a /menu pero es creditor => redirigimos
-            router.navigateByUrl('/menu/creditor');
-          }
-          if (state.url === '/menu/creditor' && !isCreditor) {
-            // Si no es creditor pero quiere entrar ahí => lo mandamos al menú
-            router.navigateByUrl('/menu');
-          }
-        }),
-        map(() => true)
+      return from(userService.validateUserStatus()).pipe(
+        switchMap(() =>
+          userService.isCreditor().pipe(
+            tap(isCreditor => {
+              if (state.url === '/menu' && isCreditor) {
+                router.navigateByUrl('/menu/creditor');
+              }
+              if (state.url === '/menu/creditor' && !isCreditor) {
+                router.navigateByUrl('/menu');
+              }
+            }),
+            map(() => true)
+          )
+        ),
+        catchError(() => {
+          supabase.auth.signOut();
+          router.navigateByUrl('/auth');
+          return of(false);
+        })
       );
     })
   );

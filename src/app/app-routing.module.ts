@@ -34,7 +34,17 @@ const routes: Routes = [
     path: 'creditor',
     canActivate: [authGuard],
     loadChildren: () => import('./pages/menu/creditor/creditor.module').then(m => m.CreditorPageModule)
-  }
+  },
+  {
+  path: 'call-patient',
+  canActivate: [authGuard],
+  loadChildren: () => import('./pages/menu/call-patient/call-patient.module').then(m => m.CallPatientPageModule)
+},
+{
+  path: 'call-professional',
+  canActivate: [authGuard],
+  loadChildren: () => import('./pages/menu/call-professional/call-professional.module').then(m => m.CallProfessionalPageModule)
+}
 ];
 
 @NgModule({
