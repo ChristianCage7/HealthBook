@@ -8,12 +8,14 @@
           <img [src]="prof.imgprofile || 'assets/icon/profile-img.png'" />
         </div>
 
+        <!-- Perfil profesional-->
         <div class="professional-info">
           <h3>{{ prof.first_name }} {{ prof.last_name }}</h3>
           <p><strong>Email:</strong> {{ prof.Register?.email }}</p>
           <p><strong>Fecha nacimiento:</strong> {{ prof.datebirth | date: 'dd/MM/yyyy' }}</p>
         </div>
 
+        <!-- Botón para evaluar documentos-->
         <ion-button fill="solid" color="tertiary" class="eval-button" (click)="openReviewModal(prof)">
           <ion-icon name="search-outline" slot="start"></ion-icon>
           Evaluación
@@ -21,6 +23,7 @@
       </div>
     </div>
 
+    <!-- En caso de que no hayan profesionales: -->
     <div *ngIf="professionals.length === 0" class="ion-text-center ion-padding">
       <p class="no-results">No hay profesionales pendientes.</p>
     </div>

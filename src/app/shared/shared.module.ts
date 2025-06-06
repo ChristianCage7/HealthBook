@@ -9,6 +9,7 @@ import { CustomSelectComponent } from './components/custom-select/custom-select.
 import { ReviewDocumentModalComponent } from './components/review-document-modal/review-document-modal.component';
 import { CustomToastComponent } from './components/custom-toast/custom-toast.component';
 import { ProfessionalProfileModalComponent } from './components/professional-profile-modal/professional-profile-modal.component';
+import { CreditorProfileEditModalComponent } from './components/creditor-profile-edit-modal/creditor-profile-edit-modal.component';
 
 @NgModule({
   declarations: [
@@ -18,8 +19,8 @@ import { ProfessionalProfileModalComponent } from './components/professional-pro
     CustomSelectComponent,
     ReviewDocumentModalComponent,
     CustomToastComponent,
-    ProfessionalProfileModalComponent
-
+    ProfessionalProfileModalComponent,
+    CreditorProfileEditModalComponent
   ],
   exports: [
     HeaderComponent,
@@ -31,7 +32,8 @@ import { ProfessionalProfileModalComponent } from './components/professional-pro
     ReactiveFormsModule,
     IonicModule,
     CustomToastComponent,
-    ProfessionalProfileModalComponent
+    ProfessionalProfileModalComponent,
+    CreditorProfileEditModalComponent
   ],
   imports: [
     CommonModule,

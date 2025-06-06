@@ -3,17 +3,23 @@
 <ion-content>
   <div class="d-flex-center auth-form">
     <div class="content-wrapper">
-      <div class="user-list" *ngIf="users.length > 0">
 
-        <ion-segment [(ngModel)]="viewType" (ionChange)="changeView(viewType)">
-          <ion-segment-button value="professionals">
-            Profesionales
-          </ion-segment-button>
-          <ion-segment-button value="basics">
-            Usuarios básicos
-          </ion-segment-button>
-        </ion-segment>
+      <ion-segment [(ngModel)]="viewType" (ionChange)="changeView(viewType)">
+        <ion-segment-button value="professionals">
+          Profesionales
+        </ion-segment-button>
+        <ion-segment-button value="basics">
+          Usuarios básicos
+        </ion-segment-button>
+      </ion-segment>
 
+      <!-- Loading Spinner -->
+      <div *ngIf="loading" class="loading-wrapper">
+        <ion-spinner name="crescent" color="primary"></ion-spinner>
+      </div>
+
+      <!-- Lista de usuarios -->
+      <div class="user-list" *ngIf="!loading && users.length > 0">
         <div class="user-card" *ngFor="let user of users">
           <div class="card-avatar">
             <img [src]="user.imgprofile || 'assets/icon/profile-img.png'" />
@@ -29,12 +35,12 @@
           </div>
 
           <div class="user-actions">
-            <ion-button fill="solid" color="tertiary" class="eval-button">
+            <ion-button fill="solid" color="tertiary" class="eval-button" (click)="openEditModal(user)">
               <ion-icon name="search-outline" slot="start"></ion-icon>
               Ver perfil
             </ion-button>
 
-            <ion-button fill="solid" color="danger" class="eval-button">
+            <ion-button fill="solid" color="danger" class="eval-button" (click)="confirmDeleteAccount(user)">
               <ion-icon name="close-circle-outline" slot="start"></ion-icon>
               Desactivar perfil
             </ion-button>
@@ -42,13 +48,15 @@
         </div>
       </div>
 
+      <!-- Mensaje cuando no hay usuarios -->
       <div *ngIf="!loading && users.length === 0" class="no-data">
-        <p>No hay usuarios para mostrar.</p>
-      </div>
-
-      <div *ngIf="loading" class="loading-wrapper">
-        <ion-spinner name="crescent" color="primary"></ion-spinner>
+        <p *ngIf="viewType === 'professionals'">No hay profesionales disponibles.</p>
+        <p *ngIf="viewType === 'basics'">No hay usuarios básicos disponibles.</p>
       </div>
     </div>
   </div>
+
+  <ion-loading [isOpen]="deleteWrapper" message="Eliminando cuenta..." spinner="crescent" translucent
+    backdropDismiss="false">
+  </ion-loading>
 </ion-content>
