@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-professional-sessions',
@@ -9,9 +10,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProfessionalSessionsPage implements OnInit {
 
-  constructor() { }
+  constructor(private router: Router) {}
 
-  ngOnInit() {
+  ngOnInit() {}
+
+  goToManageAvailability() {
+    this.router.navigate(['/menu/manage-availability']);
   }
-
 }

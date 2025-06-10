@@ -48,7 +48,7 @@ const routes: Routes = [
   path: 'call-professional',
   canActivate: [authGuard],
   loadChildren: () => import('./pages/menu/call-professional/call-professional.module').then(m => m.CallProfessionalPageModule)
-}
+},
 ];
 
 @NgModule({
