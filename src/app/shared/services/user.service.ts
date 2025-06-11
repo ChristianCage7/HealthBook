@@ -88,8 +88,10 @@ export class UserService {
           })
         )
       )
-    );
-  }
+    )
+  );
+}
+
 
   updateUser(user: any) {
     const isProfessional = !!user.idprofessional;

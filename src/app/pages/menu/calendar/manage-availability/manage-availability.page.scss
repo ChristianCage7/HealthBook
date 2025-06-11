@@ -1,0 +1,55 @@
+.calendar-container {
+  max-width: 800px;
+  margin: 0 auto;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #f3eaff;
+  padding: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* Días pasados bloqueados */
+::ng-deep .cal-day-disabled {
+  pointer-events: none;
+  opacity: 0.3;
+}
+
+/* Header de días */
+::ng-deep .cal-header {
+  background-color: #4b268e;
+  color: white;
+  font-weight: 600;
+  padding: 12px 0;
+  border-radius: 12px 12px 0 0;
+}
+
+/* Celdas del calendario */
+::ng-deep .cal-cell {
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+/* Día actual */
+::ng-deep .cal-day-cell.cal-today {
+  background-color: #b388ff !important;
+  color: white !important;
+}
+
+/* Hover */
+::ng-deep .cal-day-cell:hover {
+  background-color: #e0caff;
+  cursor: pointer;
+}
+
+/* Eventos (disponibilidad) */
+::ng-deep .cal-day-cell.cal-has-events {
+  background-color: #d1c4e9 !important;
+  color: #4a148c !important;
+  font-weight: 600;
+}
+
+/* Eventos abiertos abajo del calendario */
+::ng-deep .cal-open-day-events {
+  background-color: #ede7f6;
+  padding: 4px;
+}

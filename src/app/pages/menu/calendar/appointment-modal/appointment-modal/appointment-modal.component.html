@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Nueva Cita</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">Cerrar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-item>
+    <ion-label position="stacked">Fecha</ion-label>
+    <ion-datetime
+      [(ngModel)]="appointmentDate"
+      presentation="date"
+      placeholder="Selecciona una fecha">
+    </ion-datetime>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="stacked">Hora</ion-label>
+    <ion-datetime
+      [(ngModel)]="appointmentTime"
+      presentation="time"
+      placeholder="Selecciona una hora">
+    </ion-datetime>
+  </ion-item>
+
+  <ion-button expand="block" (click)="save()">Guardar Cita</ion-button>
+</ion-content>

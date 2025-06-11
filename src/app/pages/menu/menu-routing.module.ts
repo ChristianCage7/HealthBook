@@ -42,7 +42,7 @@ const routes: Routes = [
       },
       {
         path: 'manage-availability',
-        loadChildren: () => import('./manage-availability/manage-availability.module').then(m => m.ManageAvailabilityPageModule)
+        loadChildren: () => import('./calendar/manage-availability/manage-availability.module').then(m => m.ManageAvailabilityPageModule)
       },
       {
         path: '',
@@ -61,7 +61,7 @@ const routes: Routes = [
   },
   {
     path: 'manage-availability',
-    loadChildren: () => import('./manage-availability/manage-availability.module').then( m => m.ManageAvailabilityPageModule)
+    loadChildren: () => import('./calendar/manage-availability/manage-availability.module').then( m => m.ManageAvailabilityPageModule)
   },
   {
     path: 'call-patient',
@@ -70,6 +70,10 @@ const routes: Routes = [
   {
     path: 'call-professional',
     loadChildren: () => import('./call-professional/call-professional.module').then( m => m.CallProfessionalPageModule)
+  },
+  {
+    path: 'calendar',
+    loadChildren: () => import('./calendar/calendar.module').then( m => m.CalendarPageModule)
   }
 
 ];
