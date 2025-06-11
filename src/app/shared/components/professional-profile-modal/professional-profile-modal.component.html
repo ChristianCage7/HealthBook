@@ -9,26 +9,28 @@
 
 
 <ion-content>
-
   <div class="profile-container">
     <div class="profile-inner">
       <!-- Header del perfil -->
       <div class="profile-header">
         <img src="assets/icon/profile-img.png" class="profile-avatar" />
 
-        <!--Datos del profesional y rating (hard coded por mientras (04-26))-->
+        <!--Datos del profesional y rating -->
         <div class="profile-info">
           <h2 class="profile-name">{{ professional.first_name }} {{ professional.last_name }}</h2>
           <p class="profile-specialty"><ion-icon name="people-circle-outline"></ion-icon> Psicólogo</p>
           <p class="profile-specialty"><ion-icon name="calendar-outline"></ion-icon> {{ professional.datebirth | date:
             'dd/MM/yyyy' }} </p>
-          <p class="profile-specialty"><ion-icon name="transgender-outline"></ion-icon> {{ professional.genderName }}</p>
+          <p class="profile-specialty"><ion-icon name="transgender-outline"></ion-icon> {{ professional.genderName }}
+          </p>
           <div class="profile-rating">
-            <ion-icon name="star" class="star-icon"></ion-icon>
-            <ion-icon name="star" class="star-icon"></ion-icon>
-            <ion-icon name="star" class="star-icon"></ion-icon>
-            <ion-icon name="star" class="star-icon"></ion-icon>
-            <ion-icon name="star-outline" class="star-icon"></ion-icon>
+            <ng-container *ngFor="let star of [1,2,3,4,5]; let i = index">
+              <fa-icon *ngIf="averageRating >= i + 1" [icon]="faSolidStar" class="star-rating"></fa-icon>
+              <fa-icon *ngIf="averageRating >= i + 0.5 && averageRating < i + 1" [icon]="faHalfStar"
+                class="star-rating"></fa-icon>
+              <fa-icon *ngIf="averageRating < i + 0.5" [icon]="faRegularStar" class="star-gray"></fa-icon>
+            </ng-container>
+            <span class="rating-number">{{ averageRating.toFixed(1) }}</span>
           </div>
         </div>
       </div>
@@ -61,16 +63,51 @@
         <div class="profile-contact">
           <ion-icon name="location-outline" class="contact-icon"></ion-icon>
           <span class="metric-label">
-            Eva Surbhi complex, Aksharwadi road Bhavnagar
+            ...
           </span>
         </div>
 
         <p class="contact-text">Experiencia profesional</p>
         <div class="profile-contact">
           <ion-icon name="location-outline" class="contact-icon"></ion-icon>
-          <span class="metric-label">Eva Surbhi complex, Aksharwadi road Bhavnagar</span>
+          <span class="metric-label">...</span>
         </div>
       </div>
+
+      <!-- Valoración y comentario -->
+      <h4 class="section-title">Valorar profesional</h4>
+
+      <div class="rating-section">
+        <div class="rating-stars">
+          <ng-container *ngFor="let i of [1, 2, 3, 4, 5]">
+            <fa-icon [icon]="getStarIcon(i)" class="star" (click)="handleStarClick($event, i)"></fa-icon>
+          </ng-container>
+        </div>
+
+        <div class="comment-box-wrapper" *ngIf="rating > 0">
+          <label class="comment-label" for="comment">Comentario:</label>
+          <ion-textarea [(ngModel)]="comment" id="comment" placeholder="Escribe tu opinión sobre el profesional..."
+            autoGrow="true" rows="4" class="custom-textarea comment-input">
+          </ion-textarea>
+        </div>
+
+        <ion-button class="appointment-button" expand="block" (click)="submitEvaluation()"
+          [disabled]="!rating || !comment.trim()">
+          Enviar valoración
+        </ion-button>
+      </div>
+
+
+      <h4 class="section-title">Comentarios de pacientes</h4>
+
+      <div class="review-card" *ngFor="let comment of comments">
+        <div class="review-header">
+          <div class="review-name">{{ comment.UserBasic.first_name }} {{ comment.UserBasic.last_name }}</div>
+          <div class="review-date">{{ comment.created_at | date:'dd-MM-yyyy, HH:mm' }}</div>
+        </div>
+        <blockquote class="review-text">“{{ comment.comment }}”</blockquote>
+      </div>
+
     </div>
   </div>
 </ion-content>

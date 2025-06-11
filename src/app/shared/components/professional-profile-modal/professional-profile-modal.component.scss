@@ -46,7 +46,7 @@ ion-header {
 }
 
 .profile-avatar {
-  width: 80px; 
+  width: 80px;
   height: 80px;
   border-radius: 14px;
   object-fit: cover;
@@ -81,6 +81,23 @@ ion-header {
   font-size: 18px; // Aumentado
   color: #fbc02d;
 }
+
+.star-rating {
+  color: #fbc02d;
+  font-size: 1.5rem;
+}
+
+.star-gray {
+  color: #ccc;
+  font-size: 1.5rem;
+}
+
+.rating-number {
+  margin-left: 8px;
+  font-weight: bold;
+  color: #4b268e;
+}
+
 
 /* === Botón agendar === */
 .appointment-button-wrapper {
@@ -166,4 +183,114 @@ ion-header {
   margin: 0 auto;
   padding: 0 16px; // margen lateral
   padding-top: 16px;
+}
+
+//Estrellas de valoración
+
+.rating-section {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #f9f6ff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.rating-stars {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.star {
+  font-size: 2rem;
+  color: #fbc02d;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+
+.comment-box-wrapper {
+  background: #ffffff;
+  border: 1px solid #d8d4e2;
+  border-radius: 12px;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.comment-label {
+  display: block;
+  font-weight: 600;
+  color: #4b268e;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.comment-input {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 0.75rem;
+  font-size: 0.95rem;
+  color: #333;
+  width: 100%;
+  min-height: 100px;
+  resize: none;
+  --padding-start: 1rem;
+  --padding-end: 1rem;
+  --padding-top: 0.5rem;
+  --padding-bottom: 0.5rem;
+}
+
+.comment-input::placeholder {
+  color: #a49cb6;
+  font-style: italic;
+}
+
+//Promedio de estrellas
+.average-rating-stars {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  .star-icon {
+    font-size: 24px;
+    color: #FFD700;
+  }
+
+  .rating-number {
+    margin-left: 6px;
+    font-size: 14px;
+    color: #666;
+  }
+}
+
+//Comentarios
+.review-card {
+  background: #ffffff;
+  border-left: 6px solid #4b268e;
+  padding: 16px;
+  margin-bottom: 14px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.review-name {
+  font-weight: bold;
+  color: #4b268e;
+}
+
+.review-date {
+  font-size: 13px;
+  color: #44403c;
+}
+
+.review-text {
+  font-style: italic;
+  color: #44403c;
+  margin: 0;
 }

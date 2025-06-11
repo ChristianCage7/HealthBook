@@ -12,6 +12,9 @@ export interface Professional {
   datebirth: string;
   gender: number;
   approve: number;
+  Register: {
+    status: number
+  }
 }
 
 export interface Basic {
@@ -22,6 +25,9 @@ export interface Basic {
   imgprofile: string;
   gender: number;
   datebirth: string;
+  Register: {
+    status: number
+  }
 }
 
 @Injectable({
