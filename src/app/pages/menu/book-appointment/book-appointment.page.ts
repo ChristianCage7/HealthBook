@@ -15,23 +15,34 @@ import { UserService } from 'src/app/shared/services/user.service';
 export class BookAppointmentPage implements OnInit {
 
   professionals: any[] = [];
+  iduser: number | null = null;
 
   constructor(
     private creditorService: CreditorService,
     private modalController: ModalController,
     private router: Router,
     private userService: UserService
-
   ) { }
 
   ngOnInit() {
     this.loadProfessionals();
+
+    // Obtener ID del usuario autenticado
+    this.userService.getCurrentUser().subscribe({
+      next: user => {
+        this.iduser = user.id;
+        console.log('ID de usuario autenticado:', this.iduser);
+      },
+      error: err => {
+        console.error('Error obteniendo usuario:', err);
+      }
+    });
   }
 
   /*Obtiene profesionales*/
   loadPendingProfessionals() {
     this.creditorService.getAllProfessionals().subscribe((data: any[]) => {
-      // Filtrar por profesionales abrobados en frontend
+      // Filtrar por profesionales aprobados en frontend
       this.professionals = data.filter(p => p.approve === 1);
     });
   }
@@ -59,15 +70,21 @@ export class BookAppointmentPage implements OnInit {
 
   /*Abre modal de perfil profesional*/
   async openProfessionalProfileModal(professional: any) {
-    const modal = await this.modalController.create({
-      component: ProfessionalProfileModalComponent,
-      componentProps: { professional }
-    });
+    try {
+      const modal = await this.modalController.create({
+        component: ProfessionalProfileModalComponent,
+        componentProps: {
+          professional,
+          iduser: this.iduser  // ← Se pasa el id del usuario autenticado
+        }
+      });
 
-    await modal.present();
+      await modal.present();
 
-    const { data } = await modal.onWillDismiss();
-
+      const { data } = await modal.onWillDismiss();
+    } catch (error) {
+      console.error('Error abriendo modal de perfil profesional:', error);
+    }
   }
 
   //Ruta para ir a página para agendar

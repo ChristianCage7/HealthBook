@@ -10,6 +10,7 @@ import { ReviewDocumentModalComponent } from './components/review-document-modal
 import { CustomToastComponent } from './components/custom-toast/custom-toast.component';
 import { ProfessionalProfileModalComponent } from './components/professional-profile-modal/professional-profile-modal.component';
 import { CreditorProfileEditModalComponent } from './components/creditor-profile-edit-modal/creditor-profile-edit-modal.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { CreditorProfileEditModalComponent } from './components/creditor-profile
     CommonModule,
     IonicModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    FontAwesomeModule
   ]
 })
 export class SharedModule { }

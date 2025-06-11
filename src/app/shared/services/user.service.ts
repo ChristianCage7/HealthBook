@@ -58,6 +58,7 @@ export class UserService {
             if (Array.isArray(basicRes) && basicRes.length > 0) {
               const user = basicRes[0];
               user.uid = uid;
+              user.id = user.iduser; 
               return of(user);
             }
 
@@ -66,6 +67,7 @@ export class UserService {
                 if (Array.isArray(profRes) && profRes.length > 0) {
                   const user = profRes[0];
                   user.uid = uid;
+                  user.id = user.iduser; 
                   return of(user);
                 }
 
@@ -77,6 +79,7 @@ export class UserService {
                     }
                     const user = credRes[0];
                     user.uid = uid;
+                    user.id = user.iduser; 
                     return user;
                   })
                 );
