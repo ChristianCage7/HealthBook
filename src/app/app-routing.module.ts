@@ -39,6 +39,10 @@ const routes: Routes = [
     path: 'book-appointment',
     loadChildren: () => import('./pages/menu/book-appointment/book-appointment.module').then(m => m.BookAppointmentPageModule)
   },
+  {
+  path: 'call-professional',
+  loadChildren: () => import('./pages/menu/call-professional/call-professional.module').then(m => m.CallProfessionalPageModule)
+}
 ];
 
 @NgModule({

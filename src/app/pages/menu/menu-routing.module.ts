@@ -66,7 +66,11 @@ const routes: Routes = [
   {
     path: 'calendar',
     loadChildren: () => import('./calendar/calendar.module').then( m => m.CalendarPageModule)
-  }
+  },
+  {
+    path: 'call-professional',
+    loadChildren: () => import('./call-professional/call-professional.module').then( m => m.CallProfessionalPageModule)
+  },
 
 ];
 

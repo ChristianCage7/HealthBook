@@ -1,11 +1,38 @@
 <app-header [showBackButton]="false" title="Sesiones"></app-header>
 
-<ion-content class="ion-padding">
-
-  <!-- Botón flotante arriba a la izquierda -->
-  <ion-button class="btn-primary" (click)="goToManageAvailability()">
+<ion-content class="ion-padding page-content">
+  <!-- Botón con estilo morado y posición correcta -->
+  <ion-button expand="block" class="btn-primary floating-button" (click)="goToManageAvailability()">
     Subir disponibilidad
   </ion-button>
 
-  <!-- Aquí el resto del contenido -->
+  <div *ngIf="appointments.length === 0" class="no-appointments">
+    <p class="ion-text-center">No tienes citas programadas.</p>
+  </div>
+
+  <div class="card-wrapper" *ngFor="let cita of appointments">
+    <div class="card-inner">
+      <ion-card class="professional-card">
+        <div class="info-area">
+          <div class="top-row">
+            <div class="professional-info">
+              <h3 class="name">ID Paciente: {{ cita.iduser }}</h3>
+              <p class="specialty">Fecha: {{ cita.appointmentDate }}</p>
+              <p class="specialty">Hora: {{ cita.appointmentTime }}</p>
+            </div>
+            <div class="rating">
+              <ion-icon name="videocam-outline" class="star"></ion-icon>
+            </div>
+          </div>
+
+          <div class="bottom-row">
+            <ion-button size="medium" fill="solid" class="book-button" (click)="iniciarLlamada(cita)">
+              Iniciar cita
+            </ion-button>
+          </div>
+        </div>
+      </ion-card>
+      <img src="assets/icon/profile-img.png" class="floating-avatar" />
+    </div>
+  </div>
 </ion-content>
