@@ -88,9 +88,8 @@ export class UserService {
           })
         )
       )
-    )
-  );
-}
+    );
+  }
 
 
   updateUser(user: any) {

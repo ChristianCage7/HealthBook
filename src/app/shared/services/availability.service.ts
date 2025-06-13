@@ -8,12 +8,13 @@ import { environment } from 'src/environments/environment';
 export class AvailabilityService {
   private apiUrl = environment.backendUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   createAvailability(payload: {
     idprofessional: number;
     day: string;
-    hour: string;
+    start_hour: string;
+    end_hour: string;
     available: boolean;
   }) {
     return this.http.post(`${this.apiUrl}/api/calendar/availability`, payload);
@@ -22,4 +23,19 @@ export class AvailabilityService {
   getAvailability(idprofessional: number) {
     return this.http.get<any[]>(`${this.apiUrl}/api/calendar/availability/${idprofessional}`);
   }
+
+  createPattern(payload: any) {
+    return this.http.post(`${this.apiUrl}/api/calendar/patterns`, payload);
+  }
+
+  createException(payload: {
+    idprofessional: number;
+    day: string;
+    start_hour: string;
+    end_hour: string;
+    reason: string;
+  }) {
+    return this.http.post(`${this.apiUrl}/api/calendar/exceptions`, payload);
+  }
+
 }
