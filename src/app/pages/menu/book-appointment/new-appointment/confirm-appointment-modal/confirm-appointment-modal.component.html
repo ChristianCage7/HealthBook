@@ -1,0 +1,16 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>Confirmar cita</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">Cerrar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <p><strong>Paciente:</strong> {{ patient.name }}</p>
+  <p><strong>Doctor:</strong> {{ doctor.name }}</p>
+  <p><strong>Fecha:</strong> {{ date | date:'fullDate' }}</p>
+  <p><strong>Hora:</strong> {{ slot.startHour }} – {{ slot.endHour }}</p>
+  <ion-button expand="block" (click)="confirm()">Confirmar</ion-button>
+</ion-content>

@@ -1,67 +1,211 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+ion-content {
+  overflow-y: auto;
+  height: 100%;
+}
+
+/* ===============================
+   Toolbar superior
+================================= */
+ion-header {
+  ion-toolbar {
+    --background: #4b268e;
+    --color: #ffffff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    padding-top: 10px;
+    padding-bottom: 4px;
+  }
+
+  ion-title {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-left: 16px;
+
+    strong {
+      font-size: 18px;
+      font-weight: 700;
+      color: white;
+    }
+
+    .admin {
+      font-size: 12px;
+      letter-spacing: 6px;
+      color: #e5d9fb;
+      margin-top: 2px;
+    }
+  }
+
+  ion-back-button {
+    color: #ffffff;
+    margin-left: 4px;
+  }
+}
+
+/* ===============================
+   Toolbar del segmento
+================================= */
+.segment-toolbar {
+  --background: #4b268e;
+  --color: white;
+
+  ion-segment {
+    --background: #4b268e;
+    --indicator-color: white;
+  }
+
+  ion-segment-button {
+    color: white !important;
+    font-weight: bold;
+  }
+}
+
+.segment-toolbar ion-segment-button ion-label {
+  color: white !important;
+  opacity: 1 !important;
+  font-weight: 600;
+}
+
+/* ===============================
+   Contenido principal
+================================= */
 ion-content {
   --background: #f3eaff;
+  overflow-y: auto;
+  height: 100%;
+}
+
+.form-container {
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px 16px 100px;
+  max-width: 480px;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
-ion-toolbar {
-  --background: #7e57c2;
-  --color: white;
-}
-
+/* ===============================
+   Estilos de campos
+================================= */
 ion-item {
-  width: 100%;
-  max-width: 300px;
-  background-color: transparent;
-  --background: transparent;
-  justify-content: center;
+  --inner-padding-start: 12px;
+  --inner-padding-end: 12px;
+  --padding-top: 12px;
+  --padding-bottom: 12px;
+  --background: #fff;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
 }
 
 ion-label {
-  font-weight: bold;
-  color: #5e35b1;
+  color: #4b268e;
+  font-weight: 600;
+}
+
+ion-select::part(text),
+ion-input::part(native) {
+  color: #4b268e !important;
   text-align: center;
-  width: 100%;
+  font-weight: 500;
+}
+
+ion-input[readonly] {
+  color: #4b268e !important;
+}
+
+/* ===============================
+   Botón guardar
+================================= */
+ion-button {
+  margin-top: 24px;
+  --background: #4b268e;
+  --color: white;
+  --border-radius: 12px;
+  font-weight: bold;
+}
+
+.footer-button {
+  position: sticky;
+  bottom: 0;
+  padding: 12px 16px;
+  background: #f3eaff;
+  z-index: 10;
+
+  ion-button {
+    --background: #4b268e;
+    --color: white;
+    --border-radius: 12px;
+    font-weight: bold;
+  }
+}
+
+/* ===============================
+   Calendarios y patrón
+================================= */
+.pattern-fields {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pattern-fields ion-item {
+  --background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  --padding-start: 8px;
+  --inner-padding-end: 8px;
+  --min-height: 48px;
+  box-sizing: border-box;
+}
+
+.pattern-fields ion-datetime {
+  --background: transparent;
+  font-size: 16px;
+  --padding-top: 0;
+  --padding-bottom: 0;
+  --cell-size: 40px;
+}
+
+/* Día normal */
+.pattern-fields ion-datetime::part(calendar-day) {
+  height: 38px;
+  width: 38px;
+  font-size: 16px;
+  color: #4b268e;
+  margin: 0;
+}
+
+/* Día activo */
+.pattern-fields ion-datetime::part(active) {
+  background: #4b268e;
+  color: white !important;
+  border-radius: 50%;
+}
+
+/* Reduce verticalidad */
+.pattern-fields ion-datetime::part(calendar-body) {
+  padding-top: 0;
+  padding-bottom: 0;
+  margin-top: -6px;
+  margin-bottom: -6px;
+  row-gap: 0;
+}
+
+/* Reduce espacio del encabezado */
+.pattern-fields ion-datetime::part(calendar-month-year) {
+  padding-bottom: 0;
   margin-bottom: 4px;
 }
 
-ion-datetime {
-  --background: white;
-  --highlight-color: #7e57c2;
-  --wheel-highlight-background: #e0caff;
-  --wheel-fade-color: transparent;
-
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  padding: 8px;
-  width: 100%;
-  max-width: 300px;
-}
-
-ion-button {
-  --background: #7e57c2;
-  --color: white;
-  --border-radius: 10px;
-  font-weight: 600;
-  width: 100%;
-  max-width: 300px;
-  margin-top: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  align-self: center;
-}
-
-.hour-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 16px 0;
-  justify-content: center;
-}
-
-.content-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 100%;
+/* Días de la semana */
+.pattern-fields ion-datetime::part(calendar-weekdays) {
+  font-size: 13px;
+  margin-bottom: 4px;
 }

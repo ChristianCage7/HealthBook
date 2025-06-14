@@ -4,6 +4,7 @@ import { ModalController } from '@ionic/angular';
 import { EvaluationService } from '../../services/evaluation.service';
 import { faStar as faSolidStar, faStarHalfAlt } from '@fortawesome/free-solid-svg-icons';
 import { faStar as faRegularStar } from '@fortawesome/free-regular-svg-icons';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-professional-profile-modal',
@@ -26,7 +27,8 @@ export class ProfessionalProfileModalComponent implements OnInit {
   constructor(
     private modalCtrl: ModalController,
     private router: Router,
-    private evaluationService: EvaluationService
+    private evaluationService: EvaluationService,
+    private toastService: ToastService
   ) { }
 
   ngOnInit() {
@@ -87,6 +89,7 @@ export class ProfessionalProfileModalComponent implements OnInit {
   submitEvaluation() {
     if (!this.iduser || !this.professional?.idprofessional) {
       console.warn('Faltan datos para enviar evaluación');
+      this.toastService.show('Faltan datos para enviar evaluación', 'Aviso', 'warning');
       return;
     }
 
@@ -105,7 +108,7 @@ export class ProfessionalProfileModalComponent implements OnInit {
         error: (err) => console.error('Error al enviar comentario:', err)
       });
     }
-
+    this.toastService.show('Evaluación enviada con éxito', 'Éxito', 'success');
     this.comment = '';
     this.rating = 0;
     this.modalCtrl.dismiss();

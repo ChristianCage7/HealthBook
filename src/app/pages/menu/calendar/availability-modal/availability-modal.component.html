@@ -7,28 +7,88 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <div class="content-wrapper">
-    <ion-item lines="none">
-      <ion-label position="stacked">Hora disponible</ion-label>
-      <ion-datetime
-        [(ngModel)]="selectedTime"
-        presentation="time"
-        placeholder="Selecciona una hora">
-      </ion-datetime>
-    </ion-item>
+<ion-content [fullscreen]="true" scroll-y="true">
+  <ion-toolbar class="segment-toolbar">
+    <ion-segment [(ngModel)]="showAvailabilityForm">
+      <ion-segment-button [value]="true">
+        <ion-label>Disponibilidad</ion-label>
+      </ion-segment-button>
+      <ion-segment-button [value]="false">
+        <ion-label>Excepciones</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
 
-    <ion-button expand="block" (click)="addHour()">Agregar hora</ion-button>
+  <div class="form-container">
+    <!-- DISPONIBILIDAD -->
+    <ng-container *ngIf="showAvailabilityForm">
+      <ion-item>
+        <ion-label position="stacked">Hora seleccionada</ion-label>
+        <ion-select interface="popover" [(ngModel)]="startTime" (ionChange)="onStartTimeSelect($event.detail.value)">
+          <ion-select-option *ngFor="let time of timeBlocks" [value]="time">{{ time }}</ion-select-option>
+        </ion-select>
+      </ion-item>
 
-    <div *ngIf="selectedHours.length > 0" class="hour-list">
-      <ion-chip *ngFor="let hour of selectedHours" color="primary" outline>
-        {{ hour }}
-        <ion-icon name="close-circle" (click)="removeHour(hour)"></ion-icon>
-      </ion-chip>
-    </div>
+      <ion-item>
+        <ion-label position="stacked">Hora de fin (automática)</ion-label>
+        <ion-input [value]="endTime" readonly></ion-input>
+      </ion-item>
 
-    <ion-button expand="block" (click)="saveAvailability()" [disabled]="selectedHours.length === 0">
-      Guardar
+      <ion-item lines="none">
+        <ion-label>¿Repetir durante el mes?</ion-label>
+        <ion-checkbox slot="end" (ionChange)="togglePatternOptions($event.detail.checked)"></ion-checkbox>
+      </ion-item>
+
+      <div *ngIf="showPatternOptions" class="pattern-fields">
+        <ion-item>
+          <ion-label position="stacked">Selecciona los días</ion-label>
+          <ion-select [(ngModel)]="selectedDays" multiple interface="popover">
+            <ion-select-option *ngFor="let day of daysOfWeek" [value]="day.value">{{ day.label }}</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked">Desde</ion-label>
+          <ion-datetime [(ngModel)]="patternStartDate" [min]="minDate" presentation="date"></ion-datetime>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked">Hasta</ion-label>
+          <ion-datetime [(ngModel)]="patternEndDate" [min]="minDate" presentation="date"></ion-datetime>
+        </ion-item>
+      </div>
+    </ng-container>
+
+    <!-- EXCEPCIÓN -->
+    <ng-container *ngIf="!showAvailabilityForm">
+      <ion-item>
+        <ion-label position="stacked">Hora seleccionada</ion-label>
+        <ion-select interface="popover" [(ngModel)]="startTime" (ionChange)="onStartTimeSelect($event.detail.value)">
+          <ion-select-option *ngFor="let time of timeBlocks" [value]="time">{{ time }}</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Hora de fin (automática)</ion-label>
+        <ion-input [value]="endTime" readonly></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Fecha de excepción</ion-label>
+        <ion-input [value]="exceptionDate | date: 'fullDate'" readonly></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">Motivo</ion-label>
+        <ion-input [(ngModel)]="exceptionReason" placeholder="Ej. Vacaciones, médico, etc."></ion-input>
+      </ion-item>
+    </ng-container>
+
+    <!-- Botón SIEMPRE visible al final del contenido -->
+    <ion-button class="save-button" expand="block" (click)="handleSave()" [disabled]="loading">
+      {{ showAvailabilityForm ? 'Guardar disponibilidad' : 'Guardar excepción' }}
     </ion-button>
+
+    <ion-loading [isOpen]="loading" message="Guardando..." translucent></ion-loading>
   </div>
 </ion-content>

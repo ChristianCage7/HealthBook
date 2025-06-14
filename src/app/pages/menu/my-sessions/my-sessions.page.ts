@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Appointment, AppointmentService } from 'src/app/shared/services/appointment.service';
 import { CallService } from 'src/app/shared/services/call.service';
+import { UserService } from 'src/app/shared/services/user.service';
 
 @Component({
   selector: 'app-my-sessions',
@@ -10,13 +12,41 @@ import { CallService } from 'src/app/shared/services/call.service';
 })
 export class MySessionsPage implements OnInit {
   public static sessionGlobal = '';
+  appointments: Appointment[] = [];
+  loading = true;
+
 
   constructor(
-        private callService: CallService,
-    private router: Router
+    private callService: CallService,
+    private router: Router,
+    private appointmentService: AppointmentService,
+    private userService: UserService
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
+    this.userService.getCurrentUser().subscribe({
+      next: user => {
+        this.loadAppointments(user.id);
+      },
+      error: err => {
+        console.error('No pude cargar usuario', err);
+        this.loading = false;
+      }
+    });
+  }
+
+  /*Carga las citas agendadas*/
+    private loadAppointments(userId: number) {
+    this.appointmentService.getUserAppointments(userId).subscribe({
+      next: appts => {
+        this.appointments = appts;
+        this.loading = false;
+      },
+      error: err => {
+        console.error('Error al cargar citas', err);
+        this.loading = false;
+      }
+    });
   }
 
  iniciarLlamadaProfesional() {
@@ -43,4 +73,7 @@ export class MySessionsPage implements OnInit {
       });
     });
   }
+
+
+
 }
