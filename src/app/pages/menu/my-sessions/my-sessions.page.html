@@ -8,4 +8,26 @@
   <ion-button expand="block" color="primary" (click)="ingresarComoPaciente()">
     Ingresar como paciente a la misma llamada
   </ion-button>
+
+
+   <ion-list *ngIf="!loading; else loadingTpl">
+    <ion-item *ngFor="let appt of appointments">
+      <ion-label>
+        <h2>Con profesional #{{ appt.idprofessional }}</h2>
+        <p>
+          {{ appt.appointmentDate | date:'fullDate' }}
+          a las {{ appt.appointmentTime.substring(0,5) }}
+        </p>
+        <p>Estado: {{ appt.status === 1 ? 'Activa' : 'Cancelada' }}</p>
+      </ion-label>
+    </ion-item>
+    <ion-item *ngIf="appointments.length===0">
+      <ion-label>No tienes citas agendadas.</ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ng-template #loadingTpl>
+    <ion-spinner name="crescent"></ion-spinner>
+  </ng-template>
+  
 </ion-content>
