@@ -1,0 +1,110 @@
+/* 1) Define tu morado como primary */
+:host {
+  --ion-color-primary: #4b268e;
+}
+
+/* 2) Contenedor redondeado abajo */
+.calendar-wrapper {
+  /* borde y redondeo global */
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+/* === 2) Cabecera manual (“month-nav”) === */
+.month-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ion-color-primary);
+  padding: 0.5rem 1rem;
+}
+.month-nav ion-button {
+  color: #fff;
+  --border-width: 0;
+}
+.month-nav .month-title {
+  flex: 1;
+  text-align: center;
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: normal;
+}
+
+
+
+
+/*NO TOCAR*/
+
+
+/* 7) Días del mes actual: número en negro, font normal */
+:host ::ng-deep .cal-day-cell.cal-in-month .cal-day-number {
+  color: #000 !important;
+  font-weight: normal !important;
+  opacity: 1 !important;
+}
+
+/* 8) Días fuera de mes: número en gris claro */
+:host ::ng-deep .cal-day-cell:not(.cal-in-month) .cal-day-number {
+  color: #ccc !important;
+  font-weight: normal !important;
+  opacity: 1 !important;
+}
+
+/* 9) Día seleccionado: toda la celda morada */
+:host ::ng-deep .cal-day-cell.selected-day {
+  background-color: var(--ion-color-primary) !important;
+}
+
+/* 10) Número del día seleccionado en blanco puro */
+:host ::ng-deep .cal-day-cell.selected-day .cal-day-number {
+  color: #fff !important;
+  font-weight: normal !important;
+  opacity: 1 !important;
+}
+
+/* 11) Botones de hora: blanco de base, borde y texto en morado */
+.time-button {
+  background: #fff !important;
+  color: var(--ion-color-primary) !important;
+  border: 2px solid var(--ion-color-primary) !important;
+  --border-width: 0 !important;
+  --border-radius: 1.5rem !important;
+  --min-width: 3.5rem;
+  --padding-start: 1rem;
+  --padding-end:   1rem;
+  font-size: 1.1rem !important;
+  font-weight: normal !important;
+  box-shadow: none !important;
+  outline: none !important;
+  transition: none !important;
+
+}
+
+/* Si marcas un botón con .selected, invierte colores */
+.time-button.selected {
+  background-color: var(--ion-color-primary) !important;
+  color: #fff !important;
+}
+
+/* utilidades */
+.hidden { display: none; }
+.no-times {
+  text-align: center;
+  margin-top: 1rem;
+  color: #666;
+}
+
+:host ::ng-deep .cal-weekdays {
+  display: flex !important;
+  --background: var(--ion-color-primary) !important;
+}
+
+:host ::ng-deep .cal-weekday-element {
+  flex: 1;
+  text-align: center;
+  --color: #fff !important;
+  font-weight: normal !important;
+  padding: 0.25rem 0;
+}

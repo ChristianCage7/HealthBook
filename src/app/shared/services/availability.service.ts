@@ -20,8 +20,11 @@ export class AvailabilityService {
     return this.http.post(`${this.apiUrl}/api/calendar/availability`, payload);
   }
 
-  getAvailability(idprofessional: number) {
-    return this.http.get<any[]>(`${this.apiUrl}/api/calendar/availability/${idprofessional}`);
+  getAvailability(idprofessional: number, date: string) {
+    return this.http.get<any[]>(
+      `${this.apiUrl}/api/calendar/availability/date/${idprofessional}`,
+      { params: { date } }
+    );
   }
 
   createPattern(payload: any) {
