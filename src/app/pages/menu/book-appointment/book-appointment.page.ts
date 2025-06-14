@@ -91,7 +91,8 @@ export class BookAppointmentPage implements OnInit {
   goToNewAppointment(event: Event, prof: any) {
     event.stopPropagation();
     console.log('Navegando a:', prof.idprofessional);
-    this.router.navigate(['/book-appointment/new-appointment', prof.idprofessional]);
+    this.router.navigate(['/book-appointment/new-appointment', prof.idprofessional],
+    { state: { professional: prof }}
+    );
   }
-
 }

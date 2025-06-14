@@ -13,7 +13,6 @@
             </ion-button>
         </div>
 
-        <!-- Cabecera MANUAL: clase distinta de la interna -->
 
         <!-- Calendario sin su header interno -->
         <mwl-calendar-month-view [viewDate]="viewDate" [events]="[]" (beforeViewRender)="beforeMonthViewRender($event)"
@@ -36,11 +35,6 @@
                         {{ slot.startHour }}
                     </ion-button>
                 </ion-col>
-                <ion-col size="auto" *ngIf="availabilities.length > 4">
-                    <ion-button fill="outline" shape="round" class="time-button">
-                        &gt;
-                    </ion-button>
-                </ion-col>
             </ion-row>
         </ion-grid>
     </div>
@@ -49,4 +43,5 @@
     <ion-button expand="block" class="btn-primary" [disabled]="!selectedSlot" (click)="schedule()">
         Agendar hora
     </ion-button>
+
 </ion-content>

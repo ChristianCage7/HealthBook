@@ -9,6 +9,7 @@ import { NewAppointmentPageRoutingModule } from './new-appointment-routing.modul
 import { NewAppointmentPage } from './new-appointment.page';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
+import { ConfirmAppointmentModalComponent } from './confirm-appointment-modal/confirm-appointment-modal.component';
 
 @NgModule({
   imports: [
@@ -22,6 +23,6 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
       useFactory: adapterFactory
     }),
   ],
-  declarations: [NewAppointmentPage]
+  declarations: [NewAppointmentPage,ConfirmAppointmentModalComponent]
 })
 export class NewAppointmentPageModule { }
