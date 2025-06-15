@@ -1,8 +1,10 @@
 <app-header title="Videollamada"></app-header>
 
 <ion-content class="ion-padding">
-  <div class="d-flex-center">
-    <p>Conectando a la sesión: <strong>{{ sessionId }}</strong></p>
-    <!-- Aquí irá el contenedor de OpenVidu -->
+  <div class="video-container">
+    <div id="publisher"></div>
+    <div id="subscribers">
+      <div *ngFor="let sub of subscribers" #subscriberElement></div>
+    </div>
   </div>
 </ion-content>

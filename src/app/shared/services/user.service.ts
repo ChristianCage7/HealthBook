@@ -50,45 +50,47 @@ export class UserService {
     );
   }
 
-  getCurrentUser(): Observable<any> {
-    return from(this.getUidFromAuth()).pipe(
-      switchMap(uid =>
-        this.http.get<any[]>(`${this.apiUrl}/api/users/basic/${uid}`).pipe(
-          switchMap(basicRes => {
-            if (Array.isArray(basicRes) && basicRes.length > 0) {
-              const user = basicRes[0];
-              user.uid = uid;
-              user.id = user.iduser; 
-              return of(user);
-            }
+getCurrentUser(): Observable<any> {
+  return from(this.getUidFromAuth()).pipe(
+    switchMap(uid =>
+      this.http.get<any[]>(`${this.apiUrl}/api/users/basic/${uid}`).pipe(
+        switchMap(basicRes => {
+          if (Array.isArray(basicRes) && basicRes.length > 0) {
+            const user = basicRes[0];
+            user.uid = uid;
+            user.id = user.iduser;
+            user.idprofile = user.register?.idprofile ?? 1;
+            return of(user);
+          }
 
-            return this.http.get<any[]>(`${this.apiUrl}/api/users/professional/${uid}`).pipe(
-              switchMap(profRes => {
-                if (Array.isArray(profRes) && profRes.length > 0) {
-                  const user = profRes[0];
+          return this.http.get<any[]>(`${this.apiUrl}/api/users/professional/${uid}`).pipe(
+            switchMap(profRes => {
+              if (Array.isArray(profRes) && profRes.length > 0) {
+                const user = profRes[0];
+                user.uid = uid;
+                user.id = user.iduser;
+                user.idprofile = user.register?.idprofile ?? 2;
+                return of(user);
+              }
+
+              return this.http.get<any[]>(`${this.apiUrl}/api/users/creditor/${uid}`).pipe(
+                map(credRes => {
+                  if (!Array.isArray(credRes) || credRes.length === 0) {
+                    throw new Error('Usuario no encontrado');
+                  }
+                  const user = credRes[0];
                   user.uid = uid;
-                  user.id = user.iduser; 
-                  return of(user);
-                }
-
-                // Finalmente, buscar en UserCreditor
-                return this.http.get<any[]>(`${this.apiUrl}/api/users/creditor/${uid}`).pipe(
-                  map(credRes => {
-                    if (!Array.isArray(credRes) || credRes.length === 0) {
-                      throw new Error('Usuario no encontrado');
-                    }
-                    const user = credRes[0];
-                    user.uid = uid;
-                    user.id = user.iduser; 
-                    return user;
-                  })
-                );
-              })
-            );
-          })
-        )
+                  user.id = user.iduser;
+                  user.idprofile = user.register?.idprofile ?? 3;
+                  return user;
+                })
+              );
+            })
+          );
+        })
       )
-    );
+    )
+  );
 }
 
 

@@ -19,6 +19,6 @@ export class CallService {
   }
 
 getAppointmentsByProfessional(id: number) {
-  return this.http.get<any[]>(`${environment.backendUrl}/api/appointments/professional/${id}`);
+  return this.http.get<any[]>(`http://localhost:8080/api/appointments/professional/${id}`);
 }
 }
