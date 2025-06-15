@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Appointment, AppointmentService } from 'src/app/shared/services/appointment.service';
 import { CallService } from 'src/app/shared/services/call.service';
 import { UserService } from 'src/app/shared/services/user.service';
 
@@ -10,42 +11,68 @@ import { UserService } from 'src/app/shared/services/user.service';
   standalone: false
 })
 export class MySessionsPage implements OnInit {
-  appointments: any[] = [];
+  public static sessionGlobal = '';
+  appointments: Appointment[] = [];
+  loading = true;
+
 
   constructor(
     private callService: CallService,
-    private userService: UserService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private appointmentService: AppointmentService,
+    private userService: UserService
+  ) { }
 
-  ngOnInit() {
-    this.loadAppointments();
-  }
-
-  async loadAppointments() {
-    try {
-      const uid = await this.userService.getUidFromAuth();
-      const user = await this.userService.getCurrentUser().toPromise();
-
-      if (!user?.id || user?.idprofile !== 2) {
-        console.warn('No es profesional o falta ID');
-        return;
-      }
-
-      this.callService.getAppointmentsByProfessional(user.id).subscribe(apps => {
-        this.appointments = apps.filter(app => app.status === 1);
-      });
-    } catch (err) {
-      console.error('Error al cargar citas del profesional:', err);
-    }
-  }
-
-  iniciarLlamada(cita: any) {
-    this.router.navigate(['/call-professional'], {
-      state: {
-        token: cita.tokenProfessional,
-        sessionId: cita.sessionId
+  ngOnInit(): void {
+    this.userService.getCurrentUser().subscribe({
+      next: user => {
+        this.loadAppointments(user.id);
+      },
+      error: err => {
+        console.error('No pude cargar usuario', err);
+        this.loading = false;
       }
     });
   }
+
+    private loadAppointments(userId: number) {
+    this.appointmentService.getUserAppointments(userId).subscribe({
+      next: appts => {
+        this.appointments = appts;
+        this.loading = false;
+      },
+      error: err => {
+        console.error('Error al cargar citas', err);
+        this.loading = false;
+      }
+    });
+  }
+
+ iniciarLlamadaProfesional() {
+    this.callService.createSession().subscribe(sessionId => {
+      MySessionsPage.sessionGlobal = sessionId;
+      this.callService.generateToken(sessionId, 'PUBLISHER').subscribe(token => {
+        this.router.navigate(['/call-professional'], {
+          state: { token, sessionId }
+        });
+      });
+    });
+  }
+
+  ingresarComoPaciente() {
+    const sessionId = MySessionsPage.sessionGlobal;
+    if (!sessionId) {
+      alert('La sesión aún no ha sido creada.');
+      return;
+    }
+
+    this.callService.generateToken(sessionId, 'SUBSCRIBER').subscribe(token => {
+      this.router.navigate(['/call-patient'], {
+        state: { token, sessionId }
+      });
+    });
+  }
+
+
+
 }

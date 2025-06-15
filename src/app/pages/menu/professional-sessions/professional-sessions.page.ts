@@ -10,6 +10,7 @@ import { UserService } from 'src/app/shared/services/user.service';
   standalone: false
 })
 export class ProfessionalSessionsPage implements OnInit {
+  appointments: any[] = [];
 
   constructor(
     private router: Router,
@@ -17,49 +18,38 @@ export class ProfessionalSessionsPage implements OnInit {
     private callService: CallService
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.loadAppointments();
+  }
 
   goToManageAvailability() {
     this.router.navigate(['/menu/manage-availability']);
   }
 
- iniciarCitaDesdeBase() {
-  this.userService.getCurrentUser().subscribe(user => {
-    console.log('[🟣] Usuario actual:', user);
+  async loadAppointments() {
+    try {
+      const uid = await this.userService.getUidFromAuth();
+      const user = await this.userService.getCurrentUser().toPromise();
 
-    const idProfessional = user.idprofessional;
-
-    if (!idProfessional || user.idprofile !== 2) {
-      console.warn('[⚠️] No es profesional o falta ID');
-      return;
-    }
-
-    this.callService.getAppointmentsByProfessional(idProfessional).subscribe(citas => {
-      console.log('[📦] Citas encontradas:', citas);
-
-      const activas = citas.filter(c => c.status === 1 && c.tokenProfessional);
-
-      if (activas.length === 0) {
-        alert('No tienes citas activas para iniciar.');
-        console.warn('[🛑] No hay citas activas o falta tokenProfessional');
+      if (!user?.id || user?.idprofile !== 2) {
+        console.warn('No es profesional o falta ID');
         return;
       }
 
-      const cita = activas[0];
-      console.log('[✅] Redirigiendo a videollamada con:', cita.sessionId, cita.tokenProfessional);
-
-      this.router.navigate(['/call-professional'], {
-        state: {
-          sessionId: cita.sessionId,
-          token: cita.tokenProfessional
-        }
+      this.callService.getAppointmentsByProfessional(user.id).subscribe(apps => {
+        this.appointments = apps.filter(app => app.status === 1);
       });
-    }, error => {
-      console.error('[❌] Error al obtener citas:', error);
-    });
-  }, error => {
-    console.error('[❌] Error al obtener usuario:', error);
-  });
-}
+    } catch (err) {
+      console.error('Error al cargar citas del profesional:', err);
+    }
+  }
 
+  iniciarLlamada(cita: any) {
+    this.router.navigate(['/call-professional'], {
+      state: {
+        token: cita.tokenProfessional,
+        sessionId: cita.sessionId
+      }
+    });
+  }
 }
