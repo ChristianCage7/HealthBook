@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { Appointment, AppointmentService } from 'src/app/shared/services/appointment.service';
 import { CallService } from 'src/app/shared/services/call.service';
 import { UserService } from 'src/app/shared/services/user.service';
-import { UserService } from 'src/app/shared/services/user.service';
 
 @Component({
   selector: 'app-my-sessions',
