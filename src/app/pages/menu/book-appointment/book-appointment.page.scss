@@ -103,3 +103,37 @@
   --padding-top: 6px;
   --padding-bottom: 6px;
 }
+
+.active-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 10px 20px 0;
+}
+
+ion-chip {
+  --background: #e0d3f7;
+  --color: #4b268e;
+  font-weight: 500;
+}
+
+.chip-close {
+  margin-left: 8px;
+  cursor: pointer;
+}
+
+.gender {
+  font-size: 14px;
+  color: #ccc;
+  margin-top: 2px;
+}
+
+ion-searchbar {
+  margin-top: 16px; // separación del header
+  border-radius: 50px; // forma circular
+  --border-radius: 50px;
+  --box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); // sutil sombra
+  --background: #fff;
+  padding: 0 12px;
+}
+

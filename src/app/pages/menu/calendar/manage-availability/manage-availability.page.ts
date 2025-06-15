@@ -19,7 +19,7 @@ export class ManageAvailabilityPage implements OnInit {
     private modalCtrl: ModalController,
     private availabilityService: AvailabilityService,
     private userService: UserService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.loadAvailabilities();
@@ -60,15 +60,28 @@ export class ManageAvailabilityPage implements OnInit {
     });
   }
 
+  private formatDate(date: Date): string {
+    return date.toISOString().split('T')[0];  // "2025-06-13"
+  }
+
   loadAvailabilities() {
     this.userService.getCurrentUser().subscribe(user => {
       const idprofessional = user?.idprofessional;
-      this.availabilityService.getAvailability(idprofessional).subscribe(data => {
-        this.events = data.map(item => ({
-          start: new Date(`${item.day}T${item.hour}`),
-          title: 'Disponible'
-        }));
-      });
+      if (!idprofessional) { return; }
+
+      const dateStr = this.formatDate(this.viewDate);
+
+      this.availabilityService
+        .getAvailability(idprofessional, dateStr)
+        .subscribe(data => {
+          this.events = data.map(item => ({
+            start: new Date(`${item.day}T${item.hour}`),
+            title: 'Disponible'
+          }));
+        }, err => {
+          console.error('Error al cargar disponibilidad', err);
+        });
     });
   }
+
 }

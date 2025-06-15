@@ -1,0 +1,31 @@
+:host {
+  --ion-color-primary: #4b268e;
+}
+
+/* Aplica sólo a este modal, gracias a la cssClass que le pusimos arriba */
+:host ::ng-deep ion-modal.confirmar-cita-sheet {
+  /* altura fija al 50% de la pantalla */
+  --height:     70vh;
+  --max-height: 70vh;
+
+  /* esquinas superiores redondeadas */
+  --border-radius: 16px 16px 0 0;
+
+  /* styling nativo del “handle” */
+  --handle-height:         4px;
+  --handle-width:          36px;
+  --handle-background:     var(--ion-color-medium);
+  --handle-border-radius:  2px;
+  --handle-margin:         8px auto;
+
+  /* permitimos que el header pueda “salirse” si está posicionado absolute */
+  --overflow: visible;
+}
+
+/* Forzamos que el ion-header de tu componente esté dentro del sheet y sea visible */
+:host ::ng-deep ion-modal.confirmar-cita-sheet .modal-wrapper ion-header {
+  /* Ionic por defecto lo posiciona absolute, aquí sólo nos aseguramos de que lo veas */
+  position: relative !important;
+  top:      0        !important;
+  z-index:  10       !important;
+}

@@ -1,2 +1,47 @@
 <app-header title="Nueva cita"></app-header>
-<ion-content></ion-content>
+<ion-content class="ion-padding">
+
+
+    <div class="calendar-wrapper">
+        <div class="month-nav">
+            <ion-button fill="clear" size="small" (click)="previousMonth()">
+                <ion-icon name="chevron-back-outline"></ion-icon>
+            </ion-button>
+            <span class="month-title">{{ viewDate | date:'MMMM yyyy' }}</span>
+            <ion-button fill="clear" size="small" (click)="nextMonth()">
+                <ion-icon name="chevron-forward-outline"></ion-icon>
+            </ion-button>
+        </div>
+
+
+        <!-- Calendario sin su header interno -->
+        <mwl-calendar-month-view [viewDate]="viewDate" [events]="[]" (beforeViewRender)="beforeMonthViewRender($event)"
+            (dayClicked)="onDayClick($event)"></mwl-calendar-month-view>
+    </div>
+
+
+    <!-- 3) Fecha legible debajo -->
+    <div class="selected-date">
+        Fecha seleccionada: {{ selectedDate | date:'fullDate' }}
+    </div>
+
+    <!-- 4) Botones de hora -->
+    <div *ngIf="availabilities.length > 0" class="time-buttons">
+        <ion-grid>
+            <ion-row>
+                <ion-col size="auto" *ngFor="let slot of availabilities; let i = index" [class.hidden]="i >= 4">
+                    <ion-button fill="outline" shape="round" class="time-button"
+                        [class.selected]="slot === selectedSlot" (click)="selectSlot(slot)">
+                        {{ slot.startHour }}
+                    </ion-button>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </div>
+
+    <!-- El botón de Agendar -->
+    <ion-button expand="block" class="btn-primary" [disabled]="!selectedSlot" (click)="schedule()">
+        Agendar hora
+    </ion-button>
+
+</ion-content>
