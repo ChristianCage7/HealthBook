@@ -11,7 +11,7 @@ export interface AppointmentRequest {
 }
 
 export interface Appointment {
-  id: number;
+  idappointment: number;
   iduser: number;
   idprofessional: number;
   appointmentDate: string;
@@ -21,7 +21,6 @@ export interface Appointment {
   tokenProfessional: string;
   status: number;
   createdAt: string;
-  // …otros campos que devuelva tu backend
 }
 
 @Injectable({ providedIn: 'root' })
@@ -40,6 +39,36 @@ export class AppointmentService {
     /** Trae todas las citas del paciente */
   getUserAppointments(userId: number): Observable<Appointment[]> {
     return this.http.get<Appointment[]>(`${this.apiUrl}/appointments/user/${userId}`);
+  }
+
+    /** Citas por profesional */
+  getProfessionalAppointments(professionalId: number): Observable<Appointment[]> {
+    return this.http.get<Appointment[]>(`${this.apiUrl}/appointments/professional/${professionalId}`);
+  }
+
+  /** Cambiar estado genérico (status: 0 a 4) */
+  updateStatus(id: number, status: number): Observable<void> {
+    return this.http.patch<void>(`${this.apiUrl}/appointments/${id}/status`, { status });
+  }
+
+  /** Confirmar cita (cambia status en tabla a 1) */
+  confirmAppointment(id: number): Observable<void> {
+    return this.http.patch<void>(`${this.apiUrl}/appointments/${id}/confirm`, {});
+  }
+
+  /** Rechazar cita (cambia status en tabla a 2) */
+  rejectAppointment(id: number): Observable<void> {
+    return this.http.patch<void>(`${this.apiUrl}/appointments/${id}/reject`, {});
+  }
+
+  /** Cancelar cita (cambia status en tabla a 3) */
+  cancelAppointment(id: number): Observable<void> {
+    return this.http.patch<void>(`${this.apiUrl}/appointments/${id}/cancel`, {});
+  }
+
+  /** Marcar como completada (cambia status en tabla a 4) */
+  completeAppointment(id: number): Observable<void> {
+    return this.http.patch<void>(`${this.apiUrl}/appointments/${id}/complete`, {});
   }
 
 }
