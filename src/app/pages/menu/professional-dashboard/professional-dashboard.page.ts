@@ -10,11 +10,19 @@ import { Router } from '@angular/router';
 })
 export class ProfessionalDashboardPage implements OnInit {
 
+  showAnimation = false;
+
   constructor(
     private router: Router
   ) { }
 
   ngOnInit() {
+    const alreadyAnimated = localStorage.getItem('welcome_animated');
+
+    if (!alreadyAnimated) {
+      this.showAnimation = true;
+      localStorage.setItem('welcome_animated', 'true');
+    }
   }
 
   goToManageAvailability() {

@@ -1,33 +1,64 @@
 <app-header [showBackButton]="false" title="Sesiones"></app-header>
-
 <ion-content class="ion-padding">
 
-  <!-- Sección 1: Citas Confirmadas (status = 1) -->
-  <h2 class="section-title">Citas confirmadas</h2>
-  <ion-card *ngFor="let appt of confirmedAppointments">
-    <ion-card-header>
-      <ion-card-title>Cita con paciente #{{ appt.iduser }}</ion-card-title>
-      <p>{{ formatDateTime(appt.appointmentDate, appt.appointmentTime) }}</p>
-      <p>Estado: Confirmada</p>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-button color="medium" (click)="cancel(appt.idappointment)">Cancelar</ion-button>
-      <ion-button color="primary"  >Ir a videollamada</ion-button>
-    </ion-card-content>
-  </ion-card>
+  <!-- Sección: Citas Confirmadas -->
+  <ng-container *ngIf="confirmedAppointments.length > 0; else noConfirmed">
+    <ion-card *ngFor="let appt of confirmedAppointments" class="session-card">
+      <!-- Header violeta dentro de la card -->
+      <div class="card-header">
+        <ion-card-title class="card-header-title">Cita confirmada</ion-card-title>
+      </div>
 
-  <!-- Sección 2: Citas Pendientes (status = 0) -->
-  <h2 class="section-title">Citas pendientes</h2>
-  <ion-card *ngFor="let appt of pendingAppointments">
-    <ion-card-header>
-      <ion-card-title>Cita con paciente #{{ appt.iduser }}</ion-card-title>
-      <p>{{ formatDateTime(appt.appointmentDate, appt.appointmentTime) }}</p>
-      <p>Estado: Pendiente</p>
-    </ion-card-header>
-    <ion-card-content>
-      <ion-button color="success" (click)="confirm(appt.idappointment)">Aprobar</ion-button>
-      <ion-button color="danger" (click)="reject(appt.idappointment)">Rechazar</ion-button>
-    </ion-card-content>
-  </ion-card>
+      <ion-card-content>
+        <p><strong>Paciente:</strong> #{{ appt.iduser }}</p>
+        <p>{{ formatDateTime(appt.appointmentDate, appt.appointmentTime) }}</p>
+        <p><strong>Estado:</strong> Confirmada</p>
+
+        <ion-button color="medium" (click)="cancel(appt.idappointment)">Cancelar</ion-button>
+        <ion-button color="primary" (click)="goToCall(appt)">Ir a videollamada</ion-button>
+      </ion-card-content>
+    </ion-card>
+  </ng-container>
+
+  <ng-template #noConfirmed>
+    <ion-card class="session-card">
+      <div class="card-header">
+        <ion-card-title class="card-header-title">Citas confirmadas</ion-card-title>
+      </div>
+      <ion-card-content>
+        <p>No hay citas confirmadas para mostrar.</p>
+      </ion-card-content>
+    </ion-card>
+  </ng-template>
+
+  <!-- Sección: Citas Pendientes -->
+  <ng-container *ngIf="pendingAppointments.length > 0; else noPending">
+    <ion-card *ngFor="let appt of pendingAppointments" class="session-card">
+      <!-- Header violeta dentro de la card -->
+      <div class="card-header">
+        <ion-card-title class="card-header-title">Cita pendiente</ion-card-title>
+      </div>
+
+      <ion-card-content>
+        <p><strong>Paciente:</strong> #{{ appt.iduser }}</p>
+        <p>{{ formatDateTime(appt.appointmentDate, appt.appointmentTime) }}</p>
+        <p><strong>Estado:</strong> Pendiente</p>
+
+        <ion-button color="success" (click)="confirm(appt.idappointment)">Aprobar</ion-button>
+        <ion-button color="danger" (click)="reject(appt.idappointment)">Rechazar</ion-button>
+      </ion-card-content>
+    </ion-card>
+  </ng-container>
+
+  <ng-template #noPending>
+    <ion-card class="session-card">
+      <div class="card-header">
+        <ion-card-title class="card-header-title">Citas pendientes</ion-card-title>
+      </div>
+      <ion-card-content>
+        <p>No hay citas pendientes para mostrar.</p>
+      </ion-card-content>
+    </ion-card>
+  </ng-template>
 
 </ion-content>

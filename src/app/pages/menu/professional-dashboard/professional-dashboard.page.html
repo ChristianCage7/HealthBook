@@ -1,8 +1,74 @@
 <app-header [showBackButton]="false" title="Panel"></app-header>
-<ion-content>
-<ion-button class="btn-primary" (click)="goToManageAvailability()">
-    Subir disponibilidad
-  </ion-button>
+<ion-content class="dashboard-content">
+  <!-- Bienvenida -->
+  <div class="spacer"></div> <!-- Desplaza hacia abajo -->
+
+  <div class="welcome-card" [class.animate-once]="showAnimation">
+    <div class="welcome-header">
+      <div>
+        <h2>Bienvenido, <strong>..</strong></h2>
+        <p class="subtext">¡Esperamos que tengas un gran día de atención!</p>
+      </div>
+      <ion-avatar>
+        <img src="assets/img/profile.jpg" />
+      </ion-avatar>
+    </div>
+
+    <div class="session-summary">
+      <p class="info-text">
+        <ion-icon name="calendar-outline"></ion-icon>
+        <strong>Próxima cita:</strong> Lunes, 16 de junio - 18:00 hrs
+      </p>
+      <p class="info-text">
+        <ion-icon name="document-text-outline"></ion-icon>
+        <strong>Total citas hoy:</strong> 5 agendadas
+      </p>
+    </div>
+  </div>
+
+
+  <!-- Sección de tareas -->
+
+  <div class="task" [class.animate-once]="showAnimation">
+    <h3 class="task-title">Gestión de usuario </h3>
+
+
+    <div class="task-large-card" [class.animate-once]="showAnimation">
+      <div class="task-bubble-large"></div>
+
+      <div class="task-large-content">
+        <h3 class="task-title">Ver historial clínico</h3>
+        <p class="task-sub">Consulta antecedentes y registros de atención previos.</p>
+      </div>
+
+      <ion-icon name="chevron-forward-outline" class="task-icon"></ion-icon>
+    </div>
+
+    <div class="task-large-card" [class.animate-once]="showAnimation" (click)="goToManageAvailability()">
+      <div class="task-bubble-large"></div>
+
+      <div class="task-large-content">
+        <h3 class="task-title">Gestionar disponibilidad</h3>
+        <p class="task-sub">Configura los días y horarios en que puedes atender consultas.</p>
+      </div>
+
+      <ion-icon name="chevron-forward-outline" class="task-icon"></ion-icon>
+    </div>
+
+
+    <!--Debería funcionar como notificación, por mientras se dará prioridad a historial clinico (16-06)
+    
+    <div class="task-large-card" [class.animate-once]="showAnimation">
+      <div class="task-bubble-large"></div>
+
+      <div class="task-large-content">
+        <h3 class="task-title">Revisar citas agendadas</h3>
+        <p class="task-sub">Gestiona tus próximas sesiones y pendientes.</p>
+      </div>
+
+      <ion-icon name="chevron-forward-outline" class="task-icon"></ion-icon>
+    </div>!-->
+
+  </div>
 
 </ion-content>
-
