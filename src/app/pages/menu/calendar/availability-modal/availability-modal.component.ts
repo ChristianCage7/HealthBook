@@ -116,9 +116,9 @@ export class AvailabilityModalComponent implements OnInit {
 
     try {
       await this.availabilityService.createAvailability(request).toPromise();
-      this.toastService.show('Disponibilidad guardada correctamente', 'success');
+      this.toastService.show('Disponibilidad guardada correctamente', 'Éxito', 'success');
     } catch (err) {
-      this.toastService.show('Error al guardar disponibilidad individual', 'danger');
+      this.toastService.show('Error al guardar disponibilidad individual', 'Error', 'error');
       console.error('Error individual:', err);
     }
 

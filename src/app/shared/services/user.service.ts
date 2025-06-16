@@ -67,7 +67,7 @@ export class UserService {
                 if (Array.isArray(profRes) && profRes.length > 0) {
                   const user = profRes[0];
                   user.uid = uid;
-                  user.id = user.iduser; 
+                  user.id = user.idprofessional; 
                   return of(user);
                 }
 
@@ -88,8 +88,12 @@ export class UserService {
           })
         )
       )
+<<<<<<< HEAD
     );
 }
+=======
+    );}
+>>>>>>> origin/main
 
 
   updateUser(user: any) {
