@@ -71,7 +71,6 @@ export class UserService {
                   return of(user);
                 }
 
-                // Finalmente, buscar en UserCreditor
                 return this.http.get<any[]>(`${this.apiUrl}/api/users/creditor/${uid}`).pipe(
                   map(credRes => {
                     if (!Array.isArray(credRes) || credRes.length === 0) {
@@ -88,13 +87,8 @@ export class UserService {
           })
         )
       )
-<<<<<<< HEAD
     );
-}
-=======
-    );}
->>>>>>> origin/main
-
+  }
 
   updateUser(user: any) {
     const isProfessional = !!user.idprofessional;
@@ -132,7 +126,6 @@ export class UserService {
           console.log('[Validación] Respuesta UserBasic:', res);
           if (!res || res.length === 0) throw new Error('Usuario no encontrado');
           const user = res[0];
-          console.log('[Validación] STATUS en UserBasic:', user?.register?.status);
           if (user?.register?.status === 0) {
             throw new Error('Cuenta desactivada');
           }
@@ -142,10 +135,8 @@ export class UserService {
 
           return this.http.get<any[]>(`${this.apiUrl}/api/users/professional/${uid}`).toPromise()
             .then(res => {
-              console.log('[Validación] Respuesta UserProfessional:', res);
               if (!res || res.length === 0) throw new Error('Usuario no encontrado');
               const user = res[0];
-              console.log('[Validación] STATUS en UserProfessional:', user?.register?.status);
               if (user?.register?.status === 0) {
                 throw new Error('Cuenta desactivada');
               }
@@ -155,7 +146,6 @@ export class UserService {
 
               return this.http.get<any[]>(`${this.apiUrl}/api/users/creditor/${uid}`).toPromise()
                 .then(res => {
-                  console.log('[Validación] Respuesta UserCreditor:', res);
                   if (!res || res.length === 0) throw new Error('Usuario no encontrado');
                   const user = res[0];
                   if (user?.register?.status === 0) {
@@ -167,17 +157,15 @@ export class UserService {
     });
   }
 
-
-getProfessionalName(idprofessional: number): Observable<string> {
-  return this.http.get<any[]>(`${this.apiUrl}/api/users/professional/id/${idprofessional}`).pipe(
-    map(res => {
-      if (res && res.length > 0) {
-        const prof = res[0];
-        return `${prof.first_name} ${prof.last_name}`;
-      }
-      return 'Profesional desconocido';
-    })
-  );
-}
-
+  getProfessionalName(idprofessional: number): Observable<string> {
+    return this.http.get<any[]>(`${this.apiUrl}/api/users/professional/id/${idprofessional}`).pipe(
+      map(res => {
+        if (res && res.length > 0) {
+          const prof = res[0];
+          return `${prof.first_name} ${prof.last_name}`;
+        }
+        return 'Profesional desconocido';
+      })
+    );
+  }
 }

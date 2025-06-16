@@ -1,6 +1,7 @@
 <app-header [showBackButton]="false" title="Sesiones"></app-header>
 
 <ion-content class="ion-padding page-content">
+
   <!-- Botón flotante para subir disponibilidad -->
   <ion-button expand="block" class="btn-primary floating-button" (click)="goToManageAvailability()">
     Subir disponibilidad
@@ -21,6 +22,7 @@
               <h3 class="name">ID Paciente: {{ appt.iduser }}</h3>
               <p class="specialty">Fecha: {{ appt.appointmentDate }}</p>
               <p class="specialty">Hora: {{ appt.appointmentTime }}</p>
+              <p class="specialty">Estado: Confirmada</p>
             </div>
             <div class="rating">
               <ion-icon name="videocam-outline" class="star"></ion-icon>
@@ -56,6 +58,7 @@
               <h3 class="name">ID Paciente: {{ appt.iduser }}</h3>
               <p class="specialty">Fecha: {{ appt.appointmentDate }}</p>
               <p class="specialty">Hora: {{ appt.appointmentTime }}</p>
+              <p class="specialty">Estado: Pendiente</p>
             </div>
           </div>
 
