@@ -1,33 +1,37 @@
 <app-header [showBackButton]="false" title="Mis citas"></app-header>
 
 <ion-content class="ion-padding">
-  <ion-button expand="block" color="tertiary" (click)="iniciarLlamadaProfesional()">
-    Iniciar videollamada (Profesional)
-  </ion-button>
+  <ng-template [ngIf]="!loading" [ngIfElse]="loadingTpl">
+    <ion-card *ngFor="let appt of appointments">
+      <ion-card-header>
+        <ion-card-title>
+          {{ appt.professionalName ? appt.professionalName : 'Profesional' }}
+        </ion-card-title>
+        <ion-card-subtitle>
+          {{ appt.appointmentDate | date: 'fullDate' }} a las {{ appt.appointmentTime?.substring(0, 5) }}
+        </ion-card-subtitle>
+      </ion-card-header>
 
-  <ion-button expand="block" color="primary" (click)="ingresarComoPaciente()">
-    Ingresar como paciente a la misma llamada
-  </ion-button>
-
-
-   <ion-list *ngIf="!loading; else loadingTpl">
-    <ion-item *ngFor="let appt of appointments">
-      <ion-label>
-        <h2>Con profesional #{{ appt.idprofessional }}</h2>
+      <ion-card-content>
         <p>
-          {{ appt.appointmentDate | date:'fullDate' }}
-          a las {{ appt.appointmentTime.substring(0,5) }}
+          <strong>Estado:</strong>
+          <span [style.color]="appt.status === 1 ? 'green' : 'red'">
+            {{ appt.status === 1 ? 'Activa' : 'Cancelada' }}
+          </span>
         </p>
-        <p>Estado: {{ appt.status === 1 ? 'Activa' : 'Cancelada' }}</p>
-      </ion-label>
-    </ion-item>
-    <ion-item *ngIf="appointments.length===0">
+
+        <ion-button expand="block" class="video-call-button" (click)="iniciarLlamada(appt)">
+          Iniciar Videollamada
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-item *ngIf="appointments.length === 0">
       <ion-label>No tienes citas agendadas.</ion-label>
     </ion-item>
-  </ion-list>
+  </ng-template>
 
   <ng-template #loadingTpl>
     <ion-spinner name="crescent"></ion-spinner>
   </ng-template>
-  
 </ion-content>

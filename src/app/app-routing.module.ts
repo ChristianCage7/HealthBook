@@ -42,7 +42,11 @@ const routes: Routes = [
   {
   path: 'call-professional',
   loadChildren: () => import('./pages/menu/call-professional/call-professional.module').then(m => m.CallProfessionalPageModule)
-}
+  },
+  {
+  path: 'call-patient',
+  loadChildren: () => import('./pages/menu/call-patient/call-patient.module').then(m => m.CallPatientPageModule)
+  }
 ];
 
 @NgModule({

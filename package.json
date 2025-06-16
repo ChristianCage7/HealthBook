@@ -38,7 +38,7 @@
     "healthbook": "file:",
     "ionic4-star-rating": "^1.1.1",
     "ionicons": "^7.0.0",
-    "openvidu-browser": "^2.31.0",
+    "openvidu-browser": "2.29.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"
