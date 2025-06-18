@@ -1,0 +1,30 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Citas de {{ userProfile.first_name }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">
+        <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list *ngIf="appointments.length; else noCitas" class="appointment-list">
+    <ng-container *ngFor="let ap of appointments; let i = index">
+      <ion-list-header class="modal-list-header">
+        Cita #{{ i + 1 }}
+      </ion-list-header>
+      <ion-item>
+        <ion-label>
+          <p><strong>Fecha:</strong> {{ ap.appointmentDate | date:'shortDate' }}</p>
+          <p><strong>Inicio:</strong> {{ ap.appointmentTime }}</p>
+        </ion-label>
+      </ion-item>
+    </ng-container>
+  </ion-list>
+
+  <ng-template #noCitas>
+    <div class="no-data">No hay citas para este usuario.</div>
+  </ng-template>
+</ion-content>

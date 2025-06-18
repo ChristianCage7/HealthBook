@@ -33,8 +33,8 @@
     <h3 class="task-title">Gestión de usuario </h3>
 
 
-    <div class="task-large-card" [class.animate-once]="showAnimation">
-      <div class="task-bubble-large"></div>
+    <div class="task-large-card" [class.animate-once]="showAnimation" (click)="goToMedicalHistory()">
+      <div class="task-bubble-large"><ion-icon name="medkit-outline"></ion-icon></div>
 
       <div class="task-large-content">
         <h3 class="task-title">Ver historial clínico</h3>
@@ -45,7 +45,7 @@
     </div>
 
     <div class="task-large-card" [class.animate-once]="showAnimation" (click)="goToManageAvailability()">
-      <div class="task-bubble-large"></div>
+      <div class="task-bubble-large"><ion-icon name="calendar-outline"></ion-icon></div>
 
       <div class="task-large-content">
         <h3 class="task-title">Gestionar disponibilidad</h3>

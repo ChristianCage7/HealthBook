@@ -27,7 +27,6 @@ const routes: Routes = [
         path: 'creditor',
         loadChildren: () => import('./creditor/creditor.module').then(m => m.CreditorPageModule),
       },
-
       {
         path: 'creditor-profile-edit',
         loadChildren: () => import('./creditor/creditor-profile-edit/creditor-profile-edit.module').then(m => m.CreditorProfileEditPageModule)
@@ -45,31 +44,17 @@ const routes: Routes = [
         loadChildren: () => import('./calendar/manage-availability/manage-availability.module').then(m => m.ManageAvailabilityPageModule)
       },
       {
+        path: 'calendar',
+        loadChildren: () => import('./calendar/calendar.module').then(m => m.CalendarPageModule)
+      },
+      {
         path: '',
         redirectTo: 'home',
         pathMatch: 'full',
       }
     ]
-  },
-  {
-    path: 'professional-dashboard',
-    loadChildren: () => import('./professional-dashboard/professional-dashboard.module').then( m => m.ProfessionalDashboardPageModule)
-  },
-  {
-    path: 'professional-sessions',
-    loadChildren: () => import('./professional-sessions/professional-sessions.module').then( m => m.ProfessionalSessionsPageModule)
-  },
-  {
-    path: 'manage-availability',
-    loadChildren: () => import('./calendar/manage-availability/manage-availability.module').then( m => m.ManageAvailabilityPageModule)
-  },
-  {
-    path: 'calendar',
-    loadChildren: () => import('./calendar/calendar.module').then( m => m.CalendarPageModule)
   }
-
 ];
-
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

@@ -1,11 +1,9 @@
-<app-header title="Disponibilidad"></app-header>
+<app-header [showBackButton]="true" [defaultHref]="'/menu/professional-dashboard'" title="Disponibilidad">
+</app-header>
 
 <ion-content class="ion-padding">
   <div class="calendar-container">
-    <mwl-calendar-month-view
-      [viewDate]="viewDate"
-      [events]="events"
-      (dayClicked)="onDayClick($event)"
+    <mwl-calendar-month-view [viewDate]="viewDate" [events]="events" (dayClicked)="onDayClick($event)"
       (beforeViewRender)="beforeMonthViewRender($event)">
     </mwl-calendar-month-view>
   </div>

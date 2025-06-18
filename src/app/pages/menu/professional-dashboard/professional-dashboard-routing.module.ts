@@ -7,7 +7,11 @@ const routes: Routes = [
   {
     path: '',
     component: ProfessionalDashboardPage
+  },  {
+    path: 'medical-history',
+    loadChildren: () => import('./medical-history/medical-history.module').then( m => m.MedicalHistoryPageModule)
   }
+
 ];
 
 @NgModule({

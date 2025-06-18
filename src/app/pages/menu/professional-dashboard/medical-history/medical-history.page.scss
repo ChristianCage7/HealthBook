@@ -1,0 +1,71 @@
+// --------------------------------------------------
+// Spinner centrado
+// --------------------------------------------------
+ion-content {
+  position: relative;
+}
+
+.loading-spinner {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+}
+
+// --------------------------------------------------
+// Mensajes de error y sin datos
+// --------------------------------------------------
+.error-message,
+.no-data {
+  text-align: center;
+  margin: 24px 16px;
+  color: var(--ion-color-danger);
+}
+
+// --------------------------------------------------
+// Título de sección
+// --------------------------------------------------
+.page-title {
+  margin: 16px;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.user-details ion-button {
+  --background: #4b268e;
+  --color: #ffffff;
+}
+
+// --------------------------------------------------
+// Hacer transparente el fondo y bordes de la lista
+// --------------------------------------------------
+.medical-history-list {
+  --background: transparent;
+  --border-color: transparent;
+  background: transparent !important;
+}
+
+// --------------------------------------------------
+// Toggle de usuario: separado, violeta y redondeado
+// --------------------------------------------------
+.user-toggle {
+  margin-top: 16px;       // separación respecto al header Ionic
+  --background: #4b268e;  // violeta institucional
+  border-radius: 8px;     // esquinas redondeadas
+}
+
+.user-toggle ion-label,
+.user-toggle ion-icon {
+  color: #ffffff;         // texto e ícono en blanco
+}
+
+// --------------------------------------------------
+// Tarjeta de detalles del usuario: fondo blanco y bordes
+// --------------------------------------------------
+.user-details ion-card-content {
+  background: #ffffff;
+  border: 1px solid #ffffff;
+  border-radius: 8px;
+  padding: 16px;
+}

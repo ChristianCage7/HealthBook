@@ -1,0 +1,101 @@
+/* ===============================
+   Toolbar superior
+================================= */
+ion-header {
+  ion-toolbar {
+    --background: #4b268e;
+    --color: #ffffff;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    padding-top: 10px;
+    padding-bottom: 4px;
+  }
+
+  ion-title {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-left: 16px;
+
+    strong {
+      font-size: 18px;
+      font-weight: 700;
+      color: white;
+    }
+
+    .admin {
+      font-size: 12px;
+      letter-spacing: 6px;
+      color: #e5d9fb;
+      margin-top: 2px;
+    }
+  }
+
+  ion-back-button {
+    color: #ffffff;
+    margin-left: 4px;
+  }
+}
+
+
+/* --------------------------------------------------
+   1) Modal wrapper transparente y sin radios
+-------------------------------------------------- */
+:host ::ng-deep ion-modal .modal-wrapper,
+:host ::ng-deep ion-modal .modal-wrapper ion-content {
+  --background: transparent !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+}
+
+/* --------------------------------------------------
+   2) Toolbar nativo del modal sin borde ni sombra
+-------------------------------------------------- */
+:host ::ng-deep ion-modal .modal-wrapper ion-toolbar {
+  --background: #4b268e !important;
+  --color: #ffffff !important;
+  border-bottom: none !important;
+  box-shadow: none !important;
+}
+
+/* --------------------------------------------------
+   3) Contenedor de la lista transparente
+-------------------------------------------------- */
+.appointment-list {
+  margin: 0;
+  padding: 0;
+  background: transparent !important;
+}
+
+/* --------------------------------------------------
+   4) Encabezado interno “Cita #n” (ion-list-header)
+      Solo esquinas superiores redondeadas,
+      margin-bottom: 0, flush con el primer ítem
+-------------------------------------------------- */
+.appointment-list ion-list-header {
+  margin: 16px 16px 0;
+  padding: 8px 16px;
+  background: #4b268e;
+  color: #fff;
+  font-weight: 600;
+  border-radius: 8px 8px 0 0;
+}
+
+/* --------------------------------------------------
+   5) Primer ítem de cita: solo esquinas inferiores
+      redondeadas y flush con el header
+-------------------------------------------------- */
+.appointment-list ion-item:first-of-type {
+  margin: 0 16px 16px;
+  --background: #ffffff;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* --------------------------------------------------
+   6) Mensaje “noCitas”
+-------------------------------------------------- */
+.no-data {
+  text-align: center;
+  margin: 24px 16px;
+  color: var(--ion-color-medium);
+}

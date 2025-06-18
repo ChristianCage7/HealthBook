@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 export interface AppointmentRequest {
@@ -29,19 +29,19 @@ export class AppointmentService {
 
   constructor(private http: HttpClient) { }
 
-    createWithSession(request: AppointmentRequest): Observable<Appointment> {
+  createWithSession(request: AppointmentRequest): Observable<Appointment> {
     return this.http.post<Appointment>(
       `${this.apiUrl}/appointments/create-with-session`,
       request
     );
   }
 
-    /** Trae todas las citas del paciente */
+  /** Trae todas las citas del paciente */
   getUserAppointments(userId: number): Observable<Appointment[]> {
     return this.http.get<Appointment[]>(`${this.apiUrl}/appointments/user/${userId}`);
   }
 
-    /** Citas por profesional */
+  /** Citas por profesional */
   getProfessionalAppointments(professionalId: number): Observable<Appointment[]> {
     return this.http.get<Appointment[]>(`${this.apiUrl}/appointments/professional/${professionalId}`);
   }
@@ -71,4 +71,20 @@ export class AppointmentService {
     return this.http.patch<void>(`${this.apiUrl}/appointments/${id}/complete`, {});
   }
 
+  /**
+  * Trae el perfil básico del paciente asociado a la cita indicada.
+  * El endpoint devuelve un array JSON, extraemos y devolvemos el primer elemento.
+  */
+  getUserBasicProfileByAppointment(idappointment: number): Observable<any> {
+    return this.http
+      .get<any[]>(`${this.apiUrl}/appointments/user-profile/${idappointment}`)
+      .pipe(
+        map(res => {
+          if (!res || res.length === 0) {
+            throw new Error('Perfil no encontrado');
+          }
+          return res[0];
+        })
+      );
+  }
 }

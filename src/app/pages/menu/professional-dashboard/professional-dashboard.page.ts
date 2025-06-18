@@ -28,4 +28,8 @@ export class ProfessionalDashboardPage implements OnInit {
   goToManageAvailability() {
     this.router.navigate(['/menu/manage-availability']);
   }
+
+  goToMedicalHistory() {
+    this.router.navigate(['/menu/professional-dashboard/medical-history']);
+  }
 }

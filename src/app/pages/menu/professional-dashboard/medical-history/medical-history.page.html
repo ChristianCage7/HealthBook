@@ -1,0 +1,66 @@
+<app-header
+  [showBackButton]="true"
+  [defaultHref]="'/menu/professional-dashboard'"
+  title="Historial médico">
+</app-header>
+
+<ion-content [fullscreen]="true">
+  <!-- Spinner centrado durante la carga -->
+  <ion-spinner
+    *ngIf="loading"
+    name="crescent"
+    class="loading-spinner">
+  </ion-spinner>
+
+  <!-- Mensaje de error -->
+  <div *ngIf="error" class="error-message">
+    {{ error }}
+  </div>
+
+  <!-- Título de sección -->
+  <div class="page-title">
+    Pacientes atendidos
+  </div>
+
+  <!-- Lista transparente bajo el header -->
+  <ion-list
+    lines="none"
+    class="medical-history-list"
+    *ngIf="!loading && !error && users.length > 0">
+    <ng-container *ngFor="let u of users">
+      <!-- Toggle redondeado y violeta -->
+      <ion-item
+        class="user-toggle"
+        button
+        (click)="toggle(u)">
+        <ion-label>
+          {{ u.userProfile.first_name }} {{ u.userProfile.last_name }}
+        </ion-label>
+        <ion-icon
+          slot="end"
+          [name]="u.expanded ? 'chevron-up-outline' : 'chevron-down-outline'">
+        </ion-icon>
+      </ion-item>
+
+      <!-- Tarjeta de detalles del usuario -->
+      <div *ngIf="u.expanded" class="user-details">
+        <ion-card>
+          <ion-card-content>
+            <p><strong>Email:</strong> {{ u.userProfile.email }}</p>
+            <p><strong>Fecha de nacimiento:</strong>
+               {{ u.userProfile.datebirth | date:'longDate' }}</p>
+            <p><strong>DNI:</strong> {{ u.userProfile.dni }}</p>
+            <ion-button expand="block" (click)="openModal(u)">
+              Ver historial de citas
+            </ion-button>
+          </ion-card-content>
+        </ion-card>
+      </div>
+    </ng-container>
+  </ion-list>
+
+  <!-- Mensaje si no hay usuarios -->
+  <div *ngIf="!loading && !error && users.length === 0" class="no-data">
+    No hay citas registradas.
+  </div>
+</ion-content>
