@@ -1,19 +1,32 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { CalendarEvent, CalendarMonthViewBeforeRenderEvent } from 'angular-calendar';
+import { isSameDay } from 'date-fns';
 import { AvailabilityModalComponent } from '../availability-modal/availability-modal.component';
 import { AvailabilityService } from 'src/app/shared/services/availability.service';
 import { UserService } from 'src/app/shared/services/user.service';
+import { MonthViewDay } from 'calendar-utils';
+import { EventEmitter } from '@angular/core';
+import { addMonths, subMonths } from 'date-fns';
+import { forkJoin } from 'rxjs';
+
+interface RawAvail {
+  day: string;
+  startHour: string;
+}
 
 @Component({
   selector: 'app-manage-availability',
   templateUrl: './manage-availability.page.html',
   styleUrls: ['./manage-availability.page.scss'],
   standalone: false,
+  encapsulation: ViewEncapsulation.None, // Necesario para que ::ng-deep funcione
 })
 export class ManageAvailabilityPage implements OnInit {
   viewDate: Date = new Date();
   events: CalendarEvent[] = [];
+  /** Este Subject le avisa al calendario que “refresque” */
+  refresh = new EventEmitter<void>();
 
   constructor(
     private modalCtrl: ModalController,
@@ -25,24 +38,33 @@ export class ManageAvailabilityPage implements OnInit {
     this.loadAvailabilities();
   }
 
+  previousMonth(): void {
+    this.viewDate = subMonths(this.viewDate, 1);
+    this.loadAvailabilities();  // recarga eventos para el mes nuevo
+  }
+
+  nextMonth(): void {
+    this.viewDate = addMonths(this.viewDate, 1);
+    this.loadAvailabilities();
+  }
+
+
   async openAvailabilityModal(preselectedDate?: Date): Promise<void> {
     const modal = await this.modalCtrl.create({
       component: AvailabilityModalComponent,
-      componentProps: {
-        preselectedDate: preselectedDate || null
-      }
+      componentProps: { preselectedDate: preselectedDate || null }
     });
     await modal.present();
-
     const { data } = await modal.onDidDismiss();
     if (data?.refresh) {
       this.loadAvailabilities();
     }
   }
 
-  onDayClick({ day }: { day: { date: Date } }) {
-    if (!this.isPast(day.date)) {
-      this.openAvailabilityModal(day.date);
+  onDayClick(event: { day: MonthViewDay; sourceEvent: any }): void {
+    const date = event.day.date;
+    if (!this.isPast(date)) {
+      this.openAvailabilityModal(date);
     }
   }
 
@@ -53,34 +75,65 @@ export class ManageAvailabilityPage implements OnInit {
   }
 
   beforeMonthViewRender(renderEvent: CalendarMonthViewBeforeRenderEvent): void {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
     renderEvent.body.forEach(cell => {
-      if (this.isPast(cell.date)) {
-        cell.cssClass = 'cal-day-disabled';
+      const hasEvent = this.events.some(ev => isSameDay(ev.start, cell.date));
+
+      // 1) Si es pasado, gris y no clicable
+      if (cell.date < today) {
+        cell.cssClass = this.appendCss(cell.cssClass, 'cal-day-disabled');
+      }
+      // 2) Si es hoy, lo pintamos “today” (verde)
+      else if (isSameDay(cell.date, today)) {
+        cell.cssClass = this.appendCss(cell.cssClass, 'cal-today');
+      }
+      // 3) Si es FUTURO y tiene evento, lila
+      else if (hasEvent) {
+        cell.cssClass = this.appendCss(cell.cssClass, 'cal-has-events');
       }
     });
   }
 
-  private formatDate(date: Date): string {
-    return date.toISOString().split('T')[0];  // "2025-06-13"
+  private appendCss(existing: string | undefined, toAdd: string): string {
+    return existing ? `${existing} ${toAdd}` : toAdd;
   }
 
-  loadAvailabilities() {
+  loadAvailabilities(): void {
     this.userService.getCurrentUser().subscribe(user => {
-      const idprofessional = user?.idprofessional;
-      if (!idprofessional) { return; }
+      const idp = user?.idprofessional;
+      if (!idp) return;
 
-      const dateStr = this.formatDate(this.viewDate);
+      const year = this.viewDate.getFullYear();
+      const month = this.viewDate.getMonth(); // 0–11
 
-      this.availabilityService
-        .getAvailability(idprofessional, dateStr)
-        .subscribe(data => {
-          this.events = data.map(item => ({
-            start: new Date(`${item.day}T${item.hour}`),
-            title: 'Disponible'
-          }));
-        }, err => {
-          console.error('Error al cargar disponibilidad', err);
-        });
+      // 1) Calcula cuántos días tiene este mes
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+      // 2) Crea un array [Date(1), Date(2), …, Date(daysInMonth)]
+      const days: Date[] = Array.from(
+        { length: daysInMonth },
+        (_, i) => new Date(year, month, i + 1)
+      );
+
+      // 3) Lanza un forkJoin como antes
+      const calls = days.map(d =>
+        this.availabilityService.getAvailability(
+          idp,
+          d.toISOString().split('T')[0]
+        )
+      );
+
+      forkJoin(calls).subscribe(responses => {
+        const all = ([] as any[]).concat(...responses);
+        this.events = all.map(item => ({
+          start: new Date(`${item.day}T${item.startHour}`),
+          title: 'Disponible'
+        }));
+        // fuerza el repaint
+        this.viewDate = new Date(this.viewDate.getTime());
+      });
     });
   }
 

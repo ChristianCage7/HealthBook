@@ -1,10 +1,31 @@
 <app-header [showBackButton]="true" [defaultHref]="'/menu/professional-dashboard'" title="Disponibilidad">
 </app-header>
 
-<ion-content class="ion-padding">
+<ng-template #monthCellTemplate let-day="day">
+  <div class="cal-cell-inner">
+    <span class="cal-day-number">{{ day.date.getDate() }}</span>
+    <!-- sólo para días futuros muestro horas -->
+    <ng-container *ngIf="!isPast(day.date)">
+      <div *ngFor="let ev of day.events" class="available-time">
+        {{ ev.start | date:'HH:mm' }}
+      </div>
+    </ng-container>
+  </div>
+</ng-template>
+
+<ion-content>
   <div class="calendar-container">
-    <mwl-calendar-month-view [viewDate]="viewDate" [events]="events" (dayClicked)="onDayClick($event)"
-      (beforeViewRender)="beforeMonthViewRender($event)">
+    <div class="month-nav">
+      <ion-button fill="clear" size="small" (click)="previousMonth()">
+        <ion-icon name="chevron-back-outline"></ion-icon>
+      </ion-button>
+      <span class="month-title">{{ viewDate | date:'MMMM yyyy' }}</span>
+      <ion-button fill="clear" size="small" (click)="nextMonth()">
+        <ion-icon name="chevron-forward-outline"></ion-icon>
+      </ion-button>
+    </div>
+    <mwl-calendar-month-view [viewDate]="viewDate" [events]="events" [cellTemplate]="monthCellTemplate"
+      (beforeViewRender)="beforeMonthViewRender($event)" (dayClicked)="onDayClick($event)">
     </mwl-calendar-month-view>
   </div>
 </ion-content>

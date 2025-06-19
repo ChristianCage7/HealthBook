@@ -1,55 +1,88 @@
+/* ----------------- Contenedor ----------------- */
 .calendar-container {
   max-width: 800px;
-  margin: 0 auto;
-  border-radius: 12px;
-  overflow: hidden;
-  background-color: #f3eaff;
+  margin: 16px auto;
   padding: 16px;
+  background: #f3eaff;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-/* Días pasados bloqueados */
-::ng-deep .cal-day-disabled {
-  pointer-events: none;
-  opacity: 0.3;
+/* ----------------- Cabecera de Mes ----------------- */
+.month-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #4b268e;
+  padding: 0.5rem 1rem;
+  border-radius: 12px 12px 0 0;
+
 }
 
-/* Header de días */
-::ng-deep .cal-header {
-  background-color: #4b268e;
-  color: white;
+.month-nav ion-button {
+  color: #fff;
+  --border-width: 0;
+}
+
+.month-nav .month-title {
+  flex: 1;
+  text-align: center;
+  color: #fff;
+  font-size: 1.25rem;
+  font-weight: normal;
+}
+
+
+
+/* Oculta los “puntos” de evento por defecto */
+.cal-event {
+  display: none !important;
+}
+
+/* ----------------- Estados de celda ----------------- */
+/* Días FUTUROS con disponibilidad */
+.cal-has-events {
+  background: #d1c4e9 !important;
+  /* lila claro */
+  color: #4a148c !important;
+  font-weight: 600 !important;
+}
+
+/* Día de hoy */
+.cal-today {
+  background: #c8e6c9 !important;
+  /* verde claro */
+  color: #1b5e20 !important;
+  /* texto verde oscuro */
+  font-weight: 600 !important;
+}
+
+/* Días pasados (con o sin evento) */
+.cal-day-cell.cal-day-disabled {
+  pointer-events: none !important;
+  background-color: #f5f5f5 !important;
+  color: rgba(0, 0, 0, 0.3) !important;
+}
+
+/* ----------------- Template de horas ----------------- */
+.available-time {
+  display: inline-block;
+  margin-top: 2px;
+  padding: 2px 4px;
+  font-size: 0.7rem;
+  /* ajustado a móvil */
+  border-radius: 4px;
+  background: #4a148c;
+  /* color profesional */
+  color: #fff;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+/* ----------------- Header de días ----------------- */
+.cal-header {
+  background: #4b268e !important;
+  color: #fff !important;
   font-weight: 600;
   padding: 12px 0;
-  border-radius: 12px 12px 0 0;
-}
-
-/* Celdas del calendario */
-::ng-deep .cal-cell {
-  border-radius: 8px;
-  transition: background-color 0.3s ease;
-}
-
-/* Día actual */
-::ng-deep .cal-day-cell.cal-today {
-  background-color: #b388ff !important;
-  color: white !important;
-}
-
-/* Hover */
-::ng-deep .cal-day-cell:hover {
-  background-color: #e0caff;
-  cursor: pointer;
-}
-
-/* Eventos (disponibilidad) */
-::ng-deep .cal-day-cell.cal-has-events {
-  background-color: #d1c4e9 !important;
-  color: #4a148c !important;
-  font-weight: 600;
-}
-
-/* Eventos abiertos abajo del calendario */
-::ng-deep .cal-open-day-events {
-  background-color: #ede7f6;
-  padding: 4px;
 }
