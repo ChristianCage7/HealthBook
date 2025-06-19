@@ -23,12 +23,10 @@ export class AvailabilityModalComponent implements OnInit {
   minDate: string = '';
   showPatternOptions: boolean = false;
   loading: boolean = false;
-
-
-  // 🔹 NUEVOS campos para excepciones
   exceptionDate: string = '';
   exceptionReason: string = '';
 
+  // Días de la semana para patrones
   daysOfWeek = [
     { label: 'Lunes', value: 'monday' },
     { label: 'Martes', value: 'tuesday' },
@@ -47,10 +45,13 @@ export class AvailabilityModalComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    // Fecha mínima para picker
     const now = new Date();
     this.minDate = now.toISOString();
+    // Genera bloques de media hora entre 08:00 y 20:30
     this.generateTimeBlocks();
 
+    // Si llega una fecha preseleccionada, inicializa los pickers
     if (this.preselectedDate) {
       const base = new Date(this.preselectedDate);
       base.setHours(0, 0, 0, 0);
@@ -62,7 +63,7 @@ export class AvailabilityModalComponent implements OnInit {
     }
   }
 
-
+  // Generación de bloques de tiempo
   generateTimeBlocks() {
     const blocks: string[] = [];
     for (let hour = 8; hour <= 20; hour++) {
@@ -76,9 +77,11 @@ export class AvailabilityModalComponent implements OnInit {
     return n < 10 ? `0${n}` : `${n}`;
   }
 
+  // Selección de hora de inicio
   onStartTimeSelect(time: string) {
     this.startTime = time;
 
+    // Calcula endTime automáticamente +30min
     const [h, m] = time.split(':').map(Number);
     const start = new Date();
     start.setHours(h, m, 0, 0);
@@ -89,11 +92,14 @@ export class AvailabilityModalComponent implements OnInit {
     this.endTime = `${hh}:${mm}`;
   }
 
+  // Alterna opciones entre disponibilidad y excepciones
   togglePatternOptions(checked: boolean) {
     this.showPatternOptions = checked;
   }
 
+  // ----- Método para guardar disponibilidad individual y patrón -----
   async saveAvailability() {
+    // Guardar disponibilidad individual
     const user = await this.userService.getCurrentUser().toPromise();
     const idprofessional = user?.idprofessional;
 
@@ -102,6 +108,7 @@ export class AvailabilityModalComponent implements OnInit {
       return;
     }
 
+    // Prepara payload para disponibilidad individual
     const baseDate = this.preselectedDate.toISOString().split('T')[0];
     const start_hour = `${this.startTime}:00`;
     const end_hour = `${this.endTime}:00`;
@@ -122,6 +129,7 @@ export class AvailabilityModalComponent implements OnInit {
       console.error('Error individual:', err);
     }
 
+    // Si el usuario marcó patrón semanal
     if (this.showPatternOptions) {
       const patternRequest = {
         idprofessional,
@@ -141,25 +149,24 @@ export class AvailabilityModalComponent implements OnInit {
 
       try {
         await this.availabilityService.createPattern(patternRequest).toPromise();
-        this.toastService.show('Patrón de disponibilidad guardado', 'success');
+        this.toastService.show('Patrón de disponibilidad guardado', 'Éxito', 'success');
       } catch (err) {
         this.toastService.show('Error al guardar patrón de disponibilidad', 'danger');
         console.error('Error patrón:', err);
       }
     }
-
   }
 
-  //  Método para guardar excepción
+  // ----- Método para guardar una excepción -----
   async saveException() {
     const user = await this.userService.getCurrentUser().toPromise();
     const idprofessional = user?.idprofessional;
 
+    // Validaciones de excepción
     if (!idprofessional || !this.exceptionDate || !this.startTime || !this.endTime || !this.exceptionReason) {
-      this.toastService.show('⛔ Completa todos los campos de la excepción', 'danger');
+      this.toastService.show('Completa todos los campos de la excepción', 'Aviso', 'warning');
       return;
     }
-
     const request = {
       idprofessional,
       day: this.exceptionDate.split('T')[0],
@@ -167,36 +174,35 @@ export class AvailabilityModalComponent implements OnInit {
       end_hour: `${this.endTime}:00`,
       reason: this.exceptionReason
     };
-
     try {
       await this.availabilityService.createException(request).toPromise();
-      this.toastService.show('Excepción guardada correctamente', 'success');
-      this.dismiss(true);
+      this.toastService.show('Excepción guardada correctamente', 'Éxito', 'success');
     } catch (err) {
-      this.toastService.show('Error al guardar excepción', 'danger');
+      this.toastService.show('Error al guardar excepción', 'Error', 'error');
       console.error('Error excepción:', err);
     }
   }
 
-  dismiss(refresh: boolean = false) {
-    this.modalCtrl.dismiss({ refresh });
-  }
-
+  // ----- Handler único de guardado -----
   async handleSave() {
-    this.loading = true;
-
+    this.loading = true;  // Activa spinner
     try {
       if (this.showAvailabilityForm) {
-        await this.saveAvailability();
+        await this.saveAvailability(); // Guarda disponibilidad
       } else {
-        await this.saveException();
+        await this.saveException(); // Guarda patrón de días disponibles
       }
     } catch (error) {
       console.error('Error al guardar:', error);
-      this.toastService.show('Hubo un error al guardar.', 'danger');
+      this.toastService.show('Hubo un error al guardar.', 'Error', 'error');
     } finally {
-      this.loading = false;
+      this.loading = false;                        // Detiene spinner
+      await this.modalCtrl.dismiss({ refresh: true });  // Cierra modal y notifica refresh; se guarda disponiblidad de manera exitosa
     }
   }
 
+  // Cierra modal desde header
+  dismiss(){
+    this.modalCtrl.dismiss();
+  }
 }

@@ -173,7 +173,9 @@ ion-button {
   --cell-size: 40px;
 }
 
-/* Día normal */
+/* ===============================
+  Día normal
+================================= */
 .pattern-fields ion-datetime::part(calendar-day) {
   height: 38px;
   width: 38px;
@@ -182,14 +184,17 @@ ion-button {
   margin: 0;
 }
 
-/* Día activo */
-.pattern-fields ion-datetime::part(active) {
+/* ===============================
+  Día activo
+================================= */.pattern-fields ion-datetime::part(active) {
   background: #4b268e;
   color: white !important;
   border-radius: 50%;
 }
 
-/* Reduce verticalidad */
+/* ===============================
+  Reduce verticalidad
+================================= */
 .pattern-fields ion-datetime::part(calendar-body) {
   padding-top: 0;
   padding-bottom: 0;
@@ -198,13 +203,17 @@ ion-button {
   row-gap: 0;
 }
 
-/* Reduce espacio del encabezado */
+/* ===============================
+  Reduce espacio del encabezado
+================================= */
 .pattern-fields ion-datetime::part(calendar-month-year) {
   padding-bottom: 0;
   margin-bottom: 4px;
 }
 
-/* Días de la semana */
+/* ===============================
+  Días de la semana
+================================= */
 .pattern-fields ion-datetime::part(calendar-weekdays) {
   font-size: 13px;
   margin-bottom: 4px;

@@ -8,6 +8,8 @@
 </ion-header>
 
 <ion-content [fullscreen]="true" scroll-y="true">
+
+  <!-- ──────  Segmento para elegir entre disponibilidad y excepciones ──────  -->
   <ion-toolbar class="segment-toolbar">
     <ion-segment [(ngModel)]="showAvailabilityForm">
       <ion-segment-button [value]="true">
@@ -20,25 +22,29 @@
   </ion-toolbar>
 
   <div class="form-container">
-    <!-- DISPONIBILIDAD -->
+    <!-- ──────  Formulario disponibilidad ──────  -->
     <ng-container *ngIf="showAvailabilityForm">
       <ion-item>
+        <!-- Selector de hora de inicio -->
         <ion-label position="stacked">Hora seleccionada</ion-label>
         <ion-select interface="popover" [(ngModel)]="startTime" (ionChange)="onStartTimeSelect($event.detail.value)">
           <ion-select-option *ngFor="let time of timeBlocks" [value]="time">{{ time }}</ion-select-option>
         </ion-select>
       </ion-item>
 
+      <!-- Campo de hora de término (automáticamente son 30 minutos) -->
       <ion-item>
-        <ion-label position="stacked">Hora de fin (automática)</ion-label>
+        <ion-label position="stacked">Hora de término</ion-label>
         <ion-input [value]="endTime" readonly></ion-input>
       </ion-item>
 
+      <!-- Checkbox para activar patrón mensual -->
       <ion-item lines="none">
         <ion-label>¿Repetir durante el mes?</ion-label>
         <ion-checkbox slot="end" (ionChange)="togglePatternOptions($event.detail.checked)"></ion-checkbox>
       </ion-item>
 
+      <!-- Campos adicionales de patrón: días y rango de fechas -->
       <div *ngIf="showPatternOptions" class="pattern-fields">
         <ion-item>
           <ion-label position="stacked">Selecciona los días</ion-label>
@@ -47,11 +53,13 @@
           </ion-select>
         </ion-item>
 
+        <!-- Fecha de inicio del patrón -->
         <ion-item>
           <ion-label position="stacked">Desde</ion-label>
           <ion-datetime [(ngModel)]="patternStartDate" [min]="minDate" presentation="date"></ion-datetime>
         </ion-item>
 
+        <!-- Fecha de fin del patrón -->
         <ion-item>
           <ion-label position="stacked">Hasta</ion-label>
           <ion-datetime [(ngModel)]="patternEndDate" [min]="minDate" presentation="date"></ion-datetime>
@@ -59,8 +67,10 @@
       </div>
     </ng-container>
 
-    <!-- EXCEPCIÓN -->
+    <!-- ──────  Formulario excepciones ──────  -->
     <ng-container *ngIf="!showAvailabilityForm">
+      
+      <!-- Selector de hora de inicio -->
       <ion-item>
         <ion-label position="stacked">Hora seleccionada</ion-label>
         <ion-select interface="popover" [(ngModel)]="startTime" (ionChange)="onStartTimeSelect($event.detail.value)">
@@ -68,27 +78,31 @@
         </ion-select>
       </ion-item>
 
+      <!-- Campo de hora de término (automáticamente son 30 minutos) -->
       <ion-item>
-        <ion-label position="stacked">Hora de fin (automática)</ion-label>
+        <ion-label position="stacked">Hora de término</ion-label>
         <ion-input [value]="endTime" readonly></ion-input>
       </ion-item>
 
+      <!-- Fecha fijada de excepción -->
       <ion-item>
         <ion-label position="stacked">Fecha de excepción</ion-label>
         <ion-input [value]="exceptionDate | date: 'fullDate'" readonly></ion-input>
       </ion-item>
 
+      <!-- Campo para ingresar el motivo de la excepción -->
       <ion-item>
         <ion-label position="stacked">Motivo</ion-label>
         <ion-input [(ngModel)]="exceptionReason" placeholder="Ej. Vacaciones, médico, etc."></ion-input>
       </ion-item>
     </ng-container>
 
-    <!-- Botón SIEMPRE visible al final del contenido -->
+    <!-- ──────  Botón de guardar  ──────  -->
     <ion-button class="save-button" expand="block" (click)="handleSave()" [disabled]="loading">
       {{ showAvailabilityForm ? 'Guardar disponibilidad' : 'Guardar excepción' }}
     </ion-button>
-
+    
+    <!-- ──────  Spinner ──────  -->
     <ion-loading [isOpen]="loading" message="Guardando..." translucent></ion-loading>
   </div>
 </ion-content>
