@@ -6,32 +6,32 @@
   <div class="welcome-card" [class.animate-once]="showAnimation">
     <div class="welcome-header">
       <div>
-        <h2>Bienvenido, <strong>..</strong></h2>
+        <h2>Bienvenido, <strong>{{ firstName }}</strong></h2>
         <p class="subtext">¡Esperamos que tengas un gran día de atención!</p>
       </div>
       <ion-avatar>
-        <img src="assets/img/profile.jpg" />
+        <img [src]="avatarUrl" />
       </ion-avatar>
     </div>
 
     <div class="session-summary">
       <p class="info-text">
         <ion-icon name="calendar-outline"></ion-icon>
-        <strong>Próxima cita:</strong> Lunes, 16 de junio - 18:00 hrs
+        <strong>Próxima cita: </strong>
+        {{ nextAppointmentText }}
       </p>
       <p class="info-text">
         <ion-icon name="document-text-outline"></ion-icon>
-        <strong>Total citas hoy:</strong> 5 agendadas
+        <strong>Total citas hoy: </strong>
+        {{ totalAppointmentsText }}
       </p>
     </div>
   </div>
 
-
   <!-- Sección de tareas -->
 
   <div class="task" [class.animate-once]="showAnimation">
-    <h3 class="task-title">Gestión de usuario </h3>
-
+    <h3 class="task-title" style="text-align: center;">Gestión de usuario </h3>
 
     <div class="task-large-card" [class.animate-once]="showAnimation" (click)="goToMedicalHistory()">
       <div class="task-bubble-large"><ion-icon name="medkit-outline"></ion-icon></div>
@@ -55,7 +55,6 @@
       <ion-icon name="chevron-forward-outline" class="task-icon"></ion-icon>
     </div>
 
-
     <!--Debería funcionar como notificación, por mientras se dará prioridad a historial clinico (16-06)
     
     <div class="task-large-card" [class.animate-once]="showAnimation">
@@ -68,7 +67,6 @@
 
       <ion-icon name="chevron-forward-outline" class="task-icon"></ion-icon>
     </div>!-->
-
   </div>
 
 </ion-content>
