@@ -60,6 +60,10 @@
         "source": "io.ionic.starter.app-main-29:/mipmap-xxxhdpi/ic_launcher.png"
     },
     {
+        "merged": "io.ionic.starter.app-debug-27:/xml_network_security_config.xml.flat",
+        "source": "io.ionic.starter.app-main-29:/xml/network_security_config.xml"
+    },
+    {
         "merged": "io.ionic.starter.app-debug-27:/drawable-port-xhdpi_splash.png.flat",
         "source": "io.ionic.starter.app-main-29:/drawable-port-xhdpi/splash.png"
     },
