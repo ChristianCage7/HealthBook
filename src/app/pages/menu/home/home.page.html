@@ -1,19 +1,39 @@
 <app-header [showBackButton]="false" title="Inicio"></app-header>
 
 <ion-content class="main-content">
+
+    <div class="welcome-card">
+        <div class="welcome-header">
+            <div>
+                <h2>Bienvenido, <strong> firstName </strong></h2>
+                <p class="subtext">¡Esperamos que tengas un gran día de atención!</p>
+            </div>
+            <ion-avatar>
+            </ion-avatar>
+        </div>
+
+        <div class="session-summary">
+            <p class="info-text">
+                <ion-icon name="calendar-outline"></ion-icon>
+                <strong>Próxima cita: </strong>
+                ...
+            </p>
+            <p class="info-text">
+                <ion-icon name="document-text-outline"></ion-icon>
+                <strong>Total citas hoy: </strong>
+                ...
+            </p>
+        </div>
+    </div>
+
     <div class="container">
-
         <app-logo></app-logo>
-
         <h2 class="title fade-in delay-1">¡Aún no tienes citas agendadas!</h2>
-
         <p class="description fade-in delay-2">
             Agenda una sesión con nuestros <strong>profesionales</strong> y comienza tu camino hacia el bienestar.
         </p>
-
         <ion-button expand="block" class="btn-primary fade-in delay-3" routerLink="/menu/book-appointment">
             Agendar ahora
         </ion-button>
-
     </div>
 </ion-content>
