@@ -1,60 +1,107 @@
 <app-header title="Mi Perfil"></app-header>
 
 <ion-content class="ion-padding">
-  <div class="d-flex-center">
+  <div class="profile-container">
 
-    <!-- Imagen de perfil -->
-    <img
-      [src]="selectedImagePreview || user.imgprofile || 'assets/icon/profile-img.png'"
-      class="profile-img"
-      alt="Foto de perfil" />
+    <!-- Card principal -->
+    <div class="profile-card">
 
-    <!-- Seleccionar nueva imagen -->
-    <input type="file" accept="image/*" #fileInput hidden (change)="onFileSelected($event)" />
-    <ion-button fill="outline" size="small" (click)="fileInput.click()">Cambiar foto</ion-button>
+      <!-- ─── Avatar + botones ──────────────────────────────── -->
+      <div class="avatar-section">
+        <img
+          [src]="selectedImagePreview || user.imgprofile || 'assets/icon/profile-img.png'"
+          class="profile-img"
+          alt="Foto de perfil" />
+        <div class="avatar-buttons">
+          <input
+            type="file"
+            accept="image/*"
+            #fileInput
+            hidden
+            (change)="onFileSelected($event)" />
+          <ion-button fill="outline" size="small" (click)="fileInput.click()">
+            Cambiar foto
+          </ion-button>
+          <ion-button
+            *ngIf="selectedImage"
+            fill="solid"
+            size="small"
+            (click)="uploadProfileImage()">
+            Subir imagen
+          </ion-button>
+        </div>
+      </div>
 
-    <!-- Subir imagen -->
-    <ion-button *ngIf="selectedImage" class="btn-primary" size="small" (click)="uploadProfileImage()">
-      Subir imagen
-    </ion-button>
+      <!-- ─── Datos de usuario ──────────────────────────────── -->
+      <div class="info-section">
+        <h2 class="profile-name">
+          {{ user.first_name }} {{ user.last_name }}
+        </h2>
+        <p class="profile-email">{{ user.email }}</p>
+      </div>
 
-    <!-- Nombre y correo -->
-    <h2 class="profile-name">{{ user.first_name }} {{ user.last_name }}</h2>
-    <p class="profile-email">{{ user.email }}</p>
+      <!-- ─── PANEL DE EDICIÓN (solo en editMode) ───────────── -->
+      <!-- lo ponemos justo tras "info-section" para que no haga scroll -->
+      <div *ngIf="editMode" class="edit-panel">
+        <!-- 1) Botón cancelar -->
+        <ion-button
+          class="btn-primary"
+          expand="block"
+          (click)="editMode = false">
+          Cancelar edición
+        </ion-button>
 
-    <!-- Modo edición -->
-    <ion-button class="btn-primary" expand="block" (click)="editMode = !editMode">
-      {{ editMode ? 'Cancelar edición' : 'Editar perfil' }}
-    </ion-button>
+        <!-- 2) Formulario -->
+        <form (ngSubmit)="saveEdit()" class="auth-form">
+          <app-custom-input
+            [control]="getEditControl('first_name')"
+            icon="person-outline"
+            label="Nombre"
+            type="text">
+          </app-custom-input>
 
-    <!-- Formulario de edición -->
-    <form *ngIf="editMode" (ngSubmit)="saveEdit()" class="auth-form">
-      <app-custom-input
-        [control]="getEditControl('first_name')"
-        icon="person-outline"
-        label="Nombre"
-        type="text">
-      </app-custom-input>
+          <app-custom-input
+            [control]="getEditControl('last_name')"
+            icon="person-outline"
+            label="Apellido"
+            type="text">
+          </app-custom-input>
 
-      <app-custom-input
-        [control]="getEditControl('last_name')"
-        icon="person-outline"
-        label="Apellido"
-        type="text">
-      </app-custom-input>
+          <ion-button
+            class="btn-primary"
+            expand="block"
+            type="submit">
+            Guardar cambios
+          </ion-button>
+        </form>
+      </div>
 
-      <ion-button class="btn-primary" expand="block" type="submit">
-        Guardar cambios
+      <!-- ─── BOTÓN EDITAR (solo en vista) ──────────────────── -->
+      <ng-container *ngIf="!editMode">
+        <ion-button
+          class="btn-primary"
+          expand="block"
+          (click)="editMode = true">
+          Editar perfil
+        </ion-button>
+      </ng-container>
+
+      <!-- ─── Opciones siempre visibles ─────────────────────── -->
+      <ion-button
+        class="btn-secondary"
+        expand="block"
+        (click)="confirmChangePassword()">
+        Cambiar contraseña
       </ion-button>
-    </form>
+      <ion-button
+        expand="block"
+        fill="outline"
+        color="danger"
+        (click)="confirmDeleteAccount()">
+        Eliminar cuenta
+      </ion-button>
 
-    <!-- Opciones adicionales -->
-    <ion-button class="btn-primary" expand="block" color="tertiary" (click)="confirmChangePassword()">
-      Cambiar contraseña
-    </ion-button>
+    </div> <!-- /.profile-card -->
 
-    <ion-button expand="block" fill="outline" color="danger" (click)="confirmDeleteAccount()">
-      Eliminar cuenta
-    </ion-button>
-  </div>
+  </div> <!-- /.profile-container -->
 </ion-content>

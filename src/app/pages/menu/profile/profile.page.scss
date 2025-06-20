@@ -1,3 +1,4 @@
+/* Estilos para el fondo del contenido principal */
 ion-content {
   --background: linear-gradient(
     to bottom,
@@ -5,53 +6,146 @@ ion-content {
     #f4effc 50%,
     #f2eafe 100%
   );
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  height: 100%;
 }
 
-.d-flex-center {
-  width: 100%;
-  max-width: 420px;
-  margin: 0 auto;
+/* ─── Contenedor centrado ───────────────────────────────── */
+.profile-container {
+  display: flex;
+  justify-content: center;
   padding: 20px;
+}
+
+/* ─── Card del perfil ───────────────────────────────────── */
+.profile-card {
+  /* Ocupa casi toda la anchura, con un máximo adecuado */
+  width: 95%;
+  max-width: 480px;
+  padding: 14px;
+  margin: 10px auto;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  text-align: center;
+
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 12px;
 }
 
+/* ─── Sección de avatar ────────────────────────────────── */
+.avatar-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ─ Imagen de perfil con borde institucional ──────────── */
 .profile-img {
   width: 120px;
   height: 120px;
   object-fit: cover;
   border-radius: 50%;
-  border: 3px solid #ccc;
+}
+
+/* ─ Botones de cambio de foto ──────────────────────────── */
+.avatar-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+/* ─── Datos de usuario ─────────────────────────────────── */
+.info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .profile-name {
-  font-size: 1.4rem;
-  font-weight: bold;
   margin: 0;
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 
 .profile-email {
+  margin: 0;
   font-size: 1rem;
   color: #666;
-  margin-bottom: 12px;
 }
 
+/* ─── Estilo cuando el perfil está en modo "editing" ───── */
+.profile-card.editing {
+  background: linear-gradient(
+    to bottom,
+    #f4effc 0%,
+    #ede6fd 100%
+  );
+}
+
+/* ─── Sección de acciones (botones fuera del panel de edición) ─ */
+.actions-section {
+  background: #fff;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* ─── Panel de edición destacado ───────────────────────── */
+.edit-panel {
+  background: #ede6fd;       /* violeta clarito */
+  padding: 12px;             /* reduce espacio interno */
+  border: 1px solid #ddd;    /* separador sutil */
+  border-radius: 8px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 6px;                  /* menos espacio entre elementos */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Quita márgenes extras de botones dentro del panel */
+.edit-panel ion-button {
+  margin: 0;
+}
+
+/* Reduce separación dentro del formulario */
+.edit-panel .auth-form {
+  gap: 6px;
+}
+
+/* Compácta aún más el primer botón (Cancelar edición) */
+.edit-panel ion-button.btn-primary:first-child {
+  margin-bottom: 4px;
+  --padding-top: 6px;
+  --padding-bottom: 6px;
+}
+
+/* Asegura que los inputs custom no añadan márgenes */
+.edit-panel app-custom-input {
+  margin: 0;
+}
+
+/* ─── Formulario genérico ─────────────────────────────── */
 .auth-form {
   display: flex;
   flex-direction: column;
   gap: 14px;
-  width: 100%;
 }
 
+/* ─── Botón principal púrpura ─────────────────────────── */
 .btn-primary {
   --background: #4b268e;
-  --color: white;
+  --color: #fff;
+  font-weight: 600;
+  border-radius: 14px;
+}
+
+/* ─── Botón secundario púrpura claro ──────────────────── */
+.btn-secondary {
+  --background: #6a22c9;
+  --color: #fff;
   font-weight: 600;
   border-radius: 14px;
 }
