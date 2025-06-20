@@ -16,6 +16,7 @@ export class ProfessionalSessionsPage implements OnInit {
   pendingAppointments: Appointment[] = [];
   confirmedAppointments: Appointment[] = [];
   idprofessional!: number;
+  loading = true;
 
   constructor(
     private router: Router,
@@ -26,12 +27,18 @@ export class ProfessionalSessionsPage implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.loading = true;
     this.userService.getCurrentUser().subscribe({
       next: user => {
+        console.log('Usuario recibido:', user);
         this.idprofessional = user.idprofessional;
+        console.log('ID del profesional:', this.idprofessional);
         this.loadAppointments();
       },
-      error: err => console.error('Error obteniendo usuario:', err)
+      error: err => {
+        console.error('Error obteniendo usuario:', err);
+        this.loading = false;
+      }
     });
   }
 
@@ -41,20 +48,11 @@ export class ProfessionalSessionsPage implements OnInit {
         this.appointments = appointments;
         this.pendingAppointments = appointments.filter(a => a.status === 0);
         this.confirmedAppointments = appointments.filter(a => a.status === 1);
+        this.loading = false;
       },
-      error: err => console.error('Error cargando citas:', err)
-    });
-  }
-
-  goToManageAvailability() {
-    this.router.navigate(['/menu/manage-availability']);
-  }
-
-  goToCall(appointment: Appointment) {
-    this.router.navigate(['/call-professional'], {
-      state: {
-        token: appointment.tokenProfessional,
-        sessionId: appointment.sessionId
+      error: err => {
+        console.error('Error cargando citas:', err);
+        this.loading = false;
       }
     });
   }
@@ -97,6 +95,16 @@ export class ProfessionalSessionsPage implements OnInit {
       error: () => this.toastService.show('No se pudo cancelar la cita.', 'Error', 'error')
     });
   }
+
+goToCall(appointment: Appointment) {
+  this.router.navigate(['/call-professional'], {
+    state: {
+      sessionId: appointment.sessionId,
+      token: appointment.tokenProfessional,
+      idappointment: appointment.idappointment
+    }
+  });
+}
 
   formatDateTime(date: string, time: string): string {
     const datetime = new Date(`${date}T${time}`);

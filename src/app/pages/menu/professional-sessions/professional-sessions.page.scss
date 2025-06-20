@@ -1,30 +1,7 @@
-.page-content {
-  background: linear-gradient(to bottom, #f6f3fc 0%, #f4effc 50%, #f2eafe 100%);
-  position: relative;
-  padding-top: 60px;
-}
-
-.floating-button {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  z-index: 10;
-  --border-radius: 8px;
-}
-
 ion-card {
   border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-}
-
-ion-card-header {
-  padding: 16px;
-}
-
-ion-card-title {
-  font-size: 16px;
-  font-weight: bold;
 }
 
 .session-card {
@@ -44,18 +21,6 @@ ion-card-title {
   color: white;
   font-weight: bold;
   margin: 0;
-}
-
-.section-header {
-  background-color: #4b268e;
-  color: white;
-  border-radius: 12px;
-  margin-bottom: 8px;
-}
-
-.section-title {
-  font-size: 18px;
-  font-weight: bold;
 }
 
 .btn-primary {

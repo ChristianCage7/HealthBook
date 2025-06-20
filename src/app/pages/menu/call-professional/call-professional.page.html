@@ -1,10 +1,21 @@
-<app-header title="Videollamada"></app-header>
+<ion-header>
+  <app-header title="Videollamada"></app-header>
+</ion-header>
 
 <ion-content class="ion-padding">
   <div class="video-container">
-    <video id="publisher" autoplay muted playsinline></video>
-    <div id="subscribers">
-      <div *ngFor="let sub of subscribers" #subscriberElement></div>
+    <div class="video-box">
+      <video id="publisher" autoplay playsinline></video>
+      <div class="label">{{ localLabel }}</div>
+    </div>
+
+    <div class="video-box" *ngFor="let sub of subscribers; index as i">
+      <video #remoteVideo autoplay playsinline></video>
+      <div class="label">{{ remoteLabel }}</div>
     </div>
   </div>
+
+  <ion-button expand="block" color="danger" class="finish-btn" (click)="finalizarLlamada()">
+    Finalizar llamada
+  </ion-button>
 </ion-content>

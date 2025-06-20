@@ -1,16 +1,48 @@
 .video-container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 16px;
 }
 
-#publisher,
-#subscribers > div {
-  width: 90%;
+.video-wrapper {
+  position: relative;
+  width: 48%;
   max-width: 640px;
-  height: 480px;
+  background-color: black;
   border-radius: 12px;
   overflow: hidden;
-  background-color: black;
+}
+
+video,
+.video-wrapper > div {
+  width: 100%;
+  height: 100%;
+}
+
+.label {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+  opacity: 0.6;
+}
+
+.finish-btn {
+  margin-top: 20px;
+  --background: #c80016;
+  --border-radius: 10px;
+  font-weight: bold;
+}
+
+.selector {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
 }

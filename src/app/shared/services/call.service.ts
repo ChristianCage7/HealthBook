@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class CallService {
-  private apiUrl = 'http://localhost:8080/api/call'; // ajusta si usas otra URL
+  private apiUrl = 'http://52.71.93.144:8080/api/call'; // ajusta si usas otra URL
 
   constructor(private http: HttpClient) { }
 
@@ -18,7 +18,8 @@ export class CallService {
     return this.http.post(`${this.apiUrl}/token?sessionId=${sessionId}&role=${role}`, {}, { responseType: 'text' });
   }
 
-getAppointmentsByProfessional(id: number) {
-  return this.http.get<any[]>(`${environment.backendUrl}/api/appointments/professional/${id}`);
-}
+  getAppointmentsByProfessional(id: number) {
+    return this.http.get<any[]>(`${environment.backendUrl}/api/appointments/professional/${id}`);
+  }
+
 }

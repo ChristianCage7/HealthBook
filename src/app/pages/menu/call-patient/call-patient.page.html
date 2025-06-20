@@ -2,10 +2,14 @@
 
 <ion-content class="ion-padding">
   <div class="video-container">
-    <video id="publisher" autoplay muted playsinline></video>
+    <div class="video-wrapper">
+      <video id="publisher" autoplay muted playsinline></video>
+      <div class="label">{{ localLabel }}</div>
+    </div>
 
-    <div id="subscribers">
-      <div *ngFor="let sub of subscribers" #subscriberElement></div>
+    <div class="video-wrapper" *ngFor="let sub of subscribers">
+      <video #remoteVideo autoplay playsinline></video>
+      <div class="label">{{ remoteLabel }}</div>
     </div>
   </div>
 </ion-content>
