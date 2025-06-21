@@ -7,7 +7,7 @@
     <ion-button class=btn-primary expand="block" type="submit" routerLink="/auth/sign-up-professional">
       ¿Es un profesional y desea trabajar con nosotros?
       Registrese aquí
-       </ion-button>
+    </ion-button>
     <form [formGroup]="form" class="auth-form" (ngSubmit)="submit()" (keypress.enter)="submit()">
       <app-logo></app-logo>
 
@@ -41,7 +41,7 @@
         <ion-icon slot="start" name="calendar-outline"></ion-icon>
         <ion-datetime formControlName="birthDate" placeholder="Selecciona tu fecha de nacimiento" presentation="date"
           display-format="DD/MM/YYYY" value-format="YYYY-MM-DDTHH:mm:ssZ" locale="es-ES" color="primary"
-          cancel-text="Cancelar" done-text="Aceptar"></ion-datetime>
+          cancel-text="Cancelar" done-text="Aceptar" [max]="maxDate"></ion-datetime>
       </ion-item>
 
       <div class="validators" *ngIf="getFormControl('birthDate').invalid && getFormControl('birthDate').touched">

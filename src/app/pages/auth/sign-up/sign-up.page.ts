@@ -38,7 +38,12 @@ export class SignUpPage implements OnInit {
     }, { validators: this.passwordMatchValidator });
   }
 
+  maxDate: string = '';
+
   ngOnInit() {
+    const today = new Date();
+    today.setFullYear(today.getFullYear() - 18); // Resta 18 años
+    this.maxDate = today.toISOString().split('T')[0]; // YYYY-MM-DD
   }
 
   async submit() {

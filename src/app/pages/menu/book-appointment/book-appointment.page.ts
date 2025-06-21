@@ -166,11 +166,26 @@ export class BookAppointmentPage implements OnInit {
 
   //Filtro activo
   hasActiveFilters(): boolean {
-  return (
-    this.filterOption !== 'none' ||
-    this.genderFilter !== 'Todos' ||
-    this.searchText.trim() !== ''
-  );
-}
+    return (
+      this.filterOption !== 'none' ||
+      this.genderFilter !== 'Todos' ||
+      this.searchText.trim() !== ''
+    );
+  }
+
+  //Traducción géneros
+  translateGender(gender: string): string {
+    switch (gender?.toLowerCase()) {
+      case 'male':
+        return 'Masculino';
+      case 'female':
+        return 'Femenino';
+      case 'other':
+        return 'Otro';
+      default:
+        return 'Sin especificar';
+    }
+  }
+
 
 }

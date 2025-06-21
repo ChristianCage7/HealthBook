@@ -28,7 +28,7 @@ export class SignUpProfessionalPage implements OnInit {
     private alertCtrl: AlertController,
     private http: HttpClient,
     private router: Router
-  ) { 
+  ) {
 
     this.form = this.fb.group({
       email: new FormControl('', [Validators.required, Validators.email]),
@@ -40,13 +40,18 @@ export class SignUpProfessionalPage implements OnInit {
       datebirth: new FormControl('', [Validators.required]),
       idgender: new FormControl('', [Validators.required]),
       idprofession: new FormControl('', [Validators.required])
-    }, {validators: this.passwordMatchValidator});
+    }, { validators: this.passwordMatchValidator });
 
   }
+
+  maxDate: string = '';
 
   async ngOnInit() {
+    const today = new Date();
+    today.setFullYear(today.getFullYear() - 18); // Resta 18 años
+    this.maxDate = today.toISOString().split('T')[0]; // YYYY-MM-DD
   }
-  
+
 
   getFormControl(controlName: string): FormControl {
     return this.form.get(controlName) as FormControl;
@@ -73,7 +78,7 @@ export class SignUpProfessionalPage implements OnInit {
   }
 
 
-    async submit() {
+  async submit() {
     if (this.form.invalid || !this.selectedDocument) {
       this.showAlert('Debe completar todos los campos y subir el documento PDF.');
       return;

@@ -24,6 +24,7 @@
 @import "@ionic/angular/css/text-alignment.css";
 @import "@ionic/angular/css/text-transformation.css";
 @import "@ionic/angular/css/flex-utils.css";
+
 ion-button {
   text-transform: none;
 }
@@ -35,14 +36,17 @@ ion-toolbar {
 }
 
 // Color de fondo de aplicación
-ion-content {
-  --background: linear-gradient(
-    to bottom,
-    #f6f3fc 0%,
-    #f4effc 50%,
-    #f2eafe 100%
-  );
-  padding-top: 16px;
+ion-content,
+ion-content[class] {
+  --background: linear-gradient(to bottom,
+      #f6f3fc 0%,
+      #f4effc 50%,
+      #f2eafe 100%);
+  // Asegura márgenes seguros en todos los dispositivos (notch, bordes curvos, etc.)
+  --padding-top: env(safe-area-inset-top, 16px);
+  --padding-bottom: env(safe-area-inset-bottom, 16px);
+  --padding-start: env(safe-area-inset-left, 16px);
+  --padding-end: env(safe-area-inset-right, 16px);
 }
 
 // Color de toasty

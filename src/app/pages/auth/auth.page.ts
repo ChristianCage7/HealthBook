@@ -26,7 +26,7 @@ export class AuthPage implements OnInit {
     private router: Router,
     private userService: UserService,
     private toastService: ToastService
-  ) {}
+  ) { }
 
   ngOnInit() {
     console.log('[Login] Componente inicializado');
@@ -45,15 +45,28 @@ export class AuthPage implements OnInit {
       this.loading = false;
 
       if (error) {
-        this.errorMessage = error.message;
+        const customMessage = error.message.includes('Invalid login credentials')
+          ? 'Correo o contraseña incorrectos'
+          : error.message || 'Error al iniciar sesión';
+
+        this.toastService.show(customMessage, 'Error', 'error');
         return;
       }
 
-      // Validar el estado del usuario (status != 0)
-      await this.userService.validateUserStatus();
+      try {
+        // Validar el estado del usuario (en tu backend personalizado)
+        await this.userService.validateUserStatus();
+      } catch (e: any) {
+        // Si el servicio personalizado lanza un error (como "usuario no encontrado")
+        this.toastService.show(e.message || 'No se pudo validar el usuario', 'Error', 'error');
+        await supabase.auth.signOut(); // salir del auth
+        return;
+      }
+
       this.toastService.show('Inicio de sesión exitoso', 'Éxito', 'success');
 
       const isCreditor = await this.userService.isCreditor().toPromise();
+
       if (isCreditor) {
         console.log('Usuario es creditor, redirigiendo a /menu/creditor');
         this.router.navigateByUrl('/menu/creditor', { replaceUrl: true });
@@ -66,11 +79,16 @@ export class AuthPage implements OnInit {
       this.loading = false;
       console.error('Error en login o validación:', e);
 
-      // Cierre de sesión en caso de cuenta desactivada
+      // Asegurarse de cerrar sesión en Supabase
       await supabase.auth.signOut();
 
-      // Mostrar mensaje amigable
-      this.errorMessage = 'Tu cuenta ha sido desactivada y no puedes iniciar sesión.';
+      const msg =
+        e?.message?.includes('desactivada') || e?.message?.includes('inactive')
+          ? 'Tu cuenta ha sido desactivada y no puedes iniciar sesión.'
+          : 'Error inesperado al iniciar sesión';
+
+      this.toastService.show(msg, 'Error', 'error');
     }
   }
+
 }

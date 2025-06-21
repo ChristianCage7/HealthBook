@@ -24,8 +24,8 @@
             <ion-item lines="none" class="custom-input">
                 <ion-icon slot="start" name="calendar-outline"></ion-icon>
                 <ion-datetime formControlName="datebirth" placeholder="Fecha de nacimiento" presentation="date"
-                    display-format="DD/MM/YYYY" value-format="YYYY-MM-DD" locale="es-ES" cancel-text="Cancelar"
-                    done-text="Aceptar">
+                    display-format="DD/MM/YYYY" value-format="YYYY-MM-DD" locale="es-ES" [max]="maxDate"
+                    cancel-text="Cancelar" done-text="Aceptar">
                 </ion-datetime>
             </ion-item>
 

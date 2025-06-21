@@ -67,7 +67,8 @@
             <div class="professional-info">
               <h3 class="name">{{ prof.first_name }} {{ prof.last_name }}</h3>
               <p class="specialty">Psicólogo</p>
-              <p class="gender">{{ prof.genderName }}</p>
+              <p class="gender"> {{ translateGender(prof.genderName) }}</p>
+              <p class="tap-to-view">Presiona para ver perfil</p>
             </div>
             <div class="rating">
               <ion-icon name="star" class="star"></ion-icon>
