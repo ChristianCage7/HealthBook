@@ -6,7 +6,9 @@ const config: CapacitorConfig = {
   webDir: 'www',
 
   server: {
-    androidScheme: 'http'
+    androidScheme: 'http',
+    cleartext: true,
+    allowNavigation: ['http://52.71.93.144', 'http://localhost', 'http://localhost:8100']
   },
   plugins: {
     // IMPORTANTE: esto habilita el scheme en Android e iOS
