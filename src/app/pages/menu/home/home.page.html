@@ -1,39 +1,59 @@
 <app-header [showBackButton]="false" title="Inicio"></app-header>
 
 <ion-content class="main-content">
-
+    <!-- Tarjeta de bienvenida -->
     <div class="welcome-card">
         <div class="welcome-header">
             <div>
-                <h2>Bienvenido, <strong> firstName </strong></h2>
-                <p class="subtext">¡Esperamos que tengas un gran día de atención!</p>
+                <h2>Bienvenido, <strong>{{ firstName }}</strong></h2>
+                <p class="subtext">¡Esperamos que tengas un gran día!</p>
             </div>
             <ion-avatar>
+                <img [src]="imgprofile" />
             </ion-avatar>
         </div>
+    </div>
 
-        <div class="session-summary">
-            <p class="info-text">
-                <ion-icon name="calendar-outline"></ion-icon>
-                <strong>Próxima cita: </strong>
-                ...
-            </p>
-            <p class="info-text">
-                <ion-icon name="document-text-outline"></ion-icon>
-                <strong>Total citas hoy: </strong>
-                ...
-            </p>
+    <!-- Si hay citas agendadas -->
+    <ng-container *ngIf="hasAppointments; else noAppointments">
+        <div class="container">
+            <app-logo></app-logo>
+
+            <h2 class="title fade-in delay-1">Tu próxima cita</h2>
+
+            <!-- Tarjeta de cita -->
+            <div class="task-large-card fade-in delay-2">
+                <div class="task-bubble-large">
+                    <ion-icon name="calendar-number-outline"></ion-icon>
+                </div>
+
+                <!-- Contenido de la cita -->
+                <div class="task-large-content">
+                    <p class="description no-margin">
+                        <strong class="task-title">Fecha:</strong> {{ nextAppointmentText }}<br />
+                        <strong class="task-title">Estado:</strong> {{ nextAppointmentStatus }}<br />
+                        <strong class="task-title">Profesional:</strong> {{ nextProfessionalName }}
+                    </p>
+                </div>
+            </div>
+
+            <ion-button expand="block" class="btn-primary fade-in delay-3" routerLink="/menu/book-appointment">
+                Ver mis citas
+            </ion-button>
         </div>
-    </div>
+    </ng-container>
 
-    <div class="container">
-        <app-logo></app-logo>
-        <h2 class="title fade-in delay-1">¡Aún no tienes citas agendadas!</h2>
-        <p class="description fade-in delay-2">
-            Agenda una sesión con nuestros <strong>profesionales</strong> y comienza tu camino hacia el bienestar.
-        </p>
-        <ion-button expand="block" class="btn-primary fade-in delay-3" routerLink="/menu/book-appointment">
-            Agendar ahora
-        </ion-button>
-    </div>
+    <!-- Si NO hay citas -->
+    <ng-template #noAppointments>
+        <div class="container">
+            <app-logo></app-logo>
+            <h2 class="title fade-in delay-1">¡Aún no tienes citas agendadas!</h2>
+            <p class="description fade-in delay-2">
+                Agenda una sesión con nuestros <strong>profesionales</strong> y comienza tu camino hacia el bienestar.
+            </p>
+            <ion-button expand="block" class="btn-primary fade-in delay-3" routerLink="/menu/book-appointment">
+                Agendar ahora
+            </ion-button>
+        </div>
+    </ng-template>
 </ion-content>

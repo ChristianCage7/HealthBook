@@ -39,9 +39,10 @@ export class HomePage implements OnInit {
 
         this.appointmentService.getUserAppointments(user.id).subscribe((appointments: Appointment[]) => {
           const now = new Date();
+          console.log('Citas del usuario:', appointments);
 
           const future = appointments
-            .filter(a => isAfter(new Date(`${a.appointmentDate}T${a.appointmentTime}`), now))
+            .filter(a => a.status === 1 && isAfter(new Date(`${a.appointmentDate}T${a.appointmentTime}`), now))
             .sort((a, b) =>
               new Date(`${a.appointmentDate}T${a.appointmentTime}`).getTime() -
               new Date(`${b.appointmentDate}T${b.appointmentTime}`).getTime()

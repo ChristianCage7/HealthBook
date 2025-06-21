@@ -1,20 +1,19 @@
 .container {
   width: 100%;
   max-width: 400px;
-  padding: 24px;
-  margin: auto;
+  padding: 20px;
+  margin: auto; // Centra el contenido
   text-align: center;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
 }
 
 app-logo {
-  width: 180px;
+  width: 160px;
   margin: 0 auto 10px;
-  padding-top: 15%;
 }
 
 .title {
@@ -23,10 +22,13 @@ app-logo {
   color: #4b268e;
 }
 
-.description {
-  font-size: 16px;
+// Ajustes al párrafo
+.description.no-margin {
+  margin: 0;
+  font-size: 13px;
   color: #4b268e;
-  line-height: 1.4;
+  text-align: justify;
+  line-height: 1.5;
 }
 
 .btn-primary {
@@ -36,16 +38,16 @@ app-logo {
   border-radius: 14px;
 }
 
+// Tarjeta superior de bienvenida
 .welcome-card {
-  border-radius: 24px;
-  padding: 24px 20px;
-  color: white;
+  border-radius: 20px;
+  padding: 16px 16px;
+  margin: 16px;
+  min-height: 100px;
   background: linear-gradient(135deg, #4b268e, #8b79b0);
-  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
-  margin: 24px 16px 32px;
-  min-height: 160px; // similar a la altura visual de la imagen
+  color: white;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
 }
-
 
 .welcome-header {
   display: flex;
@@ -64,46 +66,81 @@ app-logo {
   opacity: 0.9;
 }
 
-h2 {
-  margin-left: 16px;
-  margin-bottom: 12px;
-  /* opcional: separación bajo el título */
-}
-
-.session-summary {
-  margin-top: 16px;
-}
-
-.info-text {
-  font-size: 0.95rem;
-  margin: 6px 0;
+// Contenedor principal de la cita
+// Tarjeta de la próxima cita
+.task-large-card {
   display: flex;
-  align-items: center;
+  flex-direction: row;
+  background: #f9f9f9;
+  border: 2px solid #4b268e;
+  border-radius: 20px;
+  padding: 16px;
+  margin: 20px 16px;
+  width: auto;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
 }
 
+// Contenedor del ícono
+.task-bubble-large {
+  width: 44px;
+  height: 44px;
+  background-color: #4b268e;
+  border-radius: 12px;
+  margin-right: 16px;
+  display: flex;
+  align-items: center;     // Centrado vertical
+  justify-content: center; // Centrado horizontal
+  flex-shrink: 0;
+}
 
-/* Animación de aparición */
+// Ícono
+.task-bubble-large ion-icon {
+  font-size: 22px;
+  color: white;
+}
+
+.task-bubble-large ion-icon {
+  display: block;
+  font-size: 28px;
+  color: #fff;
+}
+
+// Contenido textual
+.task-large-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; 
+  flex: 1;
+}
+
+.task-title {
+  margin: 0 4px 4px 0;
+  font-size: 15px;
+  font-weight: 600;
+  color: #111;
+}
+.task-sub {
+  margin: 4px 0 0;
+  font-size: 11.5px;
+  color: #555;
+}
+
+.task-icon {
+  font-size: 22px;
+  color: #888;
+}
+
+// Animaciones suaves para entrada
 .fade-in {
   opacity: 0;
   transform: translateY(10px);
   animation: fadeInUp 0.8s ease forwards;
 }
 
-.delay-0 {
-  animation-delay: 0s;
-}
-
-.delay-1 {
-  animation-delay: 0.3s;
-}
-
-.delay-2 {
-  animation-delay: 0.6s;
-}
-
-.delay-3 {
-  animation-delay: 0.9s;
-}
+.delay-0 { animation-delay: 0s; }
+.delay-1 { animation-delay: 0.3s; }
+.delay-2 { animation-delay: 0.6s; }
+.delay-3 { animation-delay: 0.9s; }
 
 @keyframes fadeInUp {
   to {
