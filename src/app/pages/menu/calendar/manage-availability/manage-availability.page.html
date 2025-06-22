@@ -14,6 +14,10 @@
 </ng-template>
 
 <ion-content>
+  <div *ngIf="loading" class="loading-wrapper">
+    <ion-spinner name="crescent" color="primary"></ion-spinner>
+  </div>
+
   <div class="calendar-container">
     <div class="month-nav">
       <ion-button fill="clear" size="small" (click)="previousMonth()">
@@ -24,7 +28,7 @@
         <ion-icon name="chevron-forward-outline"></ion-icon>
       </ion-button>
     </div>
-    <mwl-calendar-month-view [viewDate]="viewDate" [events]="events" [cellTemplate]="monthCellTemplate"
+    <mwl-calendar-month-view   *ngIf="!loading" [viewDate]="viewDate" [events]="events" [cellTemplate]="monthCellTemplate"
       (beforeViewRender)="beforeMonthViewRender($event)" (dayClicked)="onDayClick($event)">
     </mwl-calendar-month-view>
   </div>

@@ -69,7 +69,7 @@
 
     <!-- ──────  Formulario excepciones ──────  -->
     <ng-container *ngIf="!showAvailabilityForm">
-      
+
       <!-- Selector de hora de inicio -->
       <ion-item>
         <ion-label position="stacked">Hora seleccionada</ion-label>
@@ -101,8 +101,13 @@
     <ion-button class="save-button" expand="block" (click)="handleSave()" [disabled]="loading">
       {{ showAvailabilityForm ? 'Guardar disponibilidad' : 'Guardar excepción' }}
     </ion-button>
-    
-    <!-- ──────  Spinner ──────  -->
-    <ion-loading [isOpen]="loading" message="Guardando..." translucent></ion-loading>
   </div>
+
+  <div class="custom-loading-overlay" *ngIf="loading">
+  <div class="custom-loading-box">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Guardando...</p>
+  </div>
+</div>
+
 </ion-content>

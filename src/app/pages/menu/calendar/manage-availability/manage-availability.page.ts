@@ -27,6 +27,7 @@ export class ManageAvailabilityPage implements OnInit {
   events: CalendarEvent[] = [];
   /** Este Subject le avisa al calendario que “refresque” */
   refresh = new EventEmitter<void>();
+  loading = false;
 
   constructor(
     private modalCtrl: ModalController,
@@ -101,40 +102,43 @@ export class ManageAvailabilityPage implements OnInit {
   }
 
   loadAvailabilities(): void {
-    this.userService.getCurrentUser().subscribe(user => {
-      const idp = user?.idprofessional;
-      if (!idp) return;
+  this.loading = true; // ← iniciar spinner
 
-      const year = this.viewDate.getFullYear();
-      const month = this.viewDate.getMonth(); // 0–11
+  this.userService.getCurrentUser().subscribe(user => {
+    const idp = user?.idprofessional;
+    if (!idp) {
+      this.loading = false; // ← por si falla aquí
+      return;
+    }
 
-      // 1) Calcula cuántos días tiene este mes
-      const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const year = this.viewDate.getFullYear();
+    const month = this.viewDate.getMonth();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const days: Date[] = Array.from({ length: daysInMonth }, (_, i) => new Date(year, month, i + 1));
 
-      // 2) Crea un array [Date(1), Date(2), …, Date(daysInMonth)]
-      const days: Date[] = Array.from(
-        { length: daysInMonth },
-        (_, i) => new Date(year, month, i + 1)
-      );
+    const calls = days.map(d =>
+      this.availabilityService.getAvailability(
+        idp,
+        d.toISOString().split('T')[0]
+      )
+    );
 
-      // 3) Lanza un forkJoin como antes
-      const calls = days.map(d =>
-        this.availabilityService.getAvailability(
-          idp,
-          d.toISOString().split('T')[0]
-        )
-      );
-
-      forkJoin(calls).subscribe(responses => {
+    forkJoin(calls).subscribe({
+      next: responses => {
         const all = ([] as any[]).concat(...responses);
         this.events = all.map(item => ({
           start: new Date(`${item.day}T${item.startHour}`),
           title: 'Disponible'
         }));
-        // fuerza el repaint
-        this.viewDate = new Date(this.viewDate.getTime());
-      });
+        this.viewDate = new Date(this.viewDate.getTime()); // repaint
+        this.loading = false;
+      },
+      error: err => {
+        console.error('Error al cargar disponibilidades:', err);
+        this.loading = false;
+      }
     });
-  }
+  });
+}
 
 }
