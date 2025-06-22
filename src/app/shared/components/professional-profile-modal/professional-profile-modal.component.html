@@ -7,7 +7,6 @@
   </ion-toolbar>
 </ion-header>
 
-
 <ion-content>
   <div class="profile-container">
     <div class="profile-inner">
@@ -43,34 +42,29 @@
       </div>
 
       <!-- Contacto-->
-      <h4 class="section-title">Contacto</h4>
       <div class="profile-description">
         <div class="metric">
           <p class="metric-number">{{ professional.Register?.email }}</p>
-          <p class="metric-label">Correo</p>
+          <p class="metric-label">Medio de contacto</p>
         </div>
         <div class="metric">
-          <p class="metric-number">99999999</p>
-          <p class="metric-label">Télefono</p>
+          <p class="metric-number">
+            {{ professional.Register?.create_at ? (professional.Register?.create_at | date:'dd/MM/yyyy') : '—' }}
+          </p>
+          <p class="metric-label">Fecha de ingreso al sistema</p>
         </div>
       </div>
 
       <!-- Descripción profesional -->
+
       <h4 class="section-title">Acerca de</h4>
       <div class="profile-about">
-        <p class="contact-text">Antecedentes académicos</p>
-
         <div class="profile-contact">
-          <ion-icon name="location-outline" class="contact-icon"></ion-icon>
+          <ion-icon name="people-circle-outline" class="contact-icon"></ion-icon>
           <span class="metric-label">
-            ...
+            <p class="contact-text">“{{ professional.first_name }} se especializa en el bienestar emocional y ofrece
+              atención personalizada a cada paciente.”</p>
           </span>
-        </div>
-
-        <p class="contact-text">Experiencia profesional</p>
-        <div class="profile-contact">
-          <ion-icon name="location-outline" class="contact-icon"></ion-icon>
-          <span class="metric-label">...</span>
         </div>
       </div>
 

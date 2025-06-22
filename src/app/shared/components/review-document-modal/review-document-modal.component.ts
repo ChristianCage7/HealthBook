@@ -1,9 +1,10 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { ModalController, AlertController, ToastController } from '@ionic/angular';
+import { ModalController, AlertController } from '@ionic/angular';
 import { CreditorService } from 'src/app/shared/services/creditor.service';
 import { UserService } from '../../services/user.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-review-document-modal',
@@ -23,7 +24,7 @@ export class ReviewDocumentModalComponent implements OnInit {
     private modalCtrl: ModalController,
     private creditorService: CreditorService,
     private alertCtrl: AlertController,
-    private toastCtrl: ToastController,
+    private toastService: ToastService,
     private userService: UserService,
     private http: HttpClient,
   ) { }
@@ -94,12 +95,7 @@ export class ReviewDocumentModalComponent implements OnInit {
             }
 
             if (this.documents.length === 0) {
-              const toast = await this.toastCtrl.create({
-                message: 'No hay documentos para evaluar.',
-                duration: 2000,
-                color: 'warning',
-              });
-              await toast.present();
+              this.toastService.show('No hay documentos para evaluar.', 'Aviso', 'warning');
               return;
             }
 
@@ -115,28 +111,14 @@ export class ReviewDocumentModalComponent implements OnInit {
 
             try {
               await Promise.all(promises);
-
-              const toast = await this.toastCtrl.create({
-                message: 'Evaluación completada exitosamente.',
-                duration: 2000,
-                color: 'success',
-              });
-              await toast.present();
-
-              toast.onDidDismiss().then(() => {
-                this.modalCtrl.dismiss({
-                  action: this.selectedAction,
-                  comment: this.comment
-                });
+              this.toastService.show('Evaluación completada exitosamente.', 'Éxito', 'success');
+              this.modalCtrl.dismiss({
+                action: this.selectedAction,
+                comment: this.comment
               });
             } catch (error) {
               console.error('Error en la evaluación:', error);
-              const toast = await this.toastCtrl.create({
-                message: 'Error al completar la evaluación. Intente nuevamente.',
-                duration: 2000,
-                color: 'danger',
-              });
-              await toast.present();
+              this.toastService.show('Error al completar la evaluación. Intente nuevamente.', 'Error', 'error');
             }
           }
         }

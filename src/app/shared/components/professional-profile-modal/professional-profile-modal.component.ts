@@ -54,6 +54,8 @@ export class ProfessionalProfileModalComponent implements OnInit {
         error: (err) => console.error('Error obteniendo comentarios:', err)
       });
     }
+    console.log(this.professional) 
+
   }
 
   setRating(value: number) {
