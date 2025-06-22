@@ -1,0 +1,33 @@
+<ion-header class="chat-header">
+  <ion-toolbar>
+    <ion-title class="chat-username">{{ receiverName }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="closeModal()">Cerrar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="chat-content" [fullscreen]="true">
+  <div #messagesContainer class="messages-container">
+    <div *ngFor="let message of messages" [ngClass]="{
+        'own-message': message.sender_uid === senderUid,
+        'other-message': message.sender_uid !== senderUid
+      }" class="message-bubble animate-message">
+      <div class="message-text">{{ message.message }}</div>
+      <div class="message-time">
+        {{ message.timestamp | date: 'shortTime' }}
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+<ion-footer class="chat-footer">
+  <ion-toolbar>
+    <ion-item lines="none">
+      <ion-input [(ngModel)]="messageText" placeholder="Escribe un mensaje..." class="message-input"></ion-input>
+      <ion-button fill="solid" slot="end" (click)="sendMessage()" [disabled]="!messageText.trim()">
+        Enviar
+      </ion-button>
+    </ion-item>
+  </ion-toolbar>
+</ion-footer>

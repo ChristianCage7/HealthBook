@@ -10,7 +10,7 @@
   </ion-button>
 
 
-   <ion-list *ngIf="!loading; else loadingTpl">
+  <ion-list *ngIf="!loading; else loadingTpl">
     <ion-item *ngFor="let appt of appointments">
       <ion-label>
         <h2>Con profesional #{{ appt.idprofessional }}</h2>
@@ -20,6 +20,11 @@
         </p>
         <p>Estado: {{ appt.status === 1 ? 'Activa' : 'Cancelada' }}</p>
       </ion-label>
+
+      <ion-button fill="clear" slot="end" (click)="openChatModal(appt)">
+        <ion-icon name="chatbubbles-outline"></ion-icon>
+      </ion-button>
+
     </ion-item>
     <ion-item *ngIf="appointments.length===0">
       <ion-label>No tienes citas agendadas.</ion-label>
@@ -29,5 +34,5 @@
   <ng-template #loadingTpl>
     <ion-spinner name="crescent"></ion-spinner>
   </ng-template>
-  
+
 </ion-content>

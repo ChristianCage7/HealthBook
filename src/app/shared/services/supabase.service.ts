@@ -33,15 +33,24 @@ export class SupabaseService {
   async getGenderOptions() {
     const { data, error } = await supabase
       .from('Gender')
-      .select('id, gender');  
+      .select('id, gender');
     if (error) throw error;
     return data;
   }
-  
+
+  async getUid(): Promise<string> {
+    const { data, error } = await supabase.auth.getSession();
+    if (error || !data.session) {
+      throw new Error('No hay sesión activa');
+    }
+    return data.session.user.id;
+  }
+
+
   async getProfessionOptions() {
     const { data, error } = await supabase
       .from('Profession')
-      .select('idprofession, name')  
+      .select('idprofession, name')
       .eq('status', 1);
     if (error) throw error;
     return data;

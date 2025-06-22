@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AnimationController, ModalController } from '@ionic/angular';
+import { ChatModalComponent } from 'src/app/shared/components/chat-modal/chat-modal.component';
 import { Appointment, AppointmentService } from 'src/app/shared/services/appointment.service';
 import { CallService } from 'src/app/shared/services/call.service';
 import { UserService } from 'src/app/shared/services/user.service';
@@ -20,7 +22,9 @@ export class MySessionsPage implements OnInit {
     private callService: CallService,
     private router: Router,
     private appointmentService: AppointmentService,
-    private userService: UserService
+    private userService: UserService,
+    private modalCtrl: ModalController,
+    private animationCtrl: AnimationController,
   ) { }
 
   ngOnInit(): void {
@@ -36,7 +40,7 @@ export class MySessionsPage implements OnInit {
   }
 
   /*Carga las citas agendadas*/
-    private loadAppointments(userId: number) {
+  private loadAppointments(userId: number) {
     this.appointmentService.getUserAppointments(userId).subscribe({
       next: appts => {
         this.appointments = appts;
@@ -49,7 +53,38 @@ export class MySessionsPage implements OnInit {
     });
   }
 
- iniciarLlamadaProfesional() {
+  async openChatModal(appointment: Appointment) {
+    try {
+      const profile = await this.appointmentService
+        .getUserProfessionalProfileByAppointment(appointment.idappointment)
+        .toPromise();
+
+      console.log('Perfil profesional recibido:', profile);
+
+      if (!profile || !profile.UID) {
+        throw new Error('Perfil no válido o sin UID');
+      }
+
+      const modal = await this.modalCtrl.create({
+        component: ChatModalComponent,
+        componentProps: {
+          receiverUid: profile.UID,
+          idappointment: appointment.idappointment
+        },
+
+      });
+
+      await modal.present();
+
+    } catch (err) {
+      console.error('No se pudo obtener el perfil profesional:', err);
+      alert('No se pudo abrir el chat porque el perfil del profesional no está disponible.');
+    }
+  }
+
+
+
+  iniciarLlamadaProfesional() {
     this.callService.createSession().subscribe(sessionId => {
       MySessionsPage.sessionGlobal = sessionId;
       this.callService.generateToken(sessionId, 'PUBLISHER').subscribe(token => {

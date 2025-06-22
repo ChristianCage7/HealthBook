@@ -87,4 +87,20 @@ export class AppointmentService {
         })
       );
   }
+
+  getUserProfessionalProfileByAppointment(idappointment: number): Observable<any> {
+    return this.http
+      .get<any[]>(`${this.apiUrl}/appointments/professional-profile/${idappointment}`)
+      .pipe(
+        map(res => {
+          console.log('Perfil recibido:', res);
+          if (!res || res.length === 0 || !res[0].UID) {
+            throw new Error('Perfil no encontrado');
+          }
+          return res[0]; // ✅ usa el primer objeto
+        })
+      );
+  }
+
+
 }
