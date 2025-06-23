@@ -41,7 +41,7 @@ export class ChatModalComponent implements OnInit, OnDestroy, AfterViewInit {
   async ngOnInit() {
     try {
       this.senderUid = await this.supabaseService.getUid();
-      this.loadReceiverName();
+      await this.loadReceiverName();
 
       this.chatService.loadMessages(this.idappointment);
       this.chatService.subscribeToMessages(this.idappointment);
@@ -96,27 +96,32 @@ export class ChatModalComponent implements OnInit, OnDestroy, AfterViewInit {
     this.modalCtrl.dismiss();
   }
 
-  loadReceiverName() {
-    this.appointmentService.getUserProfessionalProfileByAppointment(this.idappointment).subscribe({
-      next: (res) => {
-        this.receiverName = res?.first_name + ' ' + res?.last_name;
-      },
-      error: () => {
-        this.appointmentService.getUserBasicProfileByAppointment(this.idappointment).subscribe({
-          next: (res) => {
-            this.receiverName = res?.first_name + ' ' + res?.last_name;
-          },
-          error: () => {
-            this.receiverName = 'Usuario';
-          }
-        });
+  async loadReceiverName() {
+    try {
+      const prof = await this.appointmentService
+        .getUserProfessionalProfileByAppointment(this.idappointment)
+        .toPromise();
+
+      const basic = await this.appointmentService
+        .getUserBasicProfileByAppointment(this.idappointment)
+        .toPromise();
+
+      // Determinar si el usuario actual es el profesional o el paciente
+      if (prof && prof.UID === this.senderUid && basic) {
+        this.receiverName = `${basic.first_name} ${basic.last_name}`;
+      } else if (basic && basic.UID === this.senderUid && prof) {
+        this.receiverName = `${prof.first_name} ${prof.last_name}`;
+      } else {
+        this.receiverName = 'Usuario';
       }
-    });
+    } catch (err) {
+      console.error('Error cargando nombres del chat:', err);
+      this.receiverName = 'Usuario';
+    }
   }
 
   private markSeenMessages() {
     if (!this.senderUid) return;
-
     this.chatService.markMessagesAsSeen(this.idappointment, this.senderUid);
   }
 
@@ -130,7 +135,7 @@ export class ChatModalComponent implements OnInit, OnDestroy, AfterViewInit {
 
     messages.forEach(msg => {
       const date = new Date(msg.timestamp);
-      const key = date.toDateString(); // Agrupa por día sin hora
+      const key = date.toDateString();
       if (!grouped[key]) {
         grouped[key] = { date, messages: [] };
       }
