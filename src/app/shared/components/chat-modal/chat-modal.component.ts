@@ -49,8 +49,10 @@ export class ChatModalComponent implements OnInit, OnDestroy, AfterViewInit {
       this.chatService.messagesObservable.subscribe(msgs => {
         this.messages = msgs;
         this.groupMessagesByDate(msgs);
+        this.markSeenMessages();
         setTimeout(() => this.scrollToBottom(), 100);
       });
+
     } catch (err) {
       console.error('Error en el chat:', err);
       alert('Debes iniciar sesión para usar el chat');
@@ -120,10 +122,15 @@ export class ChatModalComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  private markSeenMessages() {
-    if (!this.senderUid) return;
-    this.chatService.markMessagesAsSeen(this.idappointment, this.senderUid);
+  private async markSeenMessages() {
+    if (!this.receiverUid) return;
+
+    const updated = await this.chatService.markMessagesAsSeen(this.idappointment, this.senderUid); // CAMBIO AQUÍ
+    console.log('🔍 Resultado actualización:', updated);
   }
+
+
+
 
   getStatusIcon(message: ChatMessage): string {
     if (message.sender_uid !== this.senderUid) return '';

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { supabase } from './supabase.client';
 import { RealtimeChannel } from '@supabase/supabase-js';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, from, map, Observable } from 'rxjs';
 
 export interface ChatMessage {
   id: number;
@@ -78,18 +78,27 @@ export class ChatService {
     }
   }
 
-  async markMessagesAsSeen(idappointment: number, viewerUid: string) {
-    const { error } = await supabase
+  markMessagesAsSeen(appointmentId: number, uid: string): Observable<any> {
+    return from(supabase
       .from('Messages')
       .update({ seen: true })
-      .eq('idappointment', idappointment)
-      .eq('receiver_uid', viewerUid)
-      .eq('seen', false);
-
-    if (error) {
-      console.error('Error al marcar mensajes como vistos:', error);
-    }
+      .eq('idappointment', appointmentId)
+      .eq('receiver_uid', uid)
+      .eq('seen', false)
+    ).pipe(
+      map(({ data, error }) => {
+        if (error) {
+          console.error('Error al marcar como vistos:', error);
+          return null;
+        }
+        console.log('Mensajes actualizados:', data);
+        return data;
+      })
+    );
   }
+
+
+
 
   private updateSeenStatus(updatedMessage: ChatMessage) {
     const currentMessages = this.messages$.value;
