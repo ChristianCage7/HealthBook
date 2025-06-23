@@ -29,6 +29,7 @@ export class ChatModalComponent implements OnInit, OnDestroy, AfterViewInit {
   senderUid: string = '';
   messages: ChatMessage[] = [];
   messageText: string = '';
+  groupedMessages: { date: Date, messages: ChatMessage[] }[] = [];
 
   constructor(
     private chatService: ChatService,
@@ -44,8 +45,10 @@ export class ChatModalComponent implements OnInit, OnDestroy, AfterViewInit {
 
       this.chatService.loadMessages(this.idappointment);
       this.chatService.subscribeToMessages(this.idappointment);
+
       this.chatService.messagesObservable.subscribe(msgs => {
         this.messages = msgs;
+        this.groupMessagesByDate(msgs);
         setTimeout(() => this.scrollToBottom(), 100);
       });
     } catch (err) {
@@ -108,6 +111,51 @@ export class ChatModalComponent implements OnInit, OnDestroy, AfterViewInit {
           }
         });
       }
+    });
+  }
+
+  private markSeenMessages() {
+    if (!this.senderUid) return;
+
+    this.chatService.markMessagesAsSeen(this.idappointment, this.senderUid);
+  }
+
+  getStatusIcon(message: ChatMessage): string {
+    if (message.sender_uid !== this.senderUid) return '';
+    return message.seen ? '✔✔' : '✔';
+  }
+
+  groupMessagesByDate(messages: ChatMessage[]) {
+    const grouped: { [dateKey: string]: { date: Date, messages: ChatMessage[] } } = {};
+
+    messages.forEach(msg => {
+      const date = new Date(msg.timestamp);
+      const key = date.toDateString(); // Agrupa por día sin hora
+      if (!grouped[key]) {
+        grouped[key] = { date, messages: [] };
+      }
+      grouped[key].messages.push(msg);
+    });
+
+    this.groupedMessages = Object.values(grouped);
+  }
+
+  formatDateLabel(date: Date): string {
+    const today = new Date();
+    const yesterday = new Date();
+    yesterday.setDate(today.getDate() - 1);
+
+    const isToday = date.toDateString() === today.toDateString();
+    const isYesterday = date.toDateString() === yesterday.toDateString();
+
+    if (isToday) return 'Hoy';
+    if (isYesterday) return 'Ayer';
+
+    return date.toLocaleDateString('es-CL', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
     });
   }
 }

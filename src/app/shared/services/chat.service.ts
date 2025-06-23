@@ -47,6 +47,14 @@ export class ChatService {
         const newMsg = payload.new as ChatMessage;
         this.messages$.next([...this.messages$.value, newMsg]);
       })
+      .on('postgres_changes', {
+        event: 'UPDATE',
+        schema: 'public',
+        table: 'Messages',
+        filter: `idappointment=eq.${idappointment}`
+      }, payload => {
+        this.updateSeenStatus(payload.new as ChatMessage);
+      })
       .subscribe();
   }
 
@@ -67,6 +75,29 @@ export class ChatService {
 
     if (error) {
       console.error('Error al enviar mensaje:', error);
+    }
+  }
+
+  async markMessagesAsSeen(idappointment: number, viewerUid: string) {
+    const { error } = await supabase
+      .from('Messages')
+      .update({ seen: true })
+      .eq('idappointment', idappointment)
+      .eq('receiver_uid', viewerUid)
+      .eq('seen', false);
+
+    if (error) {
+      console.error('Error al marcar mensajes como vistos:', error);
+    }
+  }
+
+  private updateSeenStatus(updatedMessage: ChatMessage) {
+    const currentMessages = this.messages$.value;
+    const index = currentMessages.findIndex(msg => msg.id === updatedMessage.id);
+
+    if (index > -1) {
+      currentMessages[index] = updatedMessage;
+      this.messages$.next([...currentMessages]);
     }
   }
 }
