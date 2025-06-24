@@ -61,6 +61,18 @@ ion-content[class] {
   padding-bottom: env(safe-area-inset-bottom); // for previous ios versions
 }
 
+//Días con mayúscula primera letra
+.cal-month-view .cal-header .cal-cell {
+  text-transform: capitalize !important;
+}
+
+// Mes con mayúscula inicial 
+.cal-month-view .cal-header .cal-title {
+  &::first-letter {
+    text-transform: uppercase;
+  }
+}
+
 .submit {
   margin-top: 40px;
 }

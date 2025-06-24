@@ -45,11 +45,15 @@ export class AvailabilityModalComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // Fecha mínima para picker
     const now = new Date();
     this.minDate = now.toISOString();
-    // Genera bloques de media hora entre 08:00 y 20:30
-    this.generateTimeBlocks();
+
+    const today = new Date();
+    const baseDate = this.preselectedDate ?? today;
+    baseDate.setHours(0, 0, 0, 0);
+
+    const isToday = today.toDateString() === baseDate.toDateString();
+    this.generateTimeBlocks(isToday); // ← solo muestra bloques desde ahora si es hoy
 
     // Si llega una fecha preseleccionada, inicializa los pickers
     if (this.preselectedDate) {
@@ -59,19 +63,36 @@ export class AvailabilityModalComponent implements OnInit {
 
       this.patternStartDate = iso;
       this.patternEndDate = iso;
-      this.exceptionDate = iso; // importante para mostrar
+      this.exceptionDate = iso;
     }
   }
 
   // Generación de bloques de tiempo
-  generateTimeBlocks() {
+  generateTimeBlocks(limitFromNow: boolean = false) {
     const blocks: string[] = [];
+    const now = new Date();
+    const currentHour = now.getHours();
+    const currentMinute = now.getMinutes();
+
     for (let hour = 8; hour <= 20; hour++) {
-      blocks.push(`${this.pad(hour)}:00`);
-      if (hour < 20) blocks.push(`${this.pad(hour)}:30`);
+      const full = `${this.pad(hour)}:00`;
+      const half = `${this.pad(hour)}:30`;
+
+      if (!limitFromNow || this.isTimeAfterNow(hour, 0, currentHour, currentMinute)) {
+        blocks.push(full);
+      }
+      if (hour < 20 && (!limitFromNow || this.isTimeAfterNow(hour, 30, currentHour, currentMinute))) {
+        blocks.push(half);
+      }
     }
+
     this.timeBlocks = blocks;
   }
+
+  isTimeAfterNow(h: number, m: number, currentH: number, currentM: number): boolean {
+    return h > currentH || (h === currentH && m > currentM);
+  }
+
 
   pad(n: number): string {
     return n < 10 ? `0${n}` : `${n}`;
@@ -95,6 +116,20 @@ export class AvailabilityModalComponent implements OnInit {
   // Alterna opciones entre disponibilidad y excepciones
   togglePatternOptions(checked: boolean) {
     this.showPatternOptions = checked;
+  }
+
+  // Limita las hora dependiendo de la hora del momento
+  limitTimeBlocksToCurrentHour() {
+    const now = new Date();
+    const currentHour = now.getHours();
+    const currentMinute = now.getMinutes();
+
+    this.timeBlocks = this.timeBlocks.filter(time => {
+      const [h, m] = time.split(':').map(Number);
+      if (h > currentHour) return true;
+      if (h === currentHour && m > currentMinute) return true;
+      return false;
+    });
   }
 
   // ----- Método para guardar disponibilidad individual y patrón -----
@@ -202,7 +237,7 @@ export class AvailabilityModalComponent implements OnInit {
   }
 
   // Cierra modal desde header
-  dismiss(){
+  dismiss() {
     this.modalCtrl.dismiss();
   }
 }
