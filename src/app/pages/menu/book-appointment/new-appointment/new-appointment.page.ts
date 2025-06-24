@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, ViewEncapsulation } from '@angular/core';
 import { MonthViewDay } from 'calendar-utils';
 import { AvailabilityService } from 'src/app/shared/services/availability.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CalendarMonthViewBeforeRenderEvent } from 'angular-calendar';
-import { addMonths } from 'date-fns';
+import { addMonths, subMonths, isSameDay } from 'date-fns'; // ← añadimos `subMonths` e `isSameDay`
 import { ModalController } from '@ionic/angular';
 import { ConfirmAppointmentModalComponent } from './confirm-appointment-modal/confirm-appointment-modal.component';
 import { UserService } from 'src/app/shared/services/user.service';
@@ -12,7 +12,8 @@ import { UserService } from 'src/app/shared/services/user.service';
   selector: 'app-new-appointment',
   templateUrl: './new-appointment.page.html',
   styleUrls: ['./new-appointment.page.scss'],
-  standalone: false
+  standalone: false,
+  encapsulation: ViewEncapsulation.None
 })
 export class NewAppointmentPage implements OnInit {
   /** ID del profesional, leído desde la URL */
@@ -30,10 +31,20 @@ export class NewAppointmentPage implements OnInit {
   /** Franjas horarias devueltas por el backend para la fecha seleccionada */
   availabilities: { startHour: string; endHour: string;[k: string]: any }[] = [];
 
+  /** Evento seleccionado (una franja horaria) */
   selectedSlot: any = null;
-  currentUser!: { id: any; name: string; };   // paciente
-  currentPro!: { id: number; name: string; };     // doctor
 
+  /** Información del paciente logueado */
+  currentUser!: { id: any; name: string; };
+
+  /** Información del profesional */
+  currentPro!: { id: number; name: string; };
+
+  /** Lista de eventos para el calendario mensual */
+  events: { start: Date; title: string }[] = [];
+
+  refresh = new EventEmitter<void>();
+  loading = false;
 
   constructor(
     private availabilityService: AvailabilityService,
@@ -50,7 +61,6 @@ export class NewAppointmentPage implements OnInit {
    * - Carga las franjas disponibles para hoy.
    */
   ngOnInit(): void {
-    // 1) Intentamos leer el objeto profesional que pasamos por state
     const nav = this.router.getCurrentNavigation();
     const profFromState = nav?.extras.state?.['professional'];
     if (profFromState) {
@@ -61,18 +71,17 @@ export class NewAppointmentPage implements OnInit {
       this.idprofessional = profFromState.idprofessional;
       this.date = this.selectedDate.toISOString().split('T')[0];
       this.loadAvailability();
+      this.loadAllAvailabilities(); // ← carga eventos para el mes actual
     }
 
-    // 2) Si no veníamos por state, leemos el paramMap
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       if (!id) return;
       this.idprofessional = +id;
-      // aquí podrías volver a buscar el nombre si fuera necesario
       this.loadAvailability();
+      this.loadAllAvailabilities(); // ← también si entra por URL
     });
 
-    // 3) Cargar datos del paciente
     this.userService.getCurrentUser().subscribe(user => {
       this.currentUser = {
         id: user.id,
@@ -81,13 +90,27 @@ export class NewAppointmentPage implements OnInit {
     });
   }
 
-  /**
-   * Manejador del clic en un día del calendario.
-   * @param event Contiene `day: MonthViewDay` y `sourceEvent`.
-   * - Ignora días pasados.
-   * - Actualiza la fecha seleccionada y recarga disponibilidad.
-   */
-  onDayClick(event: { day: MonthViewDay; sourceEvent: MouseEvent | KeyboardEvent; }): void {
+  // Método auxiliar para saber si una fecha está en el pasado
+  isPast(date: Date): boolean {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return date < today;
+  }
+
+  /** Flecha mes anterior */
+  previousMonth() {
+    this.viewDate = subMonths(this.viewDate, 1); // ← cambiar a subMonths
+    this.loadAllAvailabilities();
+  }
+
+  /** Flecha mes siguiente */
+  nextMonth() {
+    this.viewDate = addMonths(this.viewDate, 1);
+    this.loadAllAvailabilities();
+  }
+
+  /** Al hacer clic en día: actualizar fecha seleccionada + obtener franjas horarias */
+  onDayClick(event: { day: MonthViewDay; sourceEvent: MouseEvent | KeyboardEvent }): void {
     const d = event.day.date;
     const today = new Date(); today.setHours(0, 0, 0, 0);
     if (d < today) return;
@@ -96,44 +119,56 @@ export class NewAppointmentPage implements OnInit {
     this.viewDate = d;
     this.date = d.toISOString().split('T')[0];
     this.loadAvailability();
+
+    // Fuerza la actualización visual para que aplique .selected-day
+    this.refreshView();
   }
 
-  /** Flecha mes anterior */
-  previousMonth() {
-    this.viewDate = addMonths(this.viewDate, -1);
-  }
-
-  /** Flecha mes siguiente */
-  nextMonth() {
-    this.viewDate = addMonths(this.viewDate, +1);
+  refreshView(): void {
+    this.viewDate = new Date(this.viewDate); // ⚠️ Fuerza redibujado del calendario
   }
 
   /**
-   * Antes de renderizar el mes, recorre cada celda y aplica
-   * la clase `selected-day` a la que coincide con `selectedDate`.
+   * Antes de renderizar el mes, recorre cada celda y aplica estilos según condiciones:
+   * - gris si es pasado
+   * - verde si es hoy
+   * - lila si tiene eventos (horas disponibles)
+   * - resalta el día seleccionado
    */
   beforeMonthViewRender(renderEvent: CalendarMonthViewBeforeRenderEvent): void {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
     renderEvent.body.forEach(cell => {
-      if (cell.date.toDateString() === this.selectedDate.toDateString()) {
-        cell.cssClass = 'selected-day';
+      const hasEvent = this.events.some(ev => isSameDay(ev.start, cell.date));
+      const isSelected = this.selectedDate && isSameDay(cell.date, this.selectedDate);
+      // 1) Si es pasado, gris y no clicable
+      if (cell.date < today) {
+        cell.cssClass = this.appendCss(cell.cssClass, 'cal-day-disabled');
+      }
+      // 2) Si es hoy, lo pintamos “today” (verde)
+      else if (isSameDay(cell.date, today)) {
+        cell.cssClass = this.appendCss(cell.cssClass, 'cal-today');
+      }
+      // 3) Si es FUTURO y tiene evento, lila
+      else if (hasEvent) {
+        cell.cssClass = this.appendCss(cell.cssClass, 'cal-has-events');
+      }
+
+      // 4) Si está seleccionado, color morado (independiente del resto)
+      if (isSelected) {
+        cell.cssClass = this.appendCss(cell.cssClass, 'selected-day');
       }
     });
+
   }
 
-  /**
-   * (Alternativa no usada en el template actual)
-   * Modificador de día que puede usarse como Input en otros casos.
-   */
-  dayModifier(day: MonthViewDay): void {
-    if (day.date.toDateString() === this.selectedDate.toDateString()) {
-      day.cssClass = 'selected-day';
-    }
+  private appendCss(existing: string | undefined, toAdd: string): string {
+    return existing ? `${existing} ${toAdd}` : toAdd;
   }
 
-  /**
-   * Llama al servicio para obtener las franjas del backend
-   * según `idprofessional` y `date`. Maneja respuesta y errores.
-   */
+
+  /** Llama al backend y obtiene las franjas para el día actual */
   private loadAvailability(): void {
     if (!this.idprofessional) return;
     this.availabilityService
@@ -147,14 +182,39 @@ export class NewAppointmentPage implements OnInit {
       );
   }
 
-  /**
-   * Al seleccionar un slot, puedes redirigir o abrir un modal
-   * para confirmar la cita.
-   */
+  /** Llama al backend para obtener disponibilidad de TODO el mes actual */
+  private loadAllAvailabilities(): void {
+    const year = this.viewDate.getFullYear();
+    const month = this.viewDate.getMonth();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const days: Date[] = Array.from({ length: daysInMonth }, (_, i) => new Date(year, month, i + 1));
+
+    const calls = days.map(d =>
+      this.availabilityService.getAvailability(
+        this.idprofessional,
+        d.toISOString().split('T')[0]
+      )
+    );
+
+    Promise.all(calls.map(obs => obs.toPromise()))
+      .then(responses => {
+        const all = ([] as any[]).concat(...responses);
+        this.events = all.map(item => ({
+          start: new Date(`${item.day}T${item.startHour}`),
+          title: 'Disponible'
+        }));
+      })
+      .catch(err => {
+        console.error('Error al cargar eventos mensuales', err);
+      });
+  }
+
+  /** Al seleccionar un slot horario, se marca para agendar */
   selectSlot(slot: any): void {
     this.selectedSlot = slot;
   }
 
+  /** Muestra modal de confirmación con los datos seleccionados */
   async schedule(): Promise<void> {
     const modal = await this.modalCtrl.create({
       component: ConfirmAppointmentModalComponent,
@@ -164,7 +224,7 @@ export class NewAppointmentPage implements OnInit {
         date: this.selectedDate,
         slot: this.selectedSlot
       },
-      cssClass:          'confirmar-cita-sheet', 
+      cssClass: 'confirmar-cita-sheet',
       breakpoints: [0, 0.7, 1],
       initialBreakpoint: 0.7,
       handle: true
@@ -173,10 +233,7 @@ export class NewAppointmentPage implements OnInit {
 
     const { data } = await modal.onDidDismiss();
     if (data?.confirmed) {
-      // Aquí podrías llamar tu CallService o el endpoint para crear la cita
-      // this.callService.createSession().subscribe(...);
       console.log('Usuario confirmó la cita');
     }
   }
-
 }

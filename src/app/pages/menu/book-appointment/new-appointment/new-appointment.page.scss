@@ -1,29 +1,48 @@
 /* 1) Define tu morado como primary */
 :host {
-  --ion-color-primary: #4b268e;
+  --ion-color-base: #4b268e;
 }
 
-/* 2) Contenedor redondeado abajo */
+/* ----------------- Contenedor ----------------- */
+/* Caja contenedora principal del calendario */
 .calendar-wrapper {
-  /* borde y redondeo global */
-  border: 1px solid #ddd;
+  max-width: 800px;
+  margin: 16px auto;
+  padding: 16px;
+  background: #f3eaff; // Lila claro
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   border-radius: 0.5rem;
   overflow: hidden;
   margin-bottom: 1rem;
 }
 
 /* === 2) Cabecera manual (“month-nav”) === */
+/* Barra superior del mes (flechas + título) */
+/* ----------------- Contenedor ----------------- */
+.calendar-container {
+  max-width: 800px;
+  margin: 16px auto;
+  padding: 16px;
+  background: #f3eaff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* ----------------- Cabecera de Mes ----------------- */
 .month-nav {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--ion-color-primary);
+  background: #4b268e;
   padding: 0.5rem 1rem;
+  border-radius: 12px 12px 0 0;
+
 }
+
 .month-nav ion-button {
   color: #fff;
   --border-width: 0;
 }
+
 .month-nav .month-title {
   flex: 1;
   text-align: center;
@@ -34,77 +53,124 @@
 
 
 
-
-/*NO TOCAR*/
-
-
-/* 7) Días del mes actual: número en negro, font normal */
-:host ::ng-deep .cal-day-cell.cal-in-month .cal-day-number {
-  color: #000 !important;
-  font-weight: normal !important;
-  opacity: 1 !important;
+/* Oculta los “puntos” de evento por defecto */
+.cal-event {
+  display: none !important;
 }
 
-/* 8) Días fuera de mes: número en gris claro */
-:host ::ng-deep .cal-day-cell:not(.cal-in-month) .cal-day-number {
-  color: #ccc !important;
-  font-weight: normal !important;
-  opacity: 1 !important;
+/* ----------------- Estados de celda ----------------- */
+/* Días FUTUROS con disponibilidad */
+.cal-has-events {
+  background: #d1c4e9 !important;
+  /* lila claro */
+  color: #4a148c !important;
+  font-weight: 600 !important;
 }
 
-/* 9) Día seleccionado: toda la celda morada */
-:host ::ng-deep .cal-day-cell.selected-day {
-  background-color: var(--ion-color-primary) !important;
+/* Día de hoy */
+.cal-today {
+  background: #c8e6c9 !important;
+  /* verde claro */
+  color: #1b5e20 !important;
+  /* texto verde oscuro */
+  font-weight: 600 !important;
 }
 
-/* 10) Número del día seleccionado en blanco puro */
-:host ::ng-deep .cal-day-cell.selected-day .cal-day-number {
+/* Días pasados (con o sin evento) */
+.cal-day-cell.cal-day-disabled {
+  pointer-events: none !important;
+  background-color: #f5f5f5 !important;
+  color: rgba(0, 0, 0, 0.3) !important;
+}
+
+/* ----------------- Header de días ----------------- */
+.cal-header {
+  background: #4b268e !important;
+  color: #fff !important;
+  font-weight: 600;
+  padding: 12px 0;
+}
+
+/* Día seleccionado: toda la celda morada */
+.cal-day-cell.selected-day {
+  background-color: #4b268e !important;
+}
+
+/* Número del día seleccionado en blanco puro */
+.cal-day-cell.selected-day .cal-day-number {
   color: #fff !important;
   font-weight: normal !important;
   opacity: 1 !important;
 }
 
-/* 11) Botones de hora: blanco de base, borde y texto en morado */
+/*Spinner de carga*/
+.loading-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+/* ----------------- Template de horas ----------------- */
+/* Etiqueta lila que aparece en los slots disponibles */
+.available-time {
+  display: inline-block;
+  margin-top: 2px;
+  padding: 2px 4px;
+  font-size: 0.7rem;
+  border-radius: 4px;
+  background: #a463f4;
+  color: #fff;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+/* ----------------- Botones de hora ----------------- */
+/* Botones blancos con borde y texto morado */
 .time-button {
   background: #fff !important;
-  color: var(--ion-color-primary) !important;
-  border: 2px solid var(--ion-color-primary) !important;
+  color: #4b268e !important;
+  border: 2px solid #4b268e !important;
   --border-width: 0 !important;
   --border-radius: 1.5rem !important;
   --min-width: 3.5rem;
   --padding-start: 1rem;
-  --padding-end:   1rem;
+  --padding-end: 1rem;
   font-size: 1.1rem !important;
   font-weight: normal !important;
   box-shadow: none !important;
   outline: none !important;
   transition: none !important;
-
 }
 
-/* Si marcas un botón con .selected, invierte colores */
+/* Cuando un botón horario está seleccionado → fondo morado, texto blanco */
 .time-button.selected {
-  background-color: var(--ion-color-primary) !important;
+  background-color: #4b268e !important;
   color: #fff !important;
 }
 
-/* utilidades */
-.hidden { display: none; }
+.btn-primary {
+  --background: #4b268e;
+  --color: white;
+  font-weight: 600;
+  border-radius: 14px;
+}
+
+/* ----------------- Utilidades ----------------- */
+.hidden {
+  display: none;
+}
+
+/* Mensaje si no hay horarios disponibles */
 .no-times {
   text-align: center;
   margin-top: 1rem;
   color: #666;
-}
-
-:host ::ng-deep .cal-weekdays {
-  display: flex !important;
-  --background: var(--ion-color-primary) !important;
-}
-
-:host ::ng-deep .cal-weekday-element {
-  flex: 1;
-  text-align: center;
-  --color: #fff !important;
-  font-weight: normal !important;
-  padding: 0.25rem 0;
 }

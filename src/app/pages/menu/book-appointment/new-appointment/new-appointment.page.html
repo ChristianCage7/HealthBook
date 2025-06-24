@@ -2,6 +2,17 @@
 <ion-content class="ion-padding">
 
 
+    <ng-template #monthCellTemplate let-day="day">
+        <div class="cal-cell-inner">
+            <span class="cal-day-number">{{ day.date.getDate() }}</span>
+            <ng-container *ngIf="!isPast(day.date)">
+                <div *ngFor="let ev of day.events" class="available-time">
+                    {{ ev.start | date:'HH:mm' }}
+                </div>
+            </ng-container>
+        </div>
+    </ng-template>
+
     <div class="calendar-wrapper">
         <div class="month-nav">
             <ion-button fill="clear" size="small" (click)="previousMonth()">
@@ -13,10 +24,10 @@
             </ion-button>
         </div>
 
-
-        <!-- Calendario sin su header interno -->
-        <mwl-calendar-month-view [viewDate]="viewDate" [events]="[]" (beforeViewRender)="beforeMonthViewRender($event)"
-            (dayClicked)="onDayClick($event)"></mwl-calendar-month-view>
+        <mwl-calendar-month-view *ngIf="!loading" [viewDate]="viewDate" [events]="events"
+            [cellTemplate]="monthCellTemplate" (beforeViewRender)="beforeMonthViewRender($event)"
+            (dayClicked)="onDayClick($event)">
+        </mwl-calendar-month-view>
     </div>
 
 
