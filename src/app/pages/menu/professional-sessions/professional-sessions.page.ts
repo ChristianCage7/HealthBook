@@ -17,6 +17,8 @@ export class ProfessionalSessionsPage implements OnInit {
   pendingAppointments: Appointment[] = [];
   confirmedAppointments: Appointment[] = [];
   idprofessional!: number;
+  loading = true;
+  patientNames: { [key: number]: string } = {};
 
   constructor(
     private router: Router,
@@ -35,20 +37,42 @@ export class ProfessionalSessionsPage implements OnInit {
         console.log('ID del profesional:', this.idprofessional);
         this.loadAppointments();
       },
-      error: err => console.error('Error obteniendo usuario:', err)
+      error: err => {
+        console.error('Error obteniendo usuario:', err);
+        this.loading = false;
+      }
     });
   }
 
   loadAppointments() {
+    this.loading = true;
     this.appointmentService.getProfessionalAppointments(this.idprofessional).subscribe({
-      next: (appointments) => {
+      next: async (appointments) => {
         this.appointments = appointments;
         this.pendingAppointments = appointments.filter(a => a.status === 0);
         this.confirmedAppointments = appointments.filter(a => a.status === 1);
+
+        const fetchNames = appointments.map(async (appt) => {
+          try {
+            const profile = await this.appointmentService
+              .getUserBasicProfileByAppointment(appt.idappointment)
+              .toPromise();
+            this.patientNames[appt.idappointment] = profile?.first_name + ' ' + profile?.last_name;
+          } catch {
+            this.patientNames[appt.idappointment] = 'Paciente no disponible';
+          }
+        });
+
+        await Promise.all(fetchNames);
+        this.loading = false;
       },
-      error: err => console.error('Error cargando citas:', err)
+      error: err => {
+        console.error('Error cargando citas:', err);
+        this.loading = false;
+      }
     });
   }
+
 
   async confirm(id: number) {
     const confirmed = await this.presentConfirmation('¿Estás seguro de aprobar esta cita?');
@@ -99,16 +123,41 @@ export class ProfessionalSessionsPage implements OnInit {
     });
   }
 
-  formatDateTime(date: string, time: string): string {
-    const datetime = new Date(`${date}T${time}`);
-    return datetime.toLocaleString('es-CL', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
+  formatDate(date: string): string {
+    const d = new Date(date);
+    return this.capitalizeFirst(
+      d.toLocaleDateString('es-CL', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      })
+    );
+  }
+
+  formatTime(time: string): string {
+    const t = new Date(`1970-01-01T${time}`);
+    return t.toLocaleTimeString('es-CL', {
       hour: '2-digit',
       minute: '2-digit'
     });
+  }
+
+
+  private capitalizeFirst(text: string): string {
+    if (!text) return '';
+    return text.charAt(0).toUpperCase() + text.slice(1);
+  }
+
+  public translateStatus(status: number): string {
+    switch (status) {
+      case 0: return 'Pendiente';
+      case 1: return 'Confirmada';
+      case 2: return 'Rechazada';
+      case 3: return 'Cancelada';
+      case 4: return 'Completada';
+      default: return 'Desconocido';
+    }
   }
 
   async presentConfirmation(message: string): Promise<boolean> {

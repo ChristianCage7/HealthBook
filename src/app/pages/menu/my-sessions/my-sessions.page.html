@@ -9,30 +9,41 @@
     Ingresar como paciente a la misma llamada
   </ion-button>
 
+  <!-- Spinner de carga -->
+  <div class="loading-wrapper" *ngIf="loading">
+    <ion-spinner name="crescent" color="primary"></ion-spinner>
+  </div>
 
-  <ion-list *ngIf="!loading; else loadingTpl">
-    <ion-item *ngFor="let appt of appointments">
-      <ion-label>
-        <h2>Con profesional #{{ appt.idprofessional }}</h2>
-        <p>
-          {{ appt.appointmentDate | date:'fullDate' }}
-          a las {{ appt.appointmentTime.substring(0,5) }}
-        </p>
-        <p>Estado: {{ appt.status === 1 ? 'Activa' : 'Cancelada' }}</p>
-      </ion-label>
+  <!-- Citas -->
+  <ng-container *ngIf="!loading && appointments.length > 0; else noConfirmed">
+    <ion-card *ngFor="let appt of appointments" class="session-card">
+      <div class="card-header">
+        <ion-card-title class="card-header-title">Cita confirmada</ion-card-title>
+      </div>
+      <ion-card-content class="card-row">
+        <div class="card-info">
+          <p><strong>Profesional:</strong> {{ professionalNames[appt.idappointment] || 'Cargando...' }}</p>
+          <p><strong>Fecha:</strong> {{ formatDate(appt.appointmentDate) }}</p>
+          <p><strong>Hora:</strong> {{ formatTime(appt.appointmentTime) }}</p>
+          <p><strong>Estado:</strong> {{ translateStatus(appt.status) }}</p>
+        </div>
+        <div class="card-action">
+          <ion-button class="btn-primary" fill="clear" slot="end" (click)="openChatModal(appt)">
+            Mensaje <ion-icon name="chatbubbles-outline"></ion-icon>
+          </ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </ng-container>
 
-      <ion-button fill="clear" slot="end" (click)="openChatModal(appt)">
-        <ion-icon name="chatbubbles-outline"></ion-icon>
-      </ion-button>
-
-    </ion-item>
-    <ion-item *ngIf="appointments.length===0">
-      <ion-label>No tienes citas agendadas.</ion-label>
-    </ion-item>
-  </ion-list>
-
-  <ng-template #loadingTpl>
-    <ion-spinner name="crescent"></ion-spinner>
+  <ng-template #noConfirmed>
+    <ion-card class="session-card">
+      <div class="card-header">
+        <ion-card-title class="card-header-title">Citas confirmadas</ion-card-title>
+      </div>
+      <ion-card-content>
+        <p>No hay citas confirmadas para mostrar.</p>
+      </ion-card-content>
+    </ion-card>
   </ng-template>
-
 </ion-content>

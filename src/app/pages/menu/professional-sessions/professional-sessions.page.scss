@@ -48,6 +48,40 @@ ion-card-title {
 .btn-primary {
   --background: #4b268e;
   --color: white;
-  font-weight: 600;
   border-radius: 14px;
+}
+
+.card-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; // Para pantallas pequeñas
+
+    .card-info {
+        flex: 1;
+        min-width: 60%;
+    }
+
+    .card-actions {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+
+    ion-button {
+        margin-left: auto;
+        white-space: nowrap;
+    }
+}
+
+.loading-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(255, 255, 255, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

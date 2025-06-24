@@ -16,6 +16,7 @@ export class MySessionsPage implements OnInit {
   public static sessionGlobal = '';
   appointments: Appointment[] = [];
   loading = true;
+  professionalNames: { [key: number]: string } = {};
 
 
   constructor(
@@ -24,7 +25,6 @@ export class MySessionsPage implements OnInit {
     private appointmentService: AppointmentService,
     private userService: UserService,
     private modalCtrl: ModalController,
-    private animationCtrl: AnimationController,
   ) { }
 
   ngOnInit(): void {
@@ -44,6 +44,18 @@ export class MySessionsPage implements OnInit {
     this.appointmentService.getUserAppointments(userId).subscribe({
       next: appts => {
         this.appointments = appts;
+        // Obtener nombre de cada profesional
+        appts.forEach(appt => {
+          this.appointmentService.getUserProfessionalProfileByAppointment(appt.idappointment).subscribe({
+            next: profile => {
+              this.professionalNames[appt.idappointment] = `${profile.first_name} ${profile.last_name}`;
+            },
+            error: err => {
+              console.error(`No se pudo obtener nombre del profesional para cita ${appt.idappointment}`, err);
+              this.professionalNames[appt.idappointment] = 'Desconocido';
+            }
+          });
+        });
         this.loading = false;
       },
       error: err => {
@@ -51,6 +63,32 @@ export class MySessionsPage implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  formatDate(date: string): string {
+    const d = new Date(date);
+    return this.capitalizeFirst(
+      d.toLocaleDateString('es-CL', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      })
+    );
+  }
+
+  formatTime(time: string): string {
+    const t = new Date(`1970-01-01T${time}`);
+    return t.toLocaleTimeString('es-CL', {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  }
+
+
+  private capitalizeFirst(text: string): string {
+    if (!text) return '';
+    return text.charAt(0).toUpperCase() + text.slice(1);
   }
 
   async openChatModal(appointment: Appointment) {
@@ -79,6 +117,17 @@ export class MySessionsPage implements OnInit {
     } catch (err) {
       console.error('No se pudo obtener el perfil profesional:', err);
       alert('No se pudo abrir el chat porque el perfil del profesional no está disponible.');
+    }
+  }
+
+  public translateStatus(status: number): string {
+    switch (status) {
+      case 0: return 'Pendiente';
+      case 1: return 'Confirmada';
+      case 2: return 'Rechazada';
+      case 3: return 'Cancelada';
+      case 4: return 'Completada';
+      default: return 'Desconocido';
     }
   }
 

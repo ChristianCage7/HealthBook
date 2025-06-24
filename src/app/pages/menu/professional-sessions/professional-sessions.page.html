@@ -2,21 +2,26 @@
 <ion-content class="ion-padding">
 
   <!-- Sección: Citas Confirmadas -->
-  <ng-container *ngIf="confirmedAppointments.length > 0; else noConfirmed">
+  <ng-container *ngIf="!loading && confirmedAppointments.length > 0; else noConfirmed">
     <ion-card *ngFor="let appt of confirmedAppointments" class="session-card">
       <!-- Header violeta dentro de la card -->
       <div class="card-header">
         <ion-card-title class="card-header-title">Cita confirmada</ion-card-title>
       </div>
 
-      <ion-card-content>
-        <p><strong>Paciente:</strong> #{{ appt.iduser }}</p>
-        <p>{{ formatDateTime(appt.appointmentDate, appt.appointmentTime) }}</p>
-        <p><strong>Estado:</strong> Confirmada</p>
+      <ion-card-content class="card-row">
+        <div class="card-info">
+          <p><strong>Paciente:</strong> {{ patientNames[appt.idappointment] || 'Cargando...' }}</p>
+          <p><strong>Fecha:</strong> {{ formatDate(appt.appointmentDate) }}</p>
+          <p><strong>Hora:</strong> {{ formatTime(appt.appointmentTime) }}</p>
+          <p><strong>Estado:</strong> {{ translateStatus(appt.status) }}</p>
+        </div>
 
-        <ion-button color="medium" (click)="cancel(appt.idappointment)">Cancelar</ion-button>
-        <ion-button color="primary" (click)="goToCall(appt)">Ir a videollamada</ion-button>
-        <ion-button class="btn-primary" (click)="openChatModal(appt)">Mensaje</ion-button>
+        <div class="card-action">
+          <ion-button color="medium" (click)="cancel(appt.idappointment)">Cancelar</ion-button>
+          <ion-button color="primary" (click)="goToCall(appt)">Ir a videollamada</ion-button>
+          <ion-button class="btn-primary" (click)="openChatModal(appt)">Mensaje</ion-button>
+        </div>
       </ion-card-content>
     </ion-card>
   </ng-container>
@@ -40,13 +45,18 @@
         <ion-card-title class="card-header-title">Cita pendiente</ion-card-title>
       </div>
 
-      <ion-card-content>
-        <p><strong>Paciente:</strong> #{{ appt.iduser }}</p>
-        <p>{{ formatDateTime(appt.appointmentDate, appt.appointmentTime) }}</p>
-        <p><strong>Estado:</strong> Pendiente</p>
+      <ion-card-content class="card-row">
+        <div class="card-info">
+          <p><strong>Paciente:</strong> {{ patientNames[appt.idappointment] || 'Cargando...' }}</p>
+          <p><strong>Fecha:</strong> {{ formatDate(appt.appointmentDate) }}</p>
+          <p><strong>Hora:</strong> {{ formatTime(appt.appointmentTime) }}</p>
+          <p><strong>Estado:</strong> {{ translateStatus(appt.status) }}</p>
+        </div>
 
-        <ion-button color="success" (click)="confirm(appt.idappointment)">Aprobar</ion-button>
-        <ion-button color="danger" (click)="reject(appt.idappointment)">Rechazar</ion-button>
+        <div class="card-action">
+          <ion-button color="success" (click)="confirm(appt.idappointment)">Aprobar</ion-button>
+          <ion-button color="danger" (click)="reject(appt.idappointment)">Rechazar</ion-button>
+        </div>
       </ion-card-content>
     </ion-card>
   </ng-container>
@@ -61,5 +71,10 @@
       </ion-card-content>
     </ion-card>
   </ng-template>
+
+<div class="loading-wrapper" *ngIf="loading">
+  <ion-spinner name="crescent" color="primary"></ion-spinner>
+</div>
+
 
 </ion-content>
