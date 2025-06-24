@@ -1,6 +1,10 @@
 <app-header title="Gestión de usuarios" [showBackButton]="false"></app-header>
 
 <ion-content>
+
+  <ion-searchbar placeholder="Buscar usuario..." [(ngModel)]="searchText" (ionInput)="nameFilter()">
+  </ion-searchbar>
+
   <div class="d-flex-center auth-form">
     <div class="content-wrapper">
 
@@ -20,7 +24,7 @@
 
       <!-- Lista de usuarios -->
       <div class="user-list" *ngIf="!loading && users.length > 0">
-        <div class="user-card" *ngFor="let user of users">
+        <div class="user-card" *ngFor="let user of filteredUsers">
           <div class="card-avatar">
             <img [src]="user.imgprofile || 'assets/icon/profile-img.png'" />
           </div>

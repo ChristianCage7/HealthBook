@@ -1,6 +1,9 @@
 <app-header title="Nueva cita"></app-header>
 <ion-content class="ion-padding">
 
+    <div *ngIf="loading" class="loading-wrapper">
+        <ion-spinner name="crescent" color="primary"></ion-spinner>
+    </div>
 
     <ng-template #monthCellTemplate let-day="day">
         <div class="cal-cell-inner">

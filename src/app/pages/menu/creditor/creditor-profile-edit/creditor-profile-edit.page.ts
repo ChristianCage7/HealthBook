@@ -7,7 +7,6 @@ import { AlertController, ModalController } from '@ionic/angular';
 import { CreditorProfileEditModalComponent } from 'src/app/shared/components/creditor-profile-edit-modal/creditor-profile-edit-modal.component';
 import { HttpClient } from '@angular/common/http';
 
-
 @Component({
   selector: 'app-creditor-profile-edit',
   templateUrl: './creditor-profile-edit.page.html',
@@ -19,6 +18,9 @@ export class CreditorProfileEditPage implements OnInit {
   loading = false;
   viewType: 'professionals' | 'basics' = 'professionals';
   deleteWrapper = false;
+  searchText: string = '';
+  filteredUsers: any[] = [];
+
 
   constructor(
     private creditorService: CreditorService,
@@ -44,12 +46,12 @@ export class CreditorProfileEditPage implements OnInit {
       next: ({ users, genders }) => {
         // Solo incluir usuarios con status = 1 o activos
         this.users = users
-          .filter(user => user.Register?.status === 1)
+          //.filter(user => user.approve === 1)
           .map(user => ({
             ...user,
             genderName: genders.find(g => g.idgender === user.gender)?.gender || 'Desconocido'
           }));
-
+        this.filteredUsers = this.users;
         this.loading = false;
         this.toastService.show('Profesionales cargados correctamente', 'Éxito', 'success');
       },
@@ -77,7 +79,7 @@ export class CreditorProfileEditPage implements OnInit {
             ...user,
             genderName: genders.find(g => g.idgender === user.gender)?.gender || 'Desconocido'
           }));
-
+        this.filteredUsers = this.users;
         this.loading = false;
         this.toastService.show('Usuarios básicos cargados correctamente', 'Éxito', 'success');
       },
@@ -156,5 +158,13 @@ export class CreditorProfileEditPage implements OnInit {
     } else {
       this.loadUserBasics();
     }
+  }
+
+  nameFilter() {
+    this.filteredUsers = this.users
+      .filter(p => {
+        const nameMatch = `${p.first_name} ${p.last_name}`.toLowerCase().includes(this.searchText.toLowerCase());
+        return nameMatch;
+      })
   }
 }

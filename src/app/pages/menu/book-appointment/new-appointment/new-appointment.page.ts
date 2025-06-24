@@ -184,6 +184,7 @@ export class NewAppointmentPage implements OnInit {
 
   /** Llama al backend para obtener disponibilidad de TODO el mes actual */
   private loadAllAvailabilities(): void {
+    this.loading = true;
     const year = this.viewDate.getFullYear();
     const month = this.viewDate.getMonth();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -203,11 +204,14 @@ export class NewAppointmentPage implements OnInit {
           start: new Date(`${item.day}T${item.startHour}`),
           title: 'Disponible'
         }));
+        this.loading = false; // ✅ se apaga el spinner al terminar
       })
       .catch(err => {
         console.error('Error al cargar eventos mensuales', err);
+        this.loading = false; // ✅ se apaga el spinner si hay error
       });
   }
+
 
   /** Al seleccionar un slot horario, se marca para agendar */
   selectSlot(slot: any): void {
