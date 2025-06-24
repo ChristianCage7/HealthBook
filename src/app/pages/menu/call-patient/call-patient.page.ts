@@ -47,9 +47,16 @@ export class CallPatientPage implements OnInit, AfterViewInit {
     this.session = this.OV.initSession();
 
     this.session.on('streamCreated', (event: any) => {
-      console.log('[Paciente] streamCreated:', event.stream.streamId);
       const subscriber = this.session.subscribe(event.stream, undefined);
       this.subscribers.push(subscriber);
+
+      setTimeout(() => {
+        const index = this.subscribers.length - 1;
+        const videoEl = this.remoteVideos.toArray()[index]?.nativeElement;
+        if (videoEl) {
+          subscriber.addVideoElement(videoEl);
+        }
+      }, 500);
     });
 
     this.session.on('streamDestroyed', (event: any) => {
@@ -58,67 +65,66 @@ export class CallPatientPage implements OnInit, AfterViewInit {
       );
     });
 
-    this.session.on('signal:republish-request', () => {
-      console.log('[Paciente] Recibí republish-request');
+    this.session.on('signal:republish-request', (event: any) => {
+      if (event.from?.connectionId === this.session.connection?.connectionId) return;
 
-      this.session.remoteConnections.forEach(conn => {
-        const stream = (conn as any).stream;
-        if (stream && !this.subscribers.find(s => s.stream.streamId === stream.streamId)) {
-          const subscriber = this.session.subscribe(stream, undefined);
-          this.subscribers.push(subscriber);
-        }
-      });
+      if (this.publisher) {
+        this.publisher.stream.disposeWebRtcPeer();
+        this.publisher.videos?.forEach(video => video.video?.remove());
+        this.session.unpublish(this.publisher);
+      }
+
+      this.publicarVideo();
     });
 
     this.userService.getUidFromAuth().then(uid => {
       this.userUid = uid;
-      console.log('[Paciente] UID:', uid);
 
       this.session.connect(this.token).then(() => {
-        console.log('[Paciente] Conectado a sesión:', this.sessionId);
+        this.publicarVideo();
 
-        this.OV.getDevices().then((devices: Device[]) => {
-          const videoDevices = devices.filter(d => d.kind === 'videoinput');
-
-          if (videoDevices.length === 0) {
-            console.warn('No hay cámaras disponibles');
-            return;
-          }
-
-          const selectedDeviceId = videoDevices.length > 1
-            ? videoDevices[1].deviceId  // Segunda cámara
-            : videoDevices[0].deviceId; // Solo una disponible
-
-          console.log('📷 Dispositivos encontrados:', videoDevices.map(d => d.label));
-          console.log('✅ Usando cámara:', selectedDeviceId);
-
-          this.publisher = this.OV.initPublisher(undefined, {
-            videoSource: selectedDeviceId,
-            audioSource: undefined,
-            publishAudio: true,
-            publishVideo: true,
-            resolution: '640x480',
-            frameRate: 30,
-            insertMode: 'APPEND',
-            mirror: false,
-          });
-
-          this.session.publish(this.publisher);
-          this.publisher.addVideoElement(
-            document.getElementById('publisher') as HTMLVideoElement
-          );
-
-          console.log('[Paciente] Cámara publicada correctamente');
-
-          this.http.post(`${environment.backendUrl}/api/call/join`, {
-            sessionId: this.sessionId,
-            uid: this.userUid,
-            token: this.token
-          }).subscribe(() => {
-            console.log('[Paciente] Notificación enviada al backend');
+        this.http.post(`${environment.backendUrl}/api/call/join`, {
+          sessionId: this.sessionId,
+          uid: this.userUid,
+          token: this.token
+        }).subscribe(() => {
+          this.session.signal({
+            type: 'republish-request',
+            data: 'refresca tu stream'
           });
         });
       });
+    });
+  }
+
+  publicarVideo() {
+    this.OV.getDevices().then((devices: Device[]) => {
+      const videoDevices = devices.filter(d => d.kind === 'videoinput');
+      const selectedDeviceId = videoDevices[0]?.deviceId;
+
+      this.publisher = this.OV.initPublisher(undefined, {
+        videoSource: selectedDeviceId ?? false,
+        audioSource: undefined,
+        publishAudio: true,
+        publishVideo: !!selectedDeviceId,
+        resolution: '640x480',
+        frameRate: 30,
+        insertMode: 'APPEND',
+        mirror: false,
+      });
+
+      this.publisher.once('accessDenied', (e) => {
+        console.warn('Acceso denegado a cámara o micrófono:', e);
+      });
+
+      this.publisher.once('accessAllowed', () => {
+        this.session.publish(this.publisher);
+        this.publisher.addVideoElement(
+          document.getElementById('publisher') as HTMLVideoElement
+        );
+      });
+    }).catch(error => {
+      console.error('Error obteniendo dispositivos:', error);
     });
   }
 

@@ -9,7 +9,7 @@
       <div class="label">{{ localLabel }}</div>
     </div>
 
-    <div class="video-box" *ngFor="let sub of subscribers; index as i">
+    <div class="video-box" *ngFor="let sub of subscribers">
       <video #remoteVideo autoplay playsinline></video>
       <div class="label">{{ remoteLabel }}</div>
     </div>

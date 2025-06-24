@@ -47,7 +47,6 @@ export class CallProfessionalPage implements OnInit, AfterViewInit {
     this.session = this.OV.initSession();
 
     this.session.on('streamCreated', (event: any) => {
-      console.log('[Profesional] streamCreated:', event.stream.streamId);
       const subscriber = this.session.subscribe(event.stream, undefined);
       this.subscribers.push(subscriber);
 
@@ -55,7 +54,6 @@ export class CallProfessionalPage implements OnInit, AfterViewInit {
         const index = this.subscribers.length - 1;
         const videoEl = this.remoteVideos.toArray()[index]?.nativeElement;
         if (videoEl) {
-          console.log('[Profesional] Asociando video inmediatamente:', event.stream.streamId);
           subscriber.addVideoElement(videoEl);
         }
       }, 500);
@@ -67,8 +65,8 @@ export class CallProfessionalPage implements OnInit, AfterViewInit {
       );
     });
 
-    this.session.on('signal:republish-request', () => {
-      console.log('[Profesional] Recibí señal para republicar');
+    this.session.on('signal:republish-request', (event: any) => {
+      if (event.from?.connectionId === this.session.connection?.connectionId) return;
 
       if (this.publisher) {
         this.publisher.stream.disposeWebRtcPeer();
@@ -81,11 +79,8 @@ export class CallProfessionalPage implements OnInit, AfterViewInit {
 
     this.userService.getUidFromAuth().then(uid => {
       this.userUid = uid;
-      console.log('[Profesional] UID:', uid);
 
       this.session.connect(this.token).then(() => {
-        console.log('[Profesional] Conectado a sesión:', this.sessionId);
-
         this.publicarVideo();
 
         this.http.post(`${environment.backendUrl}/api/call/join`, {
@@ -93,7 +88,10 @@ export class CallProfessionalPage implements OnInit, AfterViewInit {
           uid: this.userUid,
           token: this.token
         }).subscribe(() => {
-          console.log('[Profesional] Notificación enviada al backend');
+          this.session.signal({
+            type: 'republish-request',
+            data: 'refresca tu stream'
+          });
         });
       });
     });
@@ -102,36 +100,31 @@ export class CallProfessionalPage implements OnInit, AfterViewInit {
   publicarVideo() {
     this.OV.getDevices().then((devices: Device[]) => {
       const videoDevices = devices.filter(d => d.kind === 'videoinput');
-
-      if (videoDevices.length === 0) {
-        console.warn('No hay cámaras disponibles');
-        return;
-      }
-
-      const selectedDeviceId = videoDevices.length > 1
-        ? videoDevices[1].deviceId
-        : videoDevices[0].deviceId;
-
-      console.log('📷 Cámaras encontradas:', videoDevices.map(d => d.label));
-      console.log('✅ Usando cámara:', selectedDeviceId);
+      const selectedDeviceId = videoDevices[0]?.deviceId;
 
       this.publisher = this.OV.initPublisher(undefined, {
-        videoSource: selectedDeviceId,
+        videoSource: selectedDeviceId ?? false,
         audioSource: undefined,
         publishAudio: true,
-        publishVideo: true,
+        publishVideo: !!selectedDeviceId,
         resolution: '640x480',
         frameRate: 30,
         insertMode: 'APPEND',
         mirror: false,
       });
 
-      this.session.publish(this.publisher);
-      this.publisher.addVideoElement(
-        document.getElementById('publisher') as HTMLVideoElement
-      );
+      this.publisher.once('accessDenied', (e) => {
+        console.warn('Acceso denegado a cámara o micrófono:', e);
+      });
 
-      console.log('[Profesional] Cámara publicada correctamente');
+      this.publisher.once('accessAllowed', () => {
+        this.session.publish(this.publisher);
+        this.publisher.addVideoElement(
+          document.getElementById('publisher') as HTMLVideoElement
+        );
+      });
+    }).catch(error => {
+      console.error('Error obteniendo dispositivos:', error);
     });
   }
 
@@ -139,16 +132,12 @@ export class CallProfessionalPage implements OnInit, AfterViewInit {
     this.remoteVideos.changes.subscribe(() => {
       this.subscribers.forEach((sub, index) => {
         const videoEl = this.remoteVideos.toArray()[index]?.nativeElement;
-        if (videoEl) {
-          console.log('[Profesional] Asociando video remoto al DOM:', sub.stream.streamId);
-          sub.addVideoElement(videoEl);
-        }
+        if (videoEl) sub.addVideoElement(videoEl);
       });
     });
   }
 
   finalizarLlamada() {
-    console.log('[Profesional] Finalizando llamada...');
     this.session.disconnect();
     this.router.navigate(['/menu']);
   }

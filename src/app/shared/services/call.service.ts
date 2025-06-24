@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class CallService {
-  private apiUrl = 'http://52.71.93.144:8080/api/call'; // ajusta si usas otra URL
+  private apiUrl = 'http://localhost/api/call'; // ajusta si usas otra URL
 
   constructor(private http: HttpClient) { }
 
