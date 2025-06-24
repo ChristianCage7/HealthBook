@@ -19,6 +19,7 @@ export class ProfessionalSessionsPage implements OnInit {
   idprofessional!: number;
   loading = true;
   patientNames: { [key: number]: string } = {};
+  viewType: 'confirmed' | 'pending' = 'confirmed';
 
   constructor(
     private router: Router,
@@ -203,6 +204,9 @@ export class ProfessionalSessionsPage implements OnInit {
     }
   }
 
-
+    /*Cambiar vista entre profesionales y básicos*/
+changeView(type: 'confirmed' | 'pending') {
+  this.viewType = type;
+}
 
 }

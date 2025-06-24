@@ -13,6 +13,25 @@ ion-card-title {
   font-weight: bold;
 }
 
+ion-segment {
+  margin-bottom: 20px;
+  background-color: #e5dbfa;
+  border-radius: 12px;
+  padding: 4px;
+}
+
+ion-segment-button {
+  --indicator-color: transparent;
+  --color-checked: #fff;
+  --background-checked: #4b268e;
+  --color: #4b268e;
+  --background: transparent;
+  border-radius: 10px;
+  font-weight: 500;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+
 .session-card {
   border-radius: 16px;
   overflow: hidden;
@@ -52,36 +71,36 @@ ion-card-title {
 }
 
 .card-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap; // Para pantallas pequeñas
+
+  .card-info {
+    flex: 1;
+    min-width: 60%;
+  }
+
+  .card-actions {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
-    flex-wrap: wrap; // Para pantallas pequeñas
+  }
 
-    .card-info {
-        flex: 1;
-        min-width: 60%;
-    }
-
-    .card-actions {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-    }
-
-    ion-button {
-        margin-left: auto;
-        white-space: nowrap;
-    }
+  ion-button {
+    margin-left: auto;
+    white-space: nowrap;
+  }
 }
 
 .loading-wrapper {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(255, 255, 255, 0.7);
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(255, 255, 255, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

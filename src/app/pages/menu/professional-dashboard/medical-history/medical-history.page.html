@@ -46,10 +46,10 @@
       <div *ngIf="u.expanded" class="user-details">
         <ion-card>
           <ion-card-content>
-            <p><strong>Email:</strong> {{ u.userProfile.email }}</p>
+            <p><strong>Email:</strong> {{ u.userProfile.Register?.email }}</p>
             <p><strong>Fecha de nacimiento:</strong>
                {{ u.userProfile.datebirth | date:'longDate' }}</p>
-            <p><strong>DNI:</strong> {{ u.userProfile.dni }}</p>
+            <p><strong>RUT:</strong> {{ u.userProfile.dni }}</p>
             <ion-button expand="block" (click)="openModal(u)">
               Ver historial de citas
             </ion-button>
