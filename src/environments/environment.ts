@@ -6,11 +6,11 @@ export const environment = {
   production: false,
   supabaseUrl: 'https://mrqsspwvbbimxrqtigmu.supabase.co',
   supabaseAnonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ycXNzcHd2YmJpbXhycXRpZ211Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ1NzczMzUsImV4cCI6MjA2MDE1MzMzNX0.LsdJIYxkoNFS1kwgxM7PiBrBJxsnaGugSzWzoeEKhTg',
-  backendUrl: 'http://52.71.93.144:8080',
-  apiUrl: 'http://52.71.93.144:8080/api'
+  backendUrl: 'http://localhost:8080',
+  apiUrl: 'http://localhost:8080/api'
 };
 
-/*
+/*S
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
  *
