@@ -6,6 +6,7 @@ import { UserService } from './shared/services/user.service';
 import { firstValueFrom } from 'rxjs';
 import { ToastService } from './shared/services/toast.service';
 import { CustomToastComponent } from './shared/components/custom-toast/custom-toast.component'; // Asegúrate que la ruta sea correcta
+import { PushService } from './shared/services/push.service';
 
 @Component({
   selector: 'app-root',
@@ -19,7 +20,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   constructor(
     private router: Router,
     private userService: UserService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private pushService: PushService
   ) {
     this.setupDeepLinking();
   }
@@ -27,6 +29,12 @@ export class AppComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     console.log('AppComponent ngOnInit');
     this.handleAppStart();
+    this.pushService.initPush();
+      this.pushService.fcmToken$.subscribe(token => {
+    if (token) {
+      console.log(' Token disponible en app.component:', token);
+    }
+  });
   }
 
   ngAfterViewInit() {
