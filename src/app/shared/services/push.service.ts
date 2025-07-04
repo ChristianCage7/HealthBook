@@ -14,10 +14,11 @@ export class PushService {
   fcmToken$ = this.fcmTokenSubject.asObservable(); // puedes suscribirte si lo necesitas en otros componentes
 
   private initialized = false;
-
+  private apiUrl = environment.backendUrl
+  
   constructor(
     private platform: Platform,
-    private apiUrl = environment.backendUrl) { }
+    ) { }
 
   async initPush() {
     if (this.initialized) return;
