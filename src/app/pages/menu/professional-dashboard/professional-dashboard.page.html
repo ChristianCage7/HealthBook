@@ -1,5 +1,11 @@
 <app-header [showBackButton]="false" title="Panel"></app-header>
 <ion-content class="dashboard-content">
+
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content pullingIcon="arrow-down" refreshingSpinner="circles">
+    </ion-refresher-content>
+  </ion-refresher>
+
   <!-- Bienvenida -->
   <div class="spacer"></div> <!-- Desplaza hacia abajo -->
 

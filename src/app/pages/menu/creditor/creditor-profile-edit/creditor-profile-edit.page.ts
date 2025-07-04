@@ -167,4 +167,14 @@ export class CreditorProfileEditPage implements OnInit {
         return nameMatch;
       })
   }
+
+  async handleRefresh(event: CustomEvent) {
+    try {
+      this.changeView(this.viewType); // 🔁 Recarga automáticamente la vista actual (profesionales o usuarios)
+    } catch (e) {
+      console.error('Error al refrescar la lista de usuarios:', e);
+    } finally {
+      (event.target as HTMLIonRefresherElement)?.complete();
+    }
+  }
 }

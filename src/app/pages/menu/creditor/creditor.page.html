@@ -1,6 +1,11 @@
-<app-header title="Solicitudes Profesionales" [showBackButton]="false" ></app-header>
+<app-header title="Solicitudes Profesionales" [showBackButton]="false"></app-header>
 
 <ion-content>
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content pullingIcon="arrow-down" refreshingSpinner="circles">
+    </ion-refresher-content>
+  </ion-refresher>
+
   <div class="d-flex-center auth-form">
     <div class="professional-list" *ngIf="professionals.length > 0">
       <div class="professional-card" *ngFor="let prof of professionals">

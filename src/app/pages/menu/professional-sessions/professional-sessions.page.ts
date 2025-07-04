@@ -204,9 +204,19 @@ export class ProfessionalSessionsPage implements OnInit {
     }
   }
 
-    /*Cambiar vista entre profesionales y básicos*/
-changeView(type: 'confirmed' | 'pending') {
-  this.viewType = type;
-}
+  /*Cambiar vista entre profesionales y básicos*/
+  changeView(type: 'confirmed' | 'pending') {
+    this.viewType = type;
+  }
+
+  async handleRefresh(event: CustomEvent) {
+    try {
+      this.loadAppointments(); // recarga todas las citas del profesional
+    } catch (e) {
+      console.error('Error al refrescar citas profesionales:', e);
+    } finally {
+      (event.target as HTMLIonRefresherElement)?.complete(); //detiene el spinner del refresher
+    }
+  }
 
 }

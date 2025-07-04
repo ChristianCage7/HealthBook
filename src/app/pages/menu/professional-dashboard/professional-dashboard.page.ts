@@ -16,8 +16,8 @@ export class ProfessionalDashboardPage implements OnInit {
   showAnimation = false;
 
   // ─── Datos del profesional ───────────────────────────────
-  firstName: string = '';        
-  avatarUrl: string = 'assets/icon/profile-img.png'; 
+  firstName: string = '';
+  avatarUrl: string = 'assets/icon/profile-img.png';
 
   // ─── Resumen de citas ────────────────────────────────────
   totalAppointmentsText: string = '';    // ahora string con mensaje
@@ -52,7 +52,7 @@ export class ProfessionalDashboardPage implements OnInit {
     this.router.navigate(['/menu/professional-dashboard/medical-history']);
   }
 
-  
+
   // ─── Trae primer nombre y avatar del profesional ────────
   private loadProfessional() {
     this.userService.getCurrentUser().subscribe(user => {
@@ -71,7 +71,7 @@ export class ProfessionalDashboardPage implements OnInit {
       if (!idp) {
         // sin profesional no hay citas
         this.totalAppointmentsText = ' No hay citas agendadas';
-        this.nextAppointmentText  = ' No tiene citas agendadas';
+        this.nextAppointmentText = ' No tiene citas agendadas';
         return;
       }
 
@@ -106,4 +106,16 @@ export class ProfessionalDashboardPage implements OnInit {
       });
     });
   }
+
+  //Swipe para refrescar
+  async handleRefresh(event: CustomEvent) {
+    try {
+      this.loadAppointments();
+    } catch (e) {
+      console.error('❌ Error al refrescar dashboard profesional:', e);
+    } finally {
+      (event.target as HTMLIonRefresherElement)?.complete();
+    }
+  }
+
 }

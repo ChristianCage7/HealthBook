@@ -14,6 +14,12 @@
 </ng-template>
 
 <ion-content>
+
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content pullingIcon="arrow-down" refreshingSpinner="circles">
+    </ion-refresher-content>
+  </ion-refresher>
+
   <div *ngIf="loading" class="loading-wrapper">
     <ion-spinner name="crescent" color="primary"></ion-spinner>
   </div>
@@ -28,7 +34,7 @@
         <ion-icon name="chevron-forward-outline"></ion-icon>
       </ion-button>
     </div>
-    <mwl-calendar-month-view   *ngIf="!loading" [viewDate]="viewDate" [events]="events" [cellTemplate]="monthCellTemplate"
+    <mwl-calendar-month-view *ngIf="!loading" [viewDate]="viewDate" [events]="events" [cellTemplate]="monthCellTemplate"
       (beforeViewRender)="beforeMonthViewRender($event)" (dayClicked)="onDayClick($event)">
     </mwl-calendar-month-view>
   </div>

@@ -240,4 +240,20 @@ export class NewAppointmentPage implements OnInit {
       console.log('Usuario confirmó la cita');
     }
   }
+
+  //Swipe para refrescar
+  async handleRefresh(event: CustomEvent) {
+    try {
+      this.date = this.selectedDate.toISOString().split('T')[0];
+      this.loadAvailability();
+      this.loadAllAvailabilities();
+    } catch (e) {
+      console.error('Error al refrescar:', e);
+    } finally {
+      const refresher = event.target as HTMLIonRefresherElement;
+      refresher.complete(); // ✅ Sin error de TypeScript
+    }
+  }
 }
+
+

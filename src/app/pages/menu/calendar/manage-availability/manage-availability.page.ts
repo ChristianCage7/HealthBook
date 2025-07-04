@@ -141,4 +141,11 @@ export class ManageAvailabilityPage implements OnInit {
   });
 }
 
+handleRefresh(event: CustomEvent) {
+  this.loadAvailabilities(); // Llama al método que ya tienes
+  setTimeout(() => {
+    (event.target as HTMLIonRefresherElement)?.complete(); // Cierra animación después de un tiempo fijo
+  }, 800); // ajusta el tiempo si es necesario
+}
+
 }

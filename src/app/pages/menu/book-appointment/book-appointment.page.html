@@ -1,6 +1,12 @@
 <app-header [showBackButton]="false" title="Agendar cita"></app-header>
 
 <ion-content class="page-content">
+
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content pullingIcon="arrow-down" refreshingSpinner="circles">
+    </ion-refresher-content>
+  </ion-refresher>
+  
   <div>
     <ion-searchbar placeholder="Buscar profesional..." [(ngModel)]="searchText" (ionInput)="applyFilters()">
     </ion-searchbar>

@@ -187,5 +187,15 @@ export class BookAppointmentPage implements OnInit {
     }
   }
 
+  async handleRefresh(event: CustomEvent) {
+    try {
+      this.loadProfessionals(); // 🔁 Recarga los profesionales con ratings
+    } catch (e) {
+      console.error('❌ Error al refrescar profesionales:', e);
+    } finally {
+      (event.target as HTMLIonRefresherElement)?.complete(); //  Detiene la animación
+    }
+  }
+
 
 }

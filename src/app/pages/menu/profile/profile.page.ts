@@ -21,14 +21,14 @@ export class ProfilePage implements OnInit {
 
   selectedImage: File | null = null;
   selectedImagePreview: string | null = null;
-  
+
   constructor(
     private userService: UserService,
     private alertCtrl: AlertController,
     private fb: FormBuilder,
     private navCtrl: NavController,
     private http: HttpClient
-  ) {}
+  ) { }
 
   async ngOnInit() {
     await this.loadUser();
@@ -197,4 +197,16 @@ export class ProfilePage implements OnInit {
       await errAlert.present();
     }
   }
+
+  //Swipe para refrescar
+  async handleRefresh(event: CustomEvent) {
+    try {
+      await this.loadUser(); // 🔄 recarga toda la información del usuario
+    } catch (e) {
+      console.error('❌ Error al refrescar perfil:', e);
+    } finally {
+      (event.target as HTMLIonRefresherElement)?.complete(); // ✅ detener el spinner
+    }
+  }
+
 }

@@ -78,4 +78,15 @@ export class HomePage implements OnInit {
       default: return 'Desconocido';
     }
   }
+
+  async handleRefresh(event: CustomEvent) {
+    try {
+      this.ngOnInit(); // recarga todo el flujo original
+    } catch (e) {
+      console.error('Error al refrescar página de inicio:', e);
+    } finally {
+      (event.target as HTMLIonRefresherElement)?.complete();
+    }
+  }
+
 }

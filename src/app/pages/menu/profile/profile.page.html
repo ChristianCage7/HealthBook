@@ -1,8 +1,13 @@
 <app-header title="Mi Perfil"></app-header>
 
 <ion-content class="ion-padding">
-  <div class="profile-container">
 
+  <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+    <ion-refresher-content pullingIcon="arrow-down" refreshingSpinner="circles">
+    </ion-refresher-content>
+  </ion-refresher>
+
+  <div class="profile-container">
     <!-- Card principal -->
     <div class="profile-card">
 

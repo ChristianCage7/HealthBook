@@ -158,6 +158,18 @@ export class MySessionsPage implements OnInit {
     });
   }
 
+  // 🔁 REFRESH PARA SWIPE
+  async handleRefresh(event: CustomEvent) {
+    try {
+      this.userService.getCurrentUser().subscribe(user => {
+        this.loadAppointments(user.id);
+      });
+    } catch (e) {
+      console.error('❌ Error al refrescar citas:', e);
+    } finally {
+      (event.target as HTMLIonRefresherElement)?.complete();
+    }
+  }
 
 
 }

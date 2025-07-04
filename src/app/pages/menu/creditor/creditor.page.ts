@@ -55,4 +55,15 @@ export class CreditorPage implements OnInit {
     }
   }
 
+  async handleRefresh(event: CustomEvent) {
+    try {
+      this.loadPendingProfessionals(); // recarga lista de profesionales por aprobar
+    } catch (e) {
+      console.error('❌ Error al refrescar acreditaciones:', e);
+    } finally {
+      (event.target as HTMLIonRefresherElement)?.complete();
+    }
+  }
+
+
 }
