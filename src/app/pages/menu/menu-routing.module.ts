@@ -68,12 +68,8 @@ const routes: Routes = [
     loadChildren: () => import('./calendar/calendar.module').then( m => m.CalendarPageModule)
   },
   {
-    path: 'call-professional',
-    loadChildren: () => import('./call-professional/call-professional.module').then( m => m.CallProfessionalPageModule)
-  },
-  {
-    path: 'call-patient',
-    loadChildren: () => import('./call-patient/call-patient.module').then( m => m.CallPatientPageModule)
+    path: 'call',
+    loadChildren: () => import('./call/call.module').then( m => m.CallPageModule)
   },
 
 ];

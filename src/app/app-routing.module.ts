@@ -39,14 +39,10 @@ const routes: Routes = [
     path: 'book-appointment',
     loadChildren: () => import('./pages/menu/book-appointment/book-appointment.module').then(m => m.BookAppointmentPageModule)
   },
-  {
-  path: 'call-professional',
-  loadChildren: () => import('./pages/menu/call-professional/call-professional.module').then(m => m.CallProfessionalPageModule)
+    {
+    path: 'call',
+    loadChildren: () => import('./pages/menu/call/call.module').then( m => m.CallPageModule)
   },
-  {
-  path: 'call-patient',
-  loadChildren: () => import('./pages/menu/call-patient/call-patient.module').then(m => m.CallPatientPageModule)
-  }
 ];
 
 @NgModule({

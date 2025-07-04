@@ -1,0 +1,60 @@
+.call-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.video-grid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.video-card {
+  position: relative;
+  width: 100%;
+  max-width: 480px;
+  aspect-ratio: 4 / 3;
+  background: black;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+/* Asegura que cualquier contenedor dentro ocupe el tamaño completo */
+.video-card > div {
+  width: 100%;
+  height: 100%;
+}
+
+/* ✅ Estilos forzados para el video inyectado */
+.video-card video {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+  background-color: black !important;
+  position: relative !important;
+  z-index: 1 !important;
+  opacity: 1 !important;
+  border: none !important;
+}
+
+/* Etiquetas "Paciente" / "Profesional" */
+.overlay {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 14px;
+  z-index: 2;
+}
+
+/* Botón de finalizar llamada */
+.end-call {
+  margin-top: 2rem;
+}

@@ -6,7 +6,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class CallService {
-  private apiUrl = 'http://localhost/api/call'; // ajusta si usas otra URL
+  private apiUrl = `${environment.backendUrl}/api/call`;
 
   constructor(private http: HttpClient) { }
 
@@ -22,4 +22,11 @@ export class CallService {
     return this.http.get<any[]>(`${environment.backendUrl}/api/appointments/professional/${id}`);
   }
 
+notifyJoined(sessionId: string, token: string, uid: string) {
+  return this.http.post(`${this.apiUrl}/join`, {
+    sessionId,
+    token,
+    uid
+  });
+}
 }
