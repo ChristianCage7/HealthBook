@@ -30,11 +30,11 @@ export class AppComponent implements OnInit, AfterViewInit {
     console.log('AppComponent ngOnInit');
     this.handleAppStart();
     this.pushService.initPush();
-      this.pushService.fcmToken$.subscribe(token => {
-    if (token) {
-      console.log(' Token disponible en app.component:', token);
-    }
-  });
+    this.pushService.fcmToken$.subscribe(token => {
+      if (token) {
+        console.log('📲 Token FCM listo');
+      }
+    });
   }
 
   ngAfterViewInit() {

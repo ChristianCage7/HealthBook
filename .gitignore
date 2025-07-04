@@ -84,5 +84,5 @@ android/app/google-services.json
 
 
 
-.vscode/extensions.json
+.vscode/
 android/capacitor-cordova-android-plugins/

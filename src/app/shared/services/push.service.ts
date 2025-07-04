@@ -3,6 +3,8 @@ import { PushNotifications, Token, ActionPerformed, PushNotificationSchema } fro
 import { LocalNotifications } from '@capacitor/local-notifications';
 import { Platform } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
+import { supabase } from './supabase.client';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +15,9 @@ export class PushService {
 
   private initialized = false;
 
-  constructor(private platform: Platform) { }
+  constructor(
+    private platform: Platform,
+    private apiUrl = environment.backendUrl) { }
 
   async initPush() {
     if (this.initialized) return;
@@ -38,6 +42,7 @@ export class PushService {
     PushNotifications.addListener('registration', (token: Token) => {
       console.log('📨 Token FCM recibido:', token.value);
       this.fcmTokenSubject.next(token.value);
+      this.sendTokenToBackend(token.value); // 👈 Envío inmediato al backend
     });
 
     PushNotifications.addListener('registrationError', err => {
@@ -73,4 +78,27 @@ export class PushService {
   getToken(): string | null {
     return this.fcmTokenSubject.value;
   }
+
+  private async sendTokenToBackend(token: string) {
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      const uid = session?.user?.id;
+
+      if (!uid) {
+        console.warn('⚠️ UID no disponible, no se puede enviar el token');
+        return;
+      }
+
+      await fetch(`${this.apiUrl}/api/push-token`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ uid, token })
+      });
+
+      console.log('✅ Token push enviado correctamente al backend');
+    } catch (err) {
+      console.error('❌ Error al enviar token push al backend:', err);
+    }
+  }
+
 }
