@@ -1,12 +1,12 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
+  appId: 'com.healthbook.app',
   appName: 'healthbook',
   webDir: 'www',
 
   server: {
-    androidScheme: 'https'
+    androidScheme: 'http'
   },
   plugins: {
     // IMPORTANTE: esto habilita el scheme en Android e iOS

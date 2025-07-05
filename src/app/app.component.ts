@@ -5,8 +5,11 @@ import { supabase } from './shared/services/supabase.client';
 import { UserService } from './shared/services/user.service';
 import { firstValueFrom } from 'rxjs';
 import { ToastService } from './shared/services/toast.service';
-import { CustomToastComponent } from './shared/components/custom-toast/custom-toast.component'; // Asegúrate que la ruta sea correcta
+import { CustomToastComponent } from './shared/components/custom-toast/custom-toast.component';
 import { PushService } from './shared/services/push.service';
+import { StatusBar, Style } from '@capacitor/status-bar';
+
+declare var NavigationBar: any;
 
 @Component({
   selector: 'app-root',
@@ -29,10 +32,11 @@ export class AppComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     console.log('AppComponent ngOnInit');
     this.handleAppStart();
+    this.initSystemBars();
     this.pushService.initPush();
     this.pushService.fcmToken$.subscribe(token => {
       if (token) {
-        console.log('📲 Token FCM listo');
+        console.log('Token FCM listo');
       }
     });
   }
@@ -78,5 +82,20 @@ export class AppComponent implements OnInit, AfterViewInit {
         }
       }
     });
+  }
+
+  async initSystemBars() {
+    try {
+      // Barra superior (status bar)
+      await StatusBar.setBackgroundColor({ color: '#000000' });
+      await StatusBar.setStyle({ style: Style.Dark });
+
+      // Barra inferior (navigation bar)
+      if (typeof NavigationBar !== 'undefined') {
+        NavigationBar.backgroundColorByHexString('#000000');
+      }
+    } catch (err) {
+      console.warn('No se pudo establecer el color de las barras:', err);
+    }
   }
 }

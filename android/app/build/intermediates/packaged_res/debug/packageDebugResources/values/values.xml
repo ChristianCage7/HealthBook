@@ -3,7 +3,13 @@
     <color name="ic_launcher_background">#FFFFFF</color>
     <string name="app_name">healthbook</string>
     <string name="custom_url_scheme">io.ionic.starter</string>
+    <string name="gcm_defaultSenderId" translatable="false">70254409214</string>
+    <string name="google_api_key" translatable="false">AIzaSyDzNJvoeI_i771SvPGELR1-ZHV96Gk0V_I</string>
+    <string name="google_app_id" translatable="false">1:70254409214:android:2e9a9dc5a254c53458bcaf</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyDzNJvoeI_i771SvPGELR1-ZHV96Gk0V_I</string>
+    <string name="google_storage_bucket" translatable="false">healthbook-ac4ad.firebasestorage.app</string>
     <string name="package_name">io.ionic.starter</string>
+    <string name="project_id" translatable="false">healthbook-ac4ad</string>
     <string name="title_activity_main">healthbook</string>
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         
