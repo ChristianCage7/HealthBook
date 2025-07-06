@@ -30,7 +30,7 @@ export class CallPage implements OnInit, OnDestroy {
   subscribers: Subscriber[] = [];
   sessionId = 'HealthbookTestSession';
   token!: string;
-  role: 'patient' | 'professional' = 'patient'; // Puedes ajustar esto dinámicamente
+  role: 'patient' | 'professional' = 'patient'; // Ajusta dinámicamente según el usuario
 
   async ngOnInit() {
     this.OV = new OpenVidu();
@@ -53,7 +53,6 @@ export class CallPage implements OnInit, OnDestroy {
           audio: true,
         });
 
-        // Render manual en el DOM
         const videoElement = document.createElement('video');
         videoElement.autoplay = true;
         videoElement.muted = true;
@@ -61,7 +60,6 @@ export class CallPage implements OnInit, OnDestroy {
         videoElement.srcObject = mediaStream;
         this.publisherContainer.nativeElement.appendChild(videoElement);
 
-        // Publicación OpenVidu
         this.publisher = this.OV.initPublisher(undefined, {
           videoSource: mediaStream.getVideoTracks()[0],
           audioSource: mediaStream.getAudioTracks()[0],
@@ -82,7 +80,7 @@ export class CallPage implements OnInit, OnDestroy {
   }
 
   async getToken(sessionId: string): Promise<string> {
-    const response = await fetch(`${environment.openviduUrl}/openvidu/api/sessions`, {
+    const sessionResponse = await fetch(`${environment.openviduUrl}/openvidu/api/sessions`, {
       method: 'POST',
       headers: {
         Authorization: 'Basic ' + btoa('OPENVIDUAPP:' + environment.openviduSecret),
@@ -91,9 +89,12 @@ export class CallPage implements OnInit, OnDestroy {
       body: JSON.stringify({ customSessionId: sessionId }),
     });
 
-    const session = await response.json();
+    // ⚠️ Si ya existe, 409 está bien
+    if (sessionResponse.status !== 200 && sessionResponse.status !== 409) {
+      throw new Error(`Error al crear la sesión: ${sessionResponse.status}`);
+    }
 
-    const tokenRes = await fetch(`${environment.openviduUrl}/openvidu/api/sessions/${sessionId}/connection`, {
+    const tokenResponse = await fetch(`${environment.openviduUrl}/openvidu/api/sessions/${sessionId}/connection`, {
       method: 'POST',
       headers: {
         Authorization: 'Basic ' + btoa('OPENVIDUAPP:' + environment.openviduSecret),
@@ -102,7 +103,7 @@ export class CallPage implements OnInit, OnDestroy {
       body: JSON.stringify({}),
     });
 
-    const tokenData = await tokenRes.json();
+    const tokenData = await tokenResponse.json();
     return tokenData.token;
   }
 
