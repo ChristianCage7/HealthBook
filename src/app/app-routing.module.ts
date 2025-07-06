@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 import { authGuard } from './shared/guards/auth.guard';
+import { VideoTestComponent } from './video-test/video-test.component';
 
 const routes: Routes = [
   {
@@ -43,6 +44,7 @@ const routes: Routes = [
     path: 'call',
     loadChildren: () => import('./pages/menu/call/call.module').then( m => m.CallPageModule)
   },
+    { path: 'video-test', component: VideoTestComponent },
 ];
 
 @NgModule({
