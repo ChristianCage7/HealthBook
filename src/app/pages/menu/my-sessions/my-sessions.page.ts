@@ -5,6 +5,8 @@ import { ChatModalComponent } from 'src/app/shared/components/chat-modal/chat-mo
 import { Appointment, AppointmentService } from 'src/app/shared/services/appointment.service';
 import { CallService } from 'src/app/shared/services/call.service';
 import { UserService } from 'src/app/shared/services/user.service';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-my-sessions',
@@ -13,14 +15,14 @@ import { UserService } from 'src/app/shared/services/user.service';
   standalone: false
 })
 export class MySessionsPage implements OnInit {
-  public static sessionGlobal = '';
-  appointments: Appointment[] = [];
+  appointments: any[] = [];
   loading = true;
+  uid!: string;
   professionalNames: { [key: number]: string } = {};
 
 
   constructor(
-    private callService: CallService,
+    private http: HttpClient,
     private router: Router,
     private appointmentService: AppointmentService,
     private userService: UserService,
@@ -30,6 +32,7 @@ export class MySessionsPage implements OnInit {
   ngOnInit(): void {
     this.userService.getCurrentUser().subscribe({
       next: user => {
+        this.uid = user.uid;
         this.loadAppointments(user.id);
       },
       error: err => {
@@ -133,30 +136,48 @@ export class MySessionsPage implements OnInit {
 
 
 
-  iniciarLlamadaProfesional() {
-    this.callService.createSession().subscribe(sessionId => {
-      MySessionsPage.sessionGlobal = sessionId;
-      this.callService.generateToken(sessionId, 'PUBLISHER').subscribe(token => {
-        this.router.navigate(['/call-professional'], {
-          state: { token, sessionId }
-        });
-      });
-    });
-  }
-
-  ingresarComoPaciente() {
-    const sessionId = MySessionsPage.sessionGlobal;
-    if (!sessionId) {
-      alert('La sesión aún no ha sido creada.');
+  iniciarLlamada(appt: any) {
+    if (!appt.sessionId || !this.uid) {
+      alert('Esta cita aún no tiene una sesión activa. Intenta más tarde.');
       return;
     }
 
-    this.callService.generateToken(sessionId, 'SUBSCRIBER').subscribe(token => {
-      this.router.navigate(['/call-patient'], {
-        state: { token, sessionId }
+
+
+    // 1. Generar token para el paciente
+    this.http.post(`${environment.apiUrl}/call/token?sessionId=${appt.sessionId}&role=PUBLISHER`, {}, { responseType: 'text' })
+      .subscribe({
+        next: (token) => {
+          // 2. Registrar participante con token generado
+          this.http.post(`${environment.apiUrl}/call/join`, {
+            sessionId: appt.sessionId,
+            token: token,
+            uid: this.uid
+          }).subscribe({
+            next: () => {
+              // 3. Navegar a videollamada con token
+              this.router.navigate(['/call'], {
+                state: {
+                  sessionId: appt.sessionId,
+                  token: token,
+                  idappointment: appt.idappointment,
+                  role: 'PATIENT'
+                }
+              });
+            },
+            error: err => {
+              console.error('Error al registrar al paciente en la llamada:', err);
+              alert('No se pudo registrar al usuario en la videollamada.');
+            }
+          });
+        },
+        error: err => {
+          console.error('Error al generar token:', err);
+          alert('No se pudo generar el token para la videollamada.');
+        }
       });
-    });
   }
+
 
   // 🔁 REFRESH PARA SWIPE
   async handleRefresh(event: CustomEvent) {
@@ -165,7 +186,7 @@ export class MySessionsPage implements OnInit {
         this.loadAppointments(user.id);
       });
     } catch (e) {
-      console.error('❌ Error al refrescar citas:', e);
+      console.error('Error al refrescar citas:', e);
     } finally {
       (event.target as HTMLIonRefresherElement)?.complete();
     }

@@ -70,14 +70,7 @@ testem.log
 Thumbs.db
 
 # Android build artifacts
-/android/.gradle/
-/android/.idea/
-/android/local.properties
-/android/app/build/
-/android/build/
-/android/captures/
-/android/.cxx/
-/android/.externalNativeBuild/
+
 
 # Firebase
 android/app/google-services.json

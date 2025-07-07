@@ -78,85 +78,85 @@ export class ProfessionalSessionsPage implements OnInit {
     });
   }
 
-async confirm(id: number) {
-  const confirmed = await this.presentConfirmation('¿Estás seguro de aprobar esta cita?');
-  if (!confirmed) return;
+  async confirm(id: number) {
+    const confirmed = await this.presentConfirmation('¿Estás seguro de aprobar esta cita?');
+    if (!confirmed) return;
 
-  this.appointmentService.confirmAppointment(id).subscribe({
-    next: () => {
-      this.loadAppointments();
-      this.toastService.show('Cita aprobada exitosamente.', 'Éxito', 'success');
-    },
-    error: () => this.toastService.show('Error al aprobar la cita.', 'Error', 'error')
-  });
-}
-
-async reject(id: number) {
-  const confirmed = await this.presentConfirmation('¿Deseas rechazar esta cita? Esta acción no se puede revertir');
-  if (!confirmed) return;
-
-  this.appointmentService.rejectAppointment(id).subscribe({
-    next: () => {
-      this.loadAppointments();
-      this.toastService.show('Cita rechazada correctamente.', 'Éxito', 'success');
-    },
-    error: () => this.toastService.show('Error al rechazar la cita.', 'Error', 'error')
-  });
-}
-
-async cancel(id: number) {
-  const confirmed = await this.presentConfirmation('¿Cancelar esta cita? Esta acción no se puede revertir');
-  if (!confirmed) return;
-
-  this.appointmentService.cancelAppointment(id).subscribe({
-    next: () => {
-      this.loadAppointments();
-      this.toastService.show('Cita cancelada.', 'Aviso', 'info');
-    },
-    error: () => this.toastService.show('No se pudo cancelar la cita.', 'Error', 'error')
-  });
-}
-
-
-goToCall(appointment: Appointment) {
-  if (!appointment.sessionId || !this.uid) {
-    this.toastService.show('Faltan datos para iniciar videollamada.', 'Error', 'error');
-    return;
+    this.appointmentService.confirmAppointment(id).subscribe({
+      next: () => {
+        this.loadAppointments();
+        this.toastService.show('Cita aprobada exitosamente.', 'Éxito', 'success');
+      },
+      error: () => this.toastService.show('Error al aprobar la cita.', 'Error', 'error')
+    });
   }
 
-  // 1. Primero generar token
-  this.http.post(`${environment.apiUrl}/call/token?sessionId=${appointment.sessionId}&role=PUBLISHER`, {}, { responseType: 'text' })
-    .subscribe({
-      next: (token) => {
-        // 2. Luego registrar participante
-        this.http.post(`${environment.apiUrl}/call/join`, {
-          sessionId: appointment.sessionId,
-          token: token,
-          uid: this.uid
-        }).subscribe({
-          next: () => {
-            // 3. Navegar con token y datos correctos
-            this.router.navigate(['/call'], {
-              state: {
-                sessionId: appointment.sessionId,
-                token: token,
-                idappointment: appointment.idappointment,
-                role: 'PROFESSIONAL'
-              }
-            });
-          },
-          error: err => {
-            console.error('Error al registrar al participante:', err);
-            this.toastService.show('No se pudo registrar al usuario en la videollamada.', 'Error', 'error');
-          }
-        });
+  async reject(id: number) {
+    const confirmed = await this.presentConfirmation('¿Deseas rechazar esta cita? Esta acción no se puede revertir');
+    if (!confirmed) return;
+
+    this.appointmentService.rejectAppointment(id).subscribe({
+      next: () => {
+        this.loadAppointments();
+        this.toastService.show('Cita rechazada correctamente.', 'Éxito', 'success');
       },
-      error: err => {
-        console.error('Error al generar token:', err);
-        this.toastService.show('No se pudo generar el token de videollamada.', 'Error', 'error');
-      }
+      error: () => this.toastService.show('Error al rechazar la cita.', 'Error', 'error')
     });
-}
+  }
+
+  async cancel(id: number) {
+    const confirmed = await this.presentConfirmation('¿Cancelar esta cita? Esta acción no se puede revertir');
+    if (!confirmed) return;
+
+    this.appointmentService.cancelAppointment(id).subscribe({
+      next: () => {
+        this.loadAppointments();
+        this.toastService.show('Cita cancelada.', 'Aviso', 'info');
+      },
+      error: () => this.toastService.show('No se pudo cancelar la cita.', 'Error', 'error')
+    });
+  }
+
+
+  goToCall(appointment: Appointment) {
+    if (!appointment.sessionId || !this.uid) {
+      this.toastService.show('Faltan datos para iniciar videollamada.', 'Error', 'error');
+      return;
+    }
+
+    // 1. Primero generar token
+    this.http.post(`${environment.apiUrl}/call/token?sessionId=${appointment.sessionId}&role=PUBLISHER`, {}, { responseType: 'text' })
+      .subscribe({
+        next: (token) => {
+          // 2. Luego registrar participante
+          this.http.post(`${environment.apiUrl}/call/join`, {
+            sessionId: appointment.sessionId,
+            token: token,
+            uid: this.uid
+          }).subscribe({
+            next: () => {
+              // 3. Navegar con token y datos correctos
+              this.router.navigate(['/call'], {
+                state: {
+                  sessionId: appointment.sessionId,
+                  token: token,
+                  idappointment: appointment.idappointment,
+                  role: 'PROFESSIONAL'
+                }
+              });
+            },
+            error: err => {
+              console.error('Error al registrar al participante:', err);
+              this.toastService.show('No se pudo registrar al usuario en la videollamada.', 'Error', 'error');
+            }
+          });
+        },
+        error: err => {
+          console.error('Error al generar token:', err);
+          this.toastService.show('No se pudo generar el token de videollamada.', 'Error', 'error');
+        }
+      });
+  }
 
   formatDate(date: string): string {
     const d = new Date(date);
@@ -196,14 +196,14 @@ goToCall(appointment: Appointment) {
   }
 
   async presentConfirmation(message: string): Promise<boolean> {
-  const alert = await this.alertCtrl.create({
-    header: 'Confirmar acción',
-    message,
-    buttons: [
-      { text: 'Cancelar', role: 'cancel' },
-      { text: 'Aceptar', role: 'confirm' }
-    ]
-  });
+    const alert = await this.alertCtrl.create({
+      header: 'Confirmar acción',
+      message,
+      buttons: [
+        { text: 'Cancelar', role: 'cancel' },
+        { text: 'Aceptar', role: 'confirm' }
+      ]
+    });
 
     await alert.present();
     const { role } = await alert.onDidDismiss();
