@@ -1,0 +1,28 @@
+<app-header title="Videollamada"></app-header>
+
+<ion-content class="ion-padding call-container">
+  <div class="video-grid">
+
+    <!-- Contenedor de video local -->
+    <div class="video-card local">
+      <span class="overlay">
+        {{ role === 'patient' ? 'Paciente' : 'Profesional' }}
+      </span>
+      <div #publisherContainer></div>
+    </div>
+
+    <!-- Contenedor de video remoto -->
+    <div class="video-card remote">
+      <span class="overlay">
+        {{ role === 'patient' ? 'Profesional' : 'Paciente' }}
+      </span>
+      <div #subscriberContainer></div>
+    </div>
+
+  </div>
+
+  <!-- Botón para finalizar la llamada -->
+  <ion-button expand="block" color="danger" class="end-call" (click)="endCall()">
+    Finalizar llamada
+  </ion-button>
+</ion-content>

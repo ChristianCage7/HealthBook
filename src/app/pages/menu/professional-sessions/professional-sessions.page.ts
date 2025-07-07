@@ -4,6 +4,8 @@ import { AppointmentService, Appointment } from 'src/app/shared/services/appoint
 import { UserService } from 'src/app/shared/services/user.service';
 import { AlertController } from '@ionic/angular';
 import { ToastService } from 'src/app/shared/services/toast.service';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-professional-sessions',
@@ -16,6 +18,7 @@ export class ProfessionalSessionsPage implements OnInit {
   pendingAppointments: Appointment[] = [];
   confirmedAppointments: Appointment[] = [];
   idprofessional!: number;
+  uid!: string;
   loading = true;
 
   constructor(
@@ -23,16 +26,16 @@ export class ProfessionalSessionsPage implements OnInit {
     private appointmentService: AppointmentService,
     private userService: UserService,
     private alertCtrl: AlertController,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private http: HttpClient
   ) {}
 
   ngOnInit() {
     this.loading = true;
     this.userService.getCurrentUser().subscribe({
       next: user => {
-        console.log('Usuario recibido:', user);
         this.idprofessional = user.idprofessional;
-        console.log('ID del profesional:', this.idprofessional);
+        this.uid = user.uid;
         this.loadAppointments();
       },
       error: err => {
@@ -97,13 +100,43 @@ export class ProfessionalSessionsPage implements OnInit {
   }
 
 goToCall(appointment: Appointment) {
-  this.router.navigate(['/call-professional'], {
-    state: {
-      sessionId: appointment.sessionId,
-      token: appointment.tokenProfessional,
-      idappointment: appointment.idappointment
-    }
-  });
+  if (!appointment.sessionId || !this.uid) {
+    this.toastService.show('Faltan datos para iniciar videollamada.', 'Error', 'error');
+    return;
+  }
+
+  // 1. Primero generar token
+  this.http.post(`${environment.apiUrl}/call/token?sessionId=${appointment.sessionId}&role=PUBLISHER`, {}, { responseType: 'text' })
+    .subscribe({
+      next: (token) => {
+        // 2. Luego registrar participante
+        this.http.post(`${environment.apiUrl}/call/join`, {
+          sessionId: appointment.sessionId,
+          token: token,
+          uid: this.uid
+        }).subscribe({
+          next: () => {
+            // 3. Navegar con token y datos correctos
+            this.router.navigate(['/call'], {
+              state: {
+                sessionId: appointment.sessionId,
+                token: token,
+                idappointment: appointment.idappointment,
+                role: 'PROFESSIONAL'
+              }
+            });
+          },
+          error: err => {
+            console.error('Error al registrar al participante:', err);
+            this.toastService.show('No se pudo registrar al usuario en la videollamada.', 'Error', 'error');
+          }
+        });
+      },
+      error: err => {
+        console.error('Error al generar token:', err);
+        this.toastService.show('No se pudo generar el token de videollamada.', 'Error', 'error');
+      }
+    });
 }
 
   formatDateTime(date: string, time: string): string {
