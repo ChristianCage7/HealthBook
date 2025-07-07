@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { format, isAfter } from 'date-fns';
+import { isAfter } from 'date-fns';
 import { Appointment, AppointmentService } from 'src/app/shared/services/appointment.service';
 import { CreditorService, Professional } from 'src/app/shared/services/creditor.service';
 import { UserService } from 'src/app/shared/services/user.service';
@@ -25,7 +25,7 @@ export class HomePage implements OnInit {
     private userService: UserService,
     private appointmentService: AppointmentService,
     private creditorService: CreditorService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.userService.getCurrentUser().subscribe(user => {
@@ -39,8 +39,6 @@ export class HomePage implements OnInit {
 
         this.appointmentService.getUserAppointments(user.id).subscribe((appointments: Appointment[]) => {
           const now = new Date();
-          console.log('Citas del usuario:', appointments);
-
           const future = appointments
             .filter(a => a.status === 1 && isAfter(new Date(`${a.appointmentDate}T${a.appointmentTime}`), now))
             .sort((a, b) =>
@@ -52,7 +50,18 @@ export class HomePage implements OnInit {
             const next = future[0];
             const dateTime = new Date(`${next.appointmentDate}T${next.appointmentTime}`);
 
-            this.nextAppointmentText = `${format(dateTime, 'EEEE, d MMMM')} – ${format(dateTime, 'HH:mm')} hrs`;
+            const options: Intl.DateTimeFormatOptions = {
+              weekday: 'long',
+              day: 'numeric',
+              month: 'long',
+              hour: '2-digit',
+              minute: '2-digit',
+              hour12: false
+            };
+
+            const formatted = new Intl.DateTimeFormat('es-CL', options).format(dateTime);
+            this.nextAppointmentText = formatted.replace(',', '').charAt(0).toUpperCase() + formatted.replace(',', '').slice(1) + ' hrs';
+
             this.nextAppointmentStatus = this.translateStatus(next.status);
             this.hasAppointments = true;
 
@@ -81,12 +90,11 @@ export class HomePage implements OnInit {
 
   async handleRefresh(event: CustomEvent) {
     try {
-      this.ngOnInit(); // recarga todo el flujo original
+      this.ngOnInit();
     } catch (e) {
       console.error('Error al refrescar página de inicio:', e);
     } finally {
       (event.target as HTMLIonRefresherElement)?.complete();
     }
   }
-
 }

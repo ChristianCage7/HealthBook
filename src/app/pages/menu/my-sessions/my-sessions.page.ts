@@ -178,6 +178,21 @@ export class MySessionsPage implements OnInit {
       });
   }
 
+  getStatusColor(status: string): string {
+    switch (status.toLowerCase()) {
+      case 'confirmada':
+        return 'success';   // verde
+      case 'pendiente':
+        return 'warning';   // amarillo
+      case 'cancelada':
+      case 'rechazada':
+        return 'danger';    // rojo
+      case 'completada':
+        return 'primary';   // azul
+      default:
+        return 'medium';    // gris
+    }
+  }
 
   // 🔁 REFRESH PARA SWIPE
   async handleRefresh(event: CustomEvent) {

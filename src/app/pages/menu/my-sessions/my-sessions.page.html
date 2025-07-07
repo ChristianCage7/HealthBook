@@ -23,45 +23,25 @@
           <p><strong>Profesional:</strong> {{ professionalNames[appt.idappointment] || 'Cargando...' }}</p>
           <p><strong>Fecha:</strong> {{ formatDate(appt.appointmentDate) }}</p>
           <p><strong>Hora:</strong> {{ formatTime(appt.appointmentTime) }}</p>
-          <p><strong>Estado:</strong> {{ translateStatus(appt.status) }}</p>
+          <p>
+            <strong>Estado:
+            <ion-label [color]="getStatusColor(translateStatus(appt.status))">
+              {{ translateStatus(appt.status) }}
+            </ion-label></strong>
+          </p>
+
         </div>
         <div class="card-action">
-          <ion-button class="btn-primary" fill="clear" slot="end" (click)="openChatModal(appt)">
-            Mensaje <ion-icon name="chatbubbles-outline"></ion-icon>
+          <ion-button expand="block" class="btn-primary" fill="clear" slot="end" (click)="openChatModal(appt)">
+            Mensaje<ion-icon name="chatbubbles-outline"></ion-icon>
+          </ion-button>
+          <ion-button expand="block" class="btn-primary" (click)="iniciarLlamada(appt)">
+            Iniciar Videollamada
           </ion-button>
         </div>
       </ion-card-content>
     </ion-card>
   </ng-container>
-  <ng-template [ngIf]="!loading" [ngIfElse]="loadingTpl">
-    <ion-card *ngFor="let appt of appointments">
-      <ion-card-header>
-        <ion-card-title>
-          {{ appt.professionalName ? appt.professionalName : 'Profesional' }}
-        </ion-card-title>
-        <ion-card-subtitle>
-          {{ appt.appointmentDate | date: 'fullDate' }} a las {{ appt.appointmentTime?.substring(0, 5) }}
-        </ion-card-subtitle>
-      </ion-card-header>
-
-      <ion-card-content>
-        <p>
-          <strong>Estado:</strong>
-          <span [style.color]="appt.status === 1 ? 'green' : 'red'">
-            {{ appt.status === 1 ? 'Activa' : 'Cancelada' }}
-          </span>
-        </p>
-
-        <ion-button expand="block" class="video-call-button" (click)="iniciarLlamada(appt)">
-          Iniciar Videollamada
-        </ion-button>
-      </ion-card-content>
-    </ion-card>
-
-    <ion-item *ngIf="appointments.length === 0">
-      <ion-label>No tienes citas agendadas.</ion-label>
-    </ion-item>
-  </ng-template>
 
   <ng-template #noConfirmed>
     <ion-card class="session-card">

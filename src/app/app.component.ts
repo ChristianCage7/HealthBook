@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-import { App } from '@capacitor/app';
+import { App as CapacitorApp } from '@capacitor/app';
 import { Router } from '@angular/router';
 import { supabase } from './shared/services/supabase.client';
 import { UserService } from './shared/services/user.service';
@@ -8,6 +8,8 @@ import { ToastService } from './shared/services/toast.service';
 import { CustomToastComponent } from './shared/components/custom-toast/custom-toast.component';
 import { PushService } from './shared/services/push.service';
 import { StatusBar, Style } from '@capacitor/status-bar';
+import { Platform, ModalController, AlertController } from '@ionic/angular';
+import { Location } from '@angular/common';
 
 declare var NavigationBar: any;
 
@@ -24,13 +26,17 @@ export class AppComponent implements OnInit, AfterViewInit {
     private router: Router,
     private userService: UserService,
     private toastService: ToastService,
-    private pushService: PushService
+    private pushService: PushService,
+    private platform: Platform,
+    private location: Location,
+    private modalCtrl: ModalController,
+    private alertCtrl: AlertController
   ) {
     this.setupDeepLinking();
+    this.setupBackButtonHandler();
   }
 
   ngOnInit() {
-    console.log('AppComponent ngOnInit');
     this.handleAppStart();
     this.initSystemBars();
     this.pushService.initPush();
@@ -46,18 +52,11 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   async handleAppStart() {
-    console.log('handleAppStart iniciado');
     try {
       const { data: { session } } = await supabase.auth.getSession();
-      console.log('Session:', session);
       if (session) {
         const isCreditor = await firstValueFrom(this.userService.isCreditor());
-        console.log('Is creditor:', isCreditor);
-        if (isCreditor) {
-          this.router.navigateByUrl('/menu/creditor', { replaceUrl: true });
-        } else {
-          this.router.navigateByUrl('/menu', { replaceUrl: true });
-        }
+        this.router.navigateByUrl(isCreditor ? '/menu/creditor' : '/menu', { replaceUrl: true });
       } else {
         this.router.navigateByUrl('/main', { replaceUrl: true });
       }
@@ -69,15 +68,13 @@ export class AppComponent implements OnInit, AfterViewInit {
   }
 
   setupDeepLinking() {
-    App.addListener('appUrlOpen', (event) => {
+    CapacitorApp.addListener('appUrlOpen', (event) => {
       const url = event.url;
-      if (url && url.startsWith('healthbook://')) {
-        const path = url.replace('healthbook://', '');
-        const basePath = path.split('#')[0];
+      if (url?.startsWith('healthbook://')) {
+        const basePath = url.replace('healthbook://', '').split('#')[0];
         if (basePath === 'auth/reset-password') {
           this.router.navigateByUrl('/auth/reset-password');
         } else {
-          console.warn('[Deep Link] Ruta desconocida:', basePath);
           this.toastService.show('Ruta desconocida en deep link', 'Aviso', 'warning');
         }
       }
@@ -86,16 +83,58 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   async initSystemBars() {
     try {
-      // Barra superior (status bar)
       await StatusBar.setBackgroundColor({ color: '#000000' });
       await StatusBar.setStyle({ style: Style.Dark });
-
-      // Barra inferior (navigation bar)
       if (typeof NavigationBar !== 'undefined') {
         NavigationBar.backgroundColorByHexString('#000000');
       }
     } catch (err) {
       console.warn('No se pudo establecer el color de las barras:', err);
     }
+  }
+
+  setupBackButtonHandler() {
+    this.platform.backButton.subscribeWithPriority(10, async () => {
+      const currentUrl = this.router.url;
+
+      const topModal = await this.modalCtrl.getTop();
+      if (topModal) {
+        await topModal.dismiss();
+        return;
+      }
+
+      if (
+        currentUrl === '/main' ||
+        currentUrl === '/menu/home' ||
+        currentUrl === '/menu/creditor' ||
+        currentUrl === '/menu/professional-dashboard'
+
+      ) {
+        const alert = await this.alertCtrl.create({
+          header: 'Salir de la app',
+          message: '¿Estás seguro de que quieres salir?',
+          buttons: [
+            { text: 'Cancelar', role: 'cancel' },
+            {
+              text: 'Salir',
+              handler: () => CapacitorApp.exitApp()
+            }
+          ]
+        });
+        await alert.present();
+        return;
+      }
+
+      // Si existe defaultHref en app-header
+      const header = document.querySelector('app-header');
+      const defaultHref = header?.getAttribute('ng-reflect-default-href');
+      if (defaultHref) {
+        this.router.navigateByUrl(defaultHref);
+        return;
+      }
+
+      // Fallback final
+      this.location.back();
+    });
   }
 }
