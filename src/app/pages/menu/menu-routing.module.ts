@@ -53,8 +53,30 @@ const routes: Routes = [
         pathMatch: 'full',
       }
     ]
-  }
+  },
+  {
+    path: 'professional-dashboard',
+    loadChildren: () => import('./professional-dashboard/professional-dashboard.module').then( m => m.ProfessionalDashboardPageModule)
+  },
+  {
+    path: 'professional-sessions',
+    loadChildren: () => import('./professional-sessions/professional-sessions.module').then( m => m.ProfessionalSessionsPageModule)
+  },
+  {
+    path: 'manage-availability',
+    loadChildren: () => import('./calendar/manage-availability/manage-availability.module').then( m => m.ManageAvailabilityPageModule)
+  },
+  {
+    path: 'calendar',
+    loadChildren: () => import('./calendar/calendar.module').then( m => m.CalendarPageModule)
+  },
+  {
+    path: 'call',
+    loadChildren: () => import('./call/call.module').then( m => m.CallPageModule)
+  },
+
 ];
+
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

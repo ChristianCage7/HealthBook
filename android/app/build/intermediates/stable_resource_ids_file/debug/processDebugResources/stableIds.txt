@@ -1,3 +1,4 @@
+io.ionic.starter:xml/network_security_config = 0x7f100002
 io.ionic.starter:styleable/ViewStubCompat = 0x7f0f0030
 io.ionic.starter:styleable/View = 0x7f0f002e
 io.ionic.starter:styleable/SwitchCompat = 0x7f0f002b

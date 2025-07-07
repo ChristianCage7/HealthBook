@@ -85,3 +85,11 @@ ion-card-title {
     justify-content: center;
     align-items: center;
 }
+
+.video-call-button {
+  --background: #4b268e;
+  --color: white;
+  font-weight: 600;
+  margin-top: 12px;
+  border-radius: 12px;
+}

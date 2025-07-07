@@ -10,6 +10,8 @@ INJECTED from D:\Projects\HealthBook\android\capacitor-cordova-android-plugins\s
 		ADDED from D:\Projects\HealthBook\android\capacitor-cordova-android-plugins\src\main\AndroidManifest.xml:2:11-69
 application
 ADDED from D:\Projects\HealthBook\android\capacitor-cordova-android-plugins\src\main\AndroidManifest.xml:4:1-6:15
+	android:usesCleartextTraffic
+		ADDED from D:\Projects\HealthBook\android\capacitor-cordova-android-plugins\src\main\AndroidManifest.xml:4:15-50
 uses-sdk
 INJECTED from D:\Projects\HealthBook\android\capacitor-cordova-android-plugins\src\main\AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from D:\Projects\HealthBook\android\capacitor-cordova-android-plugins\src\main\AndroidManifest.xml
