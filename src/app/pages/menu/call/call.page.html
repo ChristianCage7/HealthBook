@@ -1,9 +1,12 @@
 <app-header title="Videollamada"></app-header>
 
-<ion-content class="ion-padding call-container">
-  <div class="video-grid">
+<div *ngIf="showMessage" class="feedback-message">
+  {{ messageText }}
+</div>
 
-    <!-- Contenedor de video local -->
+<ion-content class="ion-padding call-container">
+  <div class="video-stack">
+
     <div class="video-card local">
       <span class="overlay">
         {{ role === 'patient' ? 'Paciente' : 'Profesional' }}
@@ -22,7 +25,22 @@
   </div>
 
   <!-- Botón para finalizar la llamada -->
-  <ion-button expand="block" color="danger" class="end-call" (click)="endCall()">
-    Finalizar llamada
-  </ion-button>
+  <div class="floating-controls">
+    <ion-button fill="solid" color="light" shape="round" (click)="toggleMute()">
+      <ion-icon [name]="muted ? 'mic-off' : 'mic'" slot="icon-only"></ion-icon>
+    </ion-button>
+    <ion-button fill="solid" color="light" shape="round" (click)="toggleSpeaker()">
+      <ion-icon [name]="isSpeakerOn ? 'volume-high' : 'headset'" slot="icon-only"></ion-icon>
+    </ion-button>
+    <ion-button fill="solid" color="danger" shape="round" (click)="endCall()">
+      <ion-icon name="call" slot="icon-only"></ion-icon>
+    </ion-button>
+    <ion-button fill="solid" color="light" shape="round" (click)="toggleCamera()">
+      <ion-icon [name]="videoOff ? 'videocam-off' : 'videocam'" slot="icon-only"></ion-icon>
+    </ion-button>
+    <ion-button fill="solid" color="light" shape="round" (click)="openChat()">
+      <ion-icon name="chatbubble-ellipses-outline" slot="icon-only"></ion-icon>
+    </ion-button>
+  </div>
+
 </ion-content>
