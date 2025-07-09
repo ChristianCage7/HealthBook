@@ -170,4 +170,6 @@ export class ChatModalComponent implements OnInit, OnDestroy, AfterViewInit {
       year: 'numeric'
     });
   }
+
+  
 }
