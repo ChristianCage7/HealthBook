@@ -51,32 +51,41 @@ export class CallPage implements OnInit, OnDestroy {
     this.OV = new OpenVidu();
     this.session = this.OV.initSession();
 
-      this.session.on('streamCreated', (event: StreamEvent) => {
-        this.session.subscribe(
-          event.stream,
-          this.subscriberContainer.nativeElement
-        );
+    this.session.on('streamCreated', (event: StreamEvent) => {
+      this.session.subscribe(
+        event.stream,
+        this.subscriberContainer.nativeElement
+      );
+    });
+
+    this.token = await this.getToken(this.sessionId);
+
+    this.session
+      .connect(this.token, { clientData: this.role })
+      .then(async () => {
+        const mediaStream = await navigator.mediaDevices.getUserMedia({
+          video: true,
+          audio: true,
+        });
+
+        const videoElement = document.createElement('video');
+        videoElement.autoplay = true;
+        videoElement.muted = true;
+        videoElement.playsInline = true;
+        videoElement.srcObject = mediaStream;
+        this.publisherContainer.nativeElement.appendChild(videoElement);
+
+        this.publisher = this.OV.initPublisher(undefined, {
+          videoSource: mediaStream.getVideoTracks()[0],
+          audioSource: mediaStream.getAudioTracks()[0],
+          insertMode: 'APPEND',
+        });
+
+        this.session.publish(this.publisher);
+      })
+      .catch((error) => {
+        console.error('Error al conectar con la sesión:', error);
       });
-
-      console.log('📡 Solicitando token...');
-      this.token = await this.getToken(this.sessionId);
-      console.log('✅ Token recibido');
-
-      await this.session.connect(this.token, { clientData: this.role });
-
-      this.publisher = this.OV.initPublisher(this.publisherContainer.nativeElement, {
-        insertMode: 'APPEND',
-        publishAudio: true,
-        publishVideo: true,
-        audioSource: undefined,
-        videoSource: undefined,
-      });
-
-      this.session.publish(this.publisher);
-      console.log('✅ Stream publicado');
-    } catch (error) {
-      console.error('❌ Error en permisos o publicación:', error);
-    }
   }
 
   ngOnDestroy(): void {
@@ -95,6 +104,7 @@ export class CallPage implements OnInit, OnDestroy {
       body: JSON.stringify({ customSessionId: sessionId }),
     });
 
+    // ⚠️ Si ya existe, 409 está bien
     if (sessionResponse.status !== 200 && sessionResponse.status !== 409) {
       throw new Error(`Error al crear la sesión: ${sessionResponse.status}`);
     }
