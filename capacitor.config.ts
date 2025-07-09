@@ -8,7 +8,7 @@ const config: CapacitorConfig = {
   server: {
     androidScheme: 'http',
     cleartext: true,
-    allowNavigation: ['http://52.71.93.144', 'http://localhost', 'http://localhost:8100']
+    allowNavigation: ['http://52.71.93.144', 'http://localhost', 'http://localhost:8100', 'https://healthbookchile.online']
   },
   plugins: {
     // IMPORTANTE: esto habilita el scheme en Android e iOS

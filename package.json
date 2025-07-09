@@ -23,6 +23,7 @@
     "@angular/router": "^19.0.0",
     "@capacitor/android": "7.2.0",
     "@capacitor/app": "7.0.1",
+    "@capacitor/camera": "^7.0.1",
     "@capacitor/core": "7.2.0",
     "@capacitor/haptics": "7.0.1",
     "@capacitor/keyboard": "7.0.1",
@@ -41,7 +42,7 @@
     "healthbook": "file:",
     "ionic4-star-rating": "^1.1.1",
     "ionicons": "^7.0.0",
-    "openvidu-browser": "2.29.0",
+    "openvidu-browser": "2.31.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.0"

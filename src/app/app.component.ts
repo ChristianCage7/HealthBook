@@ -10,6 +10,7 @@ import { PushService } from './shared/services/push.service';
 import { StatusBar, Style } from '@capacitor/status-bar';
 import { Platform, ModalController, AlertController } from '@ionic/angular';
 import { Location } from '@angular/common';
+import { Camera } from '@capacitor/camera';
 
 declare var NavigationBar: any;
 
@@ -36,7 +37,8 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.setupBackButtonHandler();
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    await this.requestPermissions();
     this.handleAppStart();
     this.initSystemBars();
     this.pushService.initPush();
@@ -50,6 +52,21 @@ export class AppComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.toastService.register(this.toastComponent);
   }
+
+  async requestPermissions() {
+    try {
+      // ✅ Solicita permiso de cámara (con Capacitor)
+      await Camera.requestPermissions({ permissions: ['camera'] });
+
+      // ✅ Solicita acceso al micrófono con Web API
+      await navigator.mediaDevices.getUserMedia({ audio: true });
+
+      console.log('✅ Permisos de cámara y micrófono concedidos');
+    } catch (err) {
+      console.warn('❌ Error solicitando permisos:', err);
+    }
+  }
+
 
   async handleAppStart() {
     try {
@@ -83,6 +100,7 @@ export class AppComponent implements OnInit, AfterViewInit {
 
   async initSystemBars() {
     try {
+      await StatusBar.setOverlaysWebView({ overlay: false });
       await StatusBar.setBackgroundColor({ color: '#000000' });
       await StatusBar.setStyle({ style: Style.Dark });
       if (typeof NavigationBar !== 'undefined') {
@@ -108,7 +126,6 @@ export class AppComponent implements OnInit, AfterViewInit {
         currentUrl === '/menu/home' ||
         currentUrl === '/menu/creditor' ||
         currentUrl === '/menu/professional-dashboard'
-
       ) {
         const alert = await this.alertCtrl.create({
           header: 'Salir de la app',
@@ -125,7 +142,6 @@ export class AppComponent implements OnInit, AfterViewInit {
         return;
       }
 
-      // Si existe defaultHref en app-header
       const header = document.querySelector('app-header');
       const defaultHref = header?.getAttribute('ng-reflect-default-href');
       if (defaultHref) {
@@ -133,7 +149,6 @@ export class AppComponent implements OnInit, AfterViewInit {
         return;
       }
 
-      // Fallback final
       this.location.back();
     });
   }

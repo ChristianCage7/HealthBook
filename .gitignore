@@ -79,3 +79,4 @@ android/app/google-services.json
 
 .vscode/
 android/capacitor-cordova-android-plugins/
+healthbook.jks

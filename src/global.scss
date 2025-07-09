@@ -29,6 +29,11 @@ ion-button {
   text-transform: none;
 }
 
+ion-app {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
 ion-header,
 ion-toolbar {
   --background: transparent;
@@ -155,6 +160,12 @@ ion-content[class] {
     margin-left: 0;
   }
 }
+
+ion-content::part(scroll) {
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-top: env(safe-area-inset-top);
+}
+
 
 @media (min-width: 769px) {
   .auth-form {
